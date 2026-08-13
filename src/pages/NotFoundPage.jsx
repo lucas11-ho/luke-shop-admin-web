@@ -1,0 +1,1 @@
+import React from 'react';import{navigate}from'../app/router.js';export function NotFoundPage(){return <div className="not-found"><strong>404</strong><h1>Page not found</h1><p>This Admin Web route does not exist.</p><button className="primary" onClick={()=>navigate('/dashboard')}>Back to dashboard</button></div>}

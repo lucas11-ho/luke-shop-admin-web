@@ -1,0 +1,13 @@
+.env.example
+API_INTEGRATION.md
+CHANGED_FILES_v0.4.1.txt
+DEPLOYMENT_CHECKLIST_v0.4.1.md
+FILE_CHECKSUMS.sha256
+MANIFEST.json
+README.md
+RELEASE_NOTES_v0.4.1.md
+TECHNICAL_ANALYSIS_v0.4.1.md
+TEST_RESULT_v0.4.1.md
+package.json
+scripts/source-regression-test.mjs
+src/pages/CustomerExperiencePage.jsx

@@ -1,0 +1,17 @@
+API_INTEGRATION.md
+CHANGED_FILES_v0.4.0.txt
+DEPLOYMENT_CHECKLIST_v0.4.0.md
+FILE_CHECKSUMS.sha256
+HOSTING.md
+MANIFEST.json
+README.md
+RELEASE_NOTES_v0.4.0.md
+SECURITY.md
+TECHNICAL_ANALYSIS_v0.4.0.md
+TEST_RESULT_v0.4.0.md
+package.json
+scripts/source-regression-test.mjs
+src/app/App.jsx
+src/components/AppShell.jsx
+src/pages/CustomerExperiencePage.jsx
+src/styles.css

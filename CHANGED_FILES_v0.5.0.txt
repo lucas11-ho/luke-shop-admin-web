@@ -1,0 +1,15 @@
+package.json
+README.md
+API_INTEGRATION.md
+CHANGED_FILES_v0.5.0.txt
+RELEASE_NOTES_v0.5.0.md
+DEPLOYMENT_CHECKLIST_v0.5.0.md
+TECHNICAL_ANALYSIS_v0.5.0.md
+TEST_RESULT_v0.5.0.md
+scripts/source-regression-test.mjs
+src/api/client.js
+src/app/App.jsx
+src/components/AppShell.jsx
+src/pages/AssetsPage.jsx
+src/pages/ProductsPage.jsx
+src/styles.css

@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: luke-shop-admin-web
+    runtime: static
+    buildCommand: npm install --no-audit --no-fund && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_LUKE_SHOP_API_BASE_URL
+        sync: false

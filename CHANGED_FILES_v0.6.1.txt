@@ -1,0 +1,5 @@
+src/pages/CustomerExperiencePage.jsx
+src/styles.css
+scripts/source-regression-test.mjs
+scripts/design-regression-test.mjs
+package.json

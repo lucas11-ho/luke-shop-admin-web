@@ -1,0 +1,18 @@
+Luke Shop Admin Web v0.2.0 - Changed Files
+
+API_INTEGRATION.md
+CHANGED_FILES_v0.2.0.txt
+DEPLOYMENT_CHECKLIST_v0.2.0.md
+FILE_CHECKSUMS.sha256
+MANIFEST.json
+README.md
+RELEASE_NOTES_v0.2.0.md
+SECURITY.md
+START-HERE-WINDOWS.bat
+TECHNICAL_ANALYSIS_v0.2.0.md
+TEST_RESULT_v0.2.0.md
+package.json
+scripts/source-regression-test.mjs
+src/components/UI.jsx
+src/pages/AccessPage.jsx
+src/styles.css
