@@ -62,3 +62,9 @@ The preview-token response contains a short-lived `preview_path`. Admin Web neve
 ## Media Library v0.5.0
 
 The Admin sends selected files directly to `POST /v1/merchant/assets/upload` using the file MIME type as `Content-Type`; tenant/store and bearer context come from the authenticated merchant session. Uploaded assets can be reused across product media attachments. Product media ordering/primary/removal uses only backend-supported endpoints.
+
+## v0.8.0 Visual Store Designer
+
+Store Designer uses the existing Customer Experience API and the signed preview-token boundary. The Admin iframe loads Customer Web from `VITE_LUKE_SHOP_CUSTOMER_WEB_BASE_URL`; live unsaved design state is passed only with `postMessage` to that exact configured origin. The preview does not receive merchant access or refresh tokens.
+
+The store selector uses `GET /v1/merchant/stores`. Media selection reuses `GET /v1/merchant/assets` with public-asset filters. Admin does not read Luke Shop database tables directly.

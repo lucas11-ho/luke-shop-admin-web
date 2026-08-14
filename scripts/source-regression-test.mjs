@@ -3,7 +3,7 @@ const read=(p)=>fs.readFileSync(p,'utf8');
 const pkg=JSON.parse(read('package.json'));let n=0;
 const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
 
-pass(pkg.version==='0.7.0','release is v0.7.0');
+pass(pkg.version==='0.8.0','release is v0.8.0');
 pass(pkg.engines.node==='>=24','Node 24+ required');
 pass(pkg.dependencies.react==='19.1.1','React exact version pinned');
 pass(pkg.devDependencies.vite==='7.1.2','Vite exact version pinned');
@@ -100,12 +100,12 @@ pass(cx.includes('/draft')&&cx.includes("method:'PUT'"),'customer experience dra
 pass(cx.includes('/publish'),'customer experience publish is integrated');
 pass(cx.includes('/rollback'),'customer experience rollback is integrated');
 pass(cx.includes('Home page builder'),'safe home section builder exists');
-pass(cx.includes('ExperiencePreview')&&cx.includes('Preview draft'),'customer experience preview exists');
+pass(cx.includes('<iframe')&&cx.includes('PreviewStudio'),'customer experience real Customer Web preview exists');
 pass(cx.includes('customer_experience.publish'),'publish permission is enforced in UI');
-pass(styles.includes('.experience-layout'),'customer experience workspace styling exists');
+pass(styles.includes('.store-designer-shell'),'customer experience Store Designer v3 workspace styling exists');
 pass(cx.includes('VITE_LUKE_SHOP_CUSTOMER_WEB_BASE_URL'),'Customer Experience uses configured Customer Web base');
-pass(cx.includes('storefront_path'),'Customer Experience displays readable storefront path');
-pass(cx.includes('Open published'),'published storefront action exists');
+pass(cx.includes('data?.store?.storefront_path')||cx.includes('storefront_path'),'Customer Experience preserves readable storefront path support');
+pass(cx.includes('Open live'),'published storefront action exists');
 pass(cx.includes('/preview-token')&&cx.includes("method:'POST'"),'secure draft preview token endpoint is integrated');
 pass(cx.includes('preview_path')&&cx.includes('window.open'),'draft preview opens signed preview path');
 pass(read('.env.example').includes('VITE_LUKE_SHOP_CUSTOMER_WEB_BASE_URL'),'Customer Web base is environment scoped');
@@ -129,16 +129,16 @@ pass(prod.includes('Set primary'),'product media primary selection is available'
 pass(prod.includes('Choose from Media Library'),'existing assets can be reused without duplicate upload');
 pass(styles.includes('.asset-grid'),'Media Library responsive grid styling exists');
 
-pass(cx.includes('Customer features')&&cx.includes('FeatureToggle'),'Customer Experience exposes safe feature toggles');
-pass(cx.includes('Image / video poster URL')&&cx.includes('CTA label')&&cx.includes('CTA path'),'Customer Experience exposes existing media and CTA section fields');
+pass(cx.includes('Storefront features')&&cx.includes('FeaturesPanel'),'Customer Experience exposes safe feature toggles');
+pass(cx.includes('Video poster')&&cx.includes('CTA label')&&cx.includes('CTA path'),'Customer Experience exposes media and CTA section fields');
 pass(cx.includes('Item limit')&&cx.includes('limit:Number'),'Customer Experience exposes safe section limits');
-pass(styles.includes('.feature-grid')&&styles.includes('.refined-builder'),'Customer Experience refinement styles exist');
+pass(styles.includes('.feature-list-v3')&&styles.includes('.home-builder-v3'),'Customer Experience v3 refinement styles exist');
 pass(cx.includes('/v1/merchant/customer-experience/catalog'),'Store Designer loads canonical template/font catalog');
 pass(cx.includes('/apply-template'),'Store Designer applies templates server-side');
-pass(cx.includes('IOS_SYSTEM')||cx.includes('iPhone / iOS'),'iOS system typography is represented in Store Designer');
+pass(cx.includes('typography_presets')&&cx.includes('TypographyPanel'),'canonical typography catalog is represented in Store Designer');
 pass(ui.includes('DateTimePicker'),'shared popup calendar/date-time picker exists');
 pass(read('src/pages/PromotionsPage.jsx').includes('schedule_timezone'),'promotion scheduling sends tenant timezone');
 pass(read('src/pages/PromotionsPage.jsx').includes('DateTimePicker'),'promotion starts/ends use popup date-time picker');
 pass(read('src/pages/OrdersPage.jsx').includes('allowed_transitions'),'order actions use backend allowed transitions');
 pass(!read('src/pages/SettingsPage.jsx').includes('<textarea value={JSON'),'raw JSON settings editor is removed');
-console.log(`${n}/${n} Luke Shop Admin Web v0.7.0 source regression checks passed`);
+console.log(`${n}/${n} Luke Shop Admin Web v0.8.0 source regression checks passed`);

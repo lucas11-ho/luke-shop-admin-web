@@ -1,8 +1,8 @@
-# LUKE_SHOP_ADMIN_WEB — current release v0.7.0
+# LUKE_SHOP_ADMIN_WEB — current release v0.8.0
 
-**Advanced Store Designer + Promotion/Order Operations** · 2026-08-13
+**Visual Store Designer v3 + Real Customer Web Preview** · 2026-08-14
 
-See `RELEASE_NOTES_v0.7.0.md` and `DEPLOYMENT_CHECKLIST_v0.7.0.md`.
+See `RELEASE_NOTES_v0.8.0.md` and `DEPLOYMENT_CHECKLIST_v0.8.0.md`.
 
 # Luke Shop Admin Web v0.6.1
 

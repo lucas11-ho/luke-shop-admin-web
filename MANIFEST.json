@@ -1,8 +1,9 @@
 {
   "product": "LUKE_SHOP_ADMIN_WEB",
-  "version": "0.7.0",
-  "release": "Advanced Store Designer + Promotion/Order Operations",
-  "date": "2026-08-13",
-  "baseline": "0.6.1",
-  "font_policy": "No Apple font binaries are bundled; iOS preset uses native system font stack."
+  "version": "0.8.0",
+  "release": "Visual Store Designer v3",
+  "date": "2026-08-14",
+  "baseline": "0.7.0",
+  "preview": "Signed Customer Web iframe + target-origin postMessage live draft state",
+  "font_policy": "No font binaries are bundled."
 }
