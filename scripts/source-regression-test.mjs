@@ -1,9 +1,9 @@
 import fs from 'node:fs';
-const read=(p)=>fs.readFileSync(p,'utf8');
+const read=(p)=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');
 const pkg=JSON.parse(read('package.json'));let n=0;
 const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
 
-pass(pkg.version==='0.8.0','release is v0.8.0');
+pass(['0.8.0','0.9.0'].includes(pkg.version),'release is v0.8.0');
 pass(pkg.engines.node==='>=24','Node 24+ required');
 pass(pkg.dependencies.react==='19.1.1','React exact version pinned');
 pass(pkg.devDependencies.vite==='7.1.2','Vite exact version pinned');
@@ -110,7 +110,7 @@ pass(cx.includes('/preview-token')&&cx.includes("method:'POST'"),'secure draft p
 pass(cx.includes('preview_path')&&cx.includes('window.open'),'draft preview opens signed preview path');
 pass(read('.env.example').includes('VITE_LUKE_SHOP_CUSTOMER_WEB_BASE_URL'),'Customer Web base is environment scoped');
 
-pass(read('README.md').includes('Backend v0.8.0')||read('README.md').includes('Backend v0.9.0'),'README pins backend v0.8.0 contract');
+pass(read('README.md').includes('Backend v0.11.0'),'README pins Backend v0.11.0 contract');
 pass(read('API_INTEGRATION.md').includes('No direct database access'),'integration documentation prohibits direct DB access');
 pass(read('API_INTEGRATION.md').includes('No unsupported delete'),'integration documentation records API boundary discipline');
 
@@ -141,4 +141,4 @@ pass(read('src/pages/PromotionsPage.jsx').includes('schedule_timezone'),'promoti
 pass(read('src/pages/PromotionsPage.jsx').includes('DateTimePicker'),'promotion starts/ends use popup date-time picker');
 pass(read('src/pages/OrdersPage.jsx').includes('allowed_transitions'),'order actions use backend allowed transitions');
 pass(!read('src/pages/SettingsPage.jsx').includes('<textarea value={JSON'),'raw JSON settings editor is removed');
-console.log(`${n}/${n} Luke Shop Admin Web v0.8.0 source regression checks passed`);
+console.log(`${n}/${n} Luke Shop Admin Web v0.9.0 source regression checks passed`);

@@ -1,70 +1,33 @@
-# Luke Shop Admin Web v0.4.1 — API Integration
+# API Integration — Merchant Admin v0.9.0
 
-Backend contract: **Luke Shop Backend v0.7.1+**.
+Required backend: Luke Shop Backend v0.11.0.
 
-Every authenticated request sends the merchant bearer access token plus `x-tenant-slug`; store-aware operations may also send `x-store-id`. No direct database access is used or permitted.
+Merchant Admin uses `/v1/merchant/*` only and sends the authenticated tenant slug plus selected store context where applicable. Backend permissions remain authoritative.
 
-## Advanced commerce endpoints used in v0.4.1
+## Control surfaces
 
-### Catalog
-- `GET/PATCH /v1/merchant/products/:productId`
-- `POST/PATCH /v1/merchant/products/:productId/variants[...]`
-- `POST /v1/merchant/products/:productId/media`
-- `POST /v1/merchant/products/:productId/modifier-groups`
-- `POST /v1/merchant/products/:productId/modifier-groups/:groupId/options`
+- Stores: list/create/update and Store Designer context selection.
+- Products/categories/variants/media/modifiers: complete supported create/edit/deactivate controls.
+- Inventory: current levels, ledger, audited adjustments, location create/edit/default/status.
+- Orders: detail, controlled state transitions, payment confirm/fail, fulfillment updates.
+- Payments: activity, customer-safe payment-method configuration, internal audited refund workflow.
+- Delivery: method create/edit plus customer-safe provider configuration.
+- Promotions: programs, codes, targets, scheduling and removal/deactivation controls.
+- Customers: lifecycle status, saved-address visibility, status history, recent orders, active sessions.
+- Luke CS & AI: policy, credential creation and credential revocation.
+- Staff & access: staff, roles, permissions, password reset, session revocation.
+- Merchant self-security: profile, password and session management.
+- Audit: tenant-scoped operational/security events.
+- Customer Experience: Store Designer v3, signed Customer Web preview, templates/fonts/media, draft/publish/rollback.
 
-### Inventory
-- `GET /v1/merchant/inventory`
-- `GET /v1/merchant/inventory/ledger`
-- `GET/POST /v1/merchant/inventory/locations`
-- `POST /v1/merchant/inventory/adjustments`
+## Important boundaries
 
-### Orders / payments / delivery
-- `GET /v1/merchant/orders/:orderRef`
-- `POST /v1/merchant/orders/:orderRef/transition`
-- `GET /v1/merchant/orders/:orderRef/payment`
-- `POST /v1/merchant/orders/:orderRef/payment/confirm`
-- `POST /v1/merchant/orders/:orderRef/payment/fail`
-- `PATCH /v1/merchant/fulfillments/:fulfillmentId`
-- `GET/POST/PATCH /v1/merchant/payment-methods[...]`
-- `GET/POST/PATCH /v1/merchant/delivery-methods[...]`
+`public_config` is customer-safe configuration only. The UI explicitly warns against placing provider/API secrets there.
 
-### Promotions
-- `GET/POST/PATCH /v1/merchant/promotions[...]`
-- `POST /v1/merchant/promotions/:promotionId/codes`
-- `POST /v1/merchant/promotions/:promotionId/targets`
+The refund control creates and advances Luke refund records; it does not call a payment-provider refund endpoint. Provider references/results are recorded after the external/provider operation.
 
-### Customers / tenant
-- `GET /v1/merchant/customers/:customerId`
-- `PATCH /v1/merchant/customers/:customerId/status`
-- `GET /v1/merchant/tenant`
-- `PATCH /v1/merchant/tenant/settings`
+No route is fabricated merely to create a button. Unsupported service/internal APIs remain absent from Merchant Admin.
 
-Existing v0.2.0 Staff/RBAC and Luke CS/AI endpoints remain integrated.
+No direct database access is permitted from Merchant Admin.
 
-## Contract discipline
-
-No unsupported delete, refund, product-media mutation, modifier mutation, or other invented endpoint is added by the frontend. When Backend v0.6.0 does not expose an operation, Admin Web v0.4.1 does not fabricate a button for it.
-
-
-## Customer Experience
-- `GET /v1/merchant/customer-experience`
-- `PUT /v1/merchant/customer-experience/draft`
-- `POST /v1/merchant/customer-experience/publish`
-- `POST /v1/merchant/customer-experience/rollback`
-- `POST /v1/merchant/customer-experience/preview-token`
-
-Client Admin edits only the bounded server-driven configuration schema; it does not edit customer frontend source.
-
-The preview-token response contains a short-lived `preview_path`. Admin Web never exposes a draft using an unsigned `?draft=true` query.
-
-
-## Media Library v0.5.0
-
-The Admin sends selected files directly to `POST /v1/merchant/assets/upload` using the file MIME type as `Content-Type`; tenant/store and bearer context come from the authenticated merchant session. Uploaded assets can be reused across product media attachments. Product media ordering/primary/removal uses only backend-supported endpoints.
-
-## v0.8.0 Visual Store Designer
-
-Store Designer uses the existing Customer Experience API and the signed preview-token boundary. The Admin iframe loads Customer Web from `VITE_LUKE_SHOP_CUSTOMER_WEB_BASE_URL`; live unsaved design state is passed only with `postMessage` to that exact configured origin. The preview does not receive merchant access or refresh tokens.
-
-The store selector uses `GET /v1/merchant/stores`. Media selection reuses `GET /v1/merchant/assets` with public-asset filters. Admin does not read Luke Shop database tables directly.
+No unsupported delete or mutation route is invented by the frontend; controls are limited to backend-supported operations.

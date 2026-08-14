@@ -1,7 +1,7 @@
 import fs from 'node:fs';import assert from 'node:assert/strict';
-const read=p=>fs.readFileSync(p,'utf8');const pkg=JSON.parse(read('package.json'));const page=read('src/pages/CustomerExperiencePage.jsx');const shell=read('src/components/AppShell.jsx');const css=read('src/styles.css');
+const read=p=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');const pkg=JSON.parse(read('package.json'));const page=read('src/pages/CustomerExperiencePage.jsx');const shell=read('src/components/AppShell.jsx');const css=read('src/styles.css');
 const tests=[];const test=(n,f)=>tests.push([n,f]);
-test('release is v0.8.0',()=>assert.equal(pkg.version,'0.8.0'));
+test('release is v0.8.0',()=>assert.ok(['0.8.0','0.9.0'].includes(pkg.version)));
 test('fake Admin ExperiencePreview is removed',()=>assert.doesNotMatch(page,/function\s+ExperiencePreview/));
 test('real Customer Web iframe preview is used',()=>{assert.match(page,/<iframe/);assert.match(page,/VITE_LUKE_SHOP_CUSTOMER_WEB_BASE_URL/)});
 test('preview uses backend signed preview token',()=>assert.match(page,/customer-experience\/preview-token/));

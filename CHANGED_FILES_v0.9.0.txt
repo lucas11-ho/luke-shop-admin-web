@@ -1,0 +1,29 @@
+Luke Shop luke-shop-admin-web v0.9.0 — Changed Files from v0.8.0
+
+Status	Path
+MODIFIED	API_INTEGRATION.md
+NEW	CHANGED_FILES_v0.9.0.txt
+NEW	DEPLOYMENT_CHECKLIST_v0.9.0.md
+MODIFIED	FILE_CHECKSUMS.sha256
+MODIFIED	MANIFEST.json
+MODIFIED	README.md
+NEW	RELEASE_NOTES_v0.9.0.md
+NEW	TECHNICAL_ANALYSIS_v0.9.0.md
+NEW	TEST_RESULT_v0.9.0.md
+MODIFIED	package.json
+MODIFIED	scripts/source-regression-test.mjs
+MODIFIED	scripts/v0.8.0-store-designer-v3-regression-test.mjs
+NEW	scripts/v0.9.0-operations-control-completion-regression-test.mjs
+MODIFIED	src/app/App.jsx
+MODIFIED	src/components/AppShell.jsx
+MODIFIED	src/pages/AccessPage.jsx
+NEW	src/pages/AuditPage.jsx
+MODIFIED	src/pages/CustomerServicePage.jsx
+MODIFIED	src/pages/CustomersPage.jsx
+MODIFIED	src/pages/DeliveryPage.jsx
+MODIFIED	src/pages/InventoryPage.jsx
+NEW	src/pages/MyProfilePage.jsx
+MODIFIED	src/pages/PaymentsPage.jsx
+MODIFIED	src/pages/ProductsPage.jsx
+MODIFIED	src/pages/PromotionsPage.jsx
+NEW	src/pages/StoresPage.jsx

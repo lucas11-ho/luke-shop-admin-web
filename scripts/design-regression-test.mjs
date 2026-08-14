@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 const files=['src/styles.css','src/components/AppShell.jsx','src/pages/LoginPage.jsx','src/pages/CustomerExperiencePage.jsx'];
-let all='';for(const f of files){if(fs.existsSync(f))all+=fs.readFileSync(f,'utf8')+'\n'}
+let all='';for(const f of files){if(fs.existsSync(f))all+=fs.readFileSync(f,'utf8').replace(/\r\n?/g,'\n')+'\n'}
 let passed=0;const check=(v,m)=>{if(!all.includes(v))throw new Error(`Missing ${m}`);console.log(`PASS ${m}`);passed++};
 check('professional-admin','professional merchant shell');
 check('nav-group-label','grouped commerce navigation');

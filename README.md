@@ -1,55 +1,24 @@
-# LUKE_SHOP_ADMIN_WEB — current release v0.8.0
+# LUKE_SHOP_ADMIN_WEB — current release v0.9.0
 
-**Visual Store Designer v3 + Real Customer Web Preview** · 2026-08-14
+**Merchant Operations & Control Completion** · 2026-08-14
 
-See `RELEASE_NOTES_v0.8.0.md` and `DEPLOYMENT_CHECKLIST_v0.8.0.md`.
+Requires Luke Shop Backend v0.11.0 with migration 012 for the new operations/control features.
 
-# Luke Shop Admin Web v0.6.1
+See `RELEASE_NOTES_v0.9.0.md`, `TECHNICAL_ANALYSIS_v0.9.0.md` and `DEPLOYMENT_CHECKLIST_v0.9.0.md`.
 
-## v0.6.1 Customer Experience Builder Polish
+## What merchants can control now
 
-- Safe feature toggles for search, promotions, and support.
-- Section image, CTA label/path, and item limit controls already supported by Backend v0.8.0.
-- Expandable campaign/home-section editor and richer draft preview.
-- Backend v0.8.0 remains unchanged.
+Merchant Admin now exposes the backend operations that previously existed only partially or not at all in the UI: stores, categories, modifier groups/options, inventory locations, payment method public configuration, audited refund records, delivery public configuration, promotion codes/targets, customer operational detail, Luke CS credential revocation, tenant audit, and the signed-in merchant's own profile/password/sessions.
 
-Tenant-scoped commerce operations and Customer Experience manager. **Required backend: Luke Shop Backend v0.8.0 or later.**
+Store Designer v3 remains intact with real Customer Web preview, responsive device modes, Media Library integration and published/draft controls.
 
+## Security boundaries
 
-## v0.6.0 Professional Commerce UI
+- Backend authorization remains the source of truth for every action.
+- Public payment/delivery configuration must never contain provider secrets.
+- Refund status controls record an external/provider result; they do not execute money movement by themselves.
+- No local dev/build workflow is included in this release package.
 
-- Grouped merchant navigation: Operate, Grow, Experience, System.
-- Premium commerce operations shell and login experience.
-- Unified Luke Professional Design System tokens and responsive behavior.
-- Existing v0.5.0 Media Library, stock, Customer Experience, RBAC and commerce workflows are preserved.
+## Verification
 
-## v0.4.1 routing/preview additions
-- Displays the tenant's published Customer Web path.
-- `Open published` launches the canonical tenant storefront.
-- `Preview draft` requests a short-lived signed preview token from Backend and opens `/preview/{token}`.
-- Draft/publish/rollback behavior from v0.4.0 is preserved.
-- No arbitrary HTML/JavaScript/source editing is exposed to tenant owners.
-
-## Local environment
-```env
-VITE_LUKE_SHOP_API_BASE_URL=http://localhost:4100
-VITE_LUKE_SHOP_CUSTOMER_WEB_BASE_URL=http://localhost:4174
-VITE_APP_ENV=development
-```
-
-```powershell
-npm install --no-audit --no-fund
-npm run verify
-npm run build
-npm run dev
-```
-
-Default URL: `http://localhost:4173`. Merchant credentials remain tab-scoped in `sessionStorage`; backend authorization remains authoritative.
-
-
-## v0.5.0 Inline Stock
-Products can now receive opening stock during creation and tracked SKU creation. Existing product inventory can be adjusted from the product workspace. These controls reuse the audited inventory ledger; Backend v0.8.0 is unchanged.
-
-
-## Media Library
-Upload tenant images/videos once and attach them to products from the Product Media workspace.
+The shipped `npm run verify` command performs source/regression checks only and does not start a development server or create a production build.
