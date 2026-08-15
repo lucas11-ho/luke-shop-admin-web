@@ -31,7 +31,7 @@ export function createApi({ getSession, onSession }){
     let payload; if(rawBody!==undefined){ headers['Content-Type']=contentType||'application/octet-stream'; payload=rawBody; } else if(body!==undefined){ headers['Content-Type']='application/json'; payload=JSON.stringify(body); }
     let res;
     try { res=await fetch(url,{method,headers,body:payload}); }
-    catch { throw new ApiError('Unable to reach Luke Shop Backend. Check the API URL and backend status.'); }
+    catch { throw new ApiError(`Browser could not complete ${method} ${path}. Check Backend CORS methods, API URL, and network status.`,{code:'NETWORK_OR_CORS_ERROR',details:{method,path}}); }
     if(res.status===401 && auth && retry && session?.refreshToken && path!=='/v1/merchant/auth/refresh'){
       if(!refreshPromise){
         refreshPromise=(async()=>{

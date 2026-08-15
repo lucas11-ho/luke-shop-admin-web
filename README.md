@@ -1,10 +1,21 @@
-# LUKE_SHOP_ADMIN_WEB — current release v0.9.0
+# LUKE_SHOP_ADMIN_WEB — current release v0.9.1
 
-**Merchant Operations & Control Completion** · 2026-08-14
+**Customer Experience Studio Reliability & UI Repair** · 2026-08-15
 
-Requires Luke Shop Backend v0.11.0 with migration 012 for the new operations/control features.
+Requires Luke Shop Backend v0.11.1 with migration 012 for the new operations/control features.
 
-See `RELEASE_NOTES_v0.9.0.md`, `TECHNICAL_ANALYSIS_v0.9.0.md` and `DEPLOYMENT_CHECKLIST_v0.9.0.md`.
+See `RELEASE_NOTES_v0.9.1.md`, `TECHNICAL_ANALYSIS_v0.9.1.md` and `DEPLOYMENT_CHECKLIST_v0.9.1.md`.
+
+
+## Customer Experience v0.9.1 repair
+
+- Draft writes are serialized and autosave stops retrying after a transport failure until the merchant explicitly retries.
+- Publish refuses to continue if a dirty draft cannot be saved first.
+- Browser/network errors now identify the method and API path and explicitly point to CORS/API connectivity.
+- The Store Designer has independent scroll areas for Sections, Preview and Inspector, a stable horizontal scroll frame when the available viewport is narrow, and a wrapped action bar instead of compressing controls into unreadable space.
+- Preview zoom includes Fit, 50%, 67%, 75%, 90% and 100%.
+- History shows recent versions first and moves older versions behind an expandable control.
+- Ratings is visibly unavailable instead of exposing a setting that Customer Web cannot implement yet.
 
 ## What merchants can control now
 

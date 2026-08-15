@@ -1,7 +1,7 @@
 import fs from 'node:fs';import assert from 'node:assert/strict';
 const read=p=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');const pkg=JSON.parse(read('package.json'));const page=read('src/pages/CustomerExperiencePage.jsx');const shell=read('src/components/AppShell.jsx');const css=read('src/styles.css');
 const tests=[];const test=(n,f)=>tests.push([n,f]);
-test('release is v0.8.0',()=>assert.ok(['0.8.0','0.9.0'].includes(pkg.version)));
+test('release is v0.8.0',()=>assert.ok(['0.8.0','0.9.0','0.9.1'].includes(pkg.version)));
 test('fake Admin ExperiencePreview is removed',()=>assert.doesNotMatch(page,/function\s+ExperiencePreview/));
 test('real Customer Web iframe preview is used',()=>{assert.match(page,/<iframe/);assert.match(page,/VITE_LUKE_SHOP_CUSTOMER_WEB_BASE_URL/)});
 test('preview uses backend signed preview token',()=>assert.match(page,/customer-experience\/preview-token/));
@@ -9,7 +9,7 @@ test('designer iframe binds parent origin',()=>assert.match(page,/parent_origin=
 test('live unsaved draft is sent to renderer with explicit target origin',()=>{assert.match(page,/luke-store-designer:config/);assert.match(page,/postMessage\(msg,CUSTOMER_WEB_ORIGIN\)/)});
 test('desktop tablet mobile and side-by-side preview modes exist',()=>{for(const v of ['desktop','tablet','mobile','both'])assert.ok(page.includes(`'${v}'`),`missing ${v}`)});
 test('preview dimensions include 1440, 768 and 390 widths',()=>{for(const v of ['1440','768','390'])assert.ok(page.includes(v),`missing ${v}`)});
-test('autosave is debounced',()=>assert.match(page,/setTimeout\(\(\)=>save\(\{quiet:true\}\),900\)/));
+test('autosave is debounced',()=>assert.match(page,/setTimeout\(\(\)=>\{?save\(\{quiet:true\}\)/));
 test('undo and redo history are implemented',()=>{assert.match(page,/undoStack/);assert.match(page,/redoStack/)});
 test('publish summarizes unpublished configuration paths',()=>{assert.match(page,/deepDiffPaths/);assert.match(page,/Publish \$\{paths\.length/)});
 test('store identity separates internal and customer-facing name',()=>{assert.match(page,/Internal store name/);assert.match(page,/Customer display name/i);assert.match(page,/use_internal_name/)});
