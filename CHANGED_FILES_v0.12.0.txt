@@ -1,0 +1,15 @@
+Merchant Admin v0.12.0
+
+Modified:
+- package.json
+- src/pages/SettingsPage.jsx
+- src/pages/CustomerServicePage.jsx
+- historical forward-version regression checks
+- README.md
+
+Added:
+- scripts/v0.12.0-commerce-connector-v2-regression-test.mjs
+- RELEASE_NOTES_v0.12.0.md
+- TECHNICAL_ANALYSIS_v0.12.0.md
+- DEPLOYMENT_CHECKLIST_v0.12.0.md
+- TEST_RESULT_v0.12.0.md

@@ -3,7 +3,7 @@ const read=(p)=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');
 const pkg=JSON.parse(read('package.json'));let n=0;
 const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
 
-pass(['0.8.0','0.9.0','0.9.1','0.10.0','0.11.0'].includes(pkg.version),'release is v0.8.0');
+pass(['0.8.0','0.9.0','0.9.1','0.10.0','0.11.0','0.12.0'].includes(pkg.version),'release is v0.8.0');
 pass(pkg.engines.node==='>=24','Node 24+ required');
 pass(pkg.dependencies.react==='19.1.1','React exact version pinned');
 pass(pkg.devDependencies.vite==='7.1.2','Vite exact version pinned');
@@ -110,7 +110,7 @@ pass(cx.includes('/preview-token')&&cx.includes("method:'POST'"),'secure draft p
 pass(cx.includes('preview_path')&&cx.includes('window.open'),'draft preview opens signed preview path');
 pass(read('.env.example').includes('VITE_LUKE_SHOP_CUSTOMER_WEB_BASE_URL'),'Customer Web base is environment scoped');
 
-pass(/Backend v0\.(?:11\.(?:0|1)|12\.0|13\.0)/.test(read('README.md')),'README pins compatible Backend v0.11.x-v0.13.0 contract');
+pass(/Backend v0\.(?:11\.(?:0|1)|12\.0|13\.0|14\.0)/.test(read('README.md')),'README pins compatible Backend contract through v0.14.0');
 pass(read('API_INTEGRATION.md').includes('No direct database access'),'integration documentation prohibits direct DB access');
 pass(read('API_INTEGRATION.md').includes('No unsupported delete'),'integration documentation records API boundary discipline');
 
