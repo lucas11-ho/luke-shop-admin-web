@@ -1,7 +1,7 @@
 {
   "name": "luke-shop-admin-web",
   "private": true,
-  "version": "0.9.1",
+  "version": "0.10.0",
   "type": "module",
   "engines": {
     "node": ">=24"
@@ -12,11 +12,12 @@
     "preview": "vite preview --host 0.0.0.0 --port 4173",
     "check": "node scripts/check-source.mjs",
     "test:source": "node scripts/source-regression-test.mjs",
-    "verify": "npm run check && npm run test:source && npm run test:design && npm run test:designer-v3 && npm run test:operations-v09 && npm run test:experience-reliability-v091",
+    "verify": "npm run check && npm run test:source && npm run test:design && npm run test:designer-v3 && npm run test:operations-v09 && npm run test:experience-reliability-v091 && npm run test:delivery-location-v010",
     "test:design": "node scripts/design-regression-test.mjs",
     "test:designer-v3": "node scripts/v0.8.0-store-designer-v3-regression-test.mjs",
     "test:operations-v09": "node scripts/v0.9.0-operations-control-completion-regression-test.mjs",
-    "test:experience-reliability-v091": "node scripts/v0.9.1-customer-experience-reliability-regression-test.mjs"
+    "test:experience-reliability-v091": "node scripts/v0.9.1-customer-experience-reliability-regression-test.mjs",
+    "test:delivery-location-v010": "node scripts/v0.10.0-delivery-location-status-visual-regression-test.mjs"
   },
   "dependencies": {
     "react": "19.1.1",
@@ -26,5 +27,5 @@
     "@vitejs/plugin-react": "4.7.0",
     "vite": "7.1.2"
   },
-  "description": "Luke Shop Merchant Admin with Customer Experience Studio reliability and UI repair"
+  "description": "Luke Shop Merchant Admin with Customer Experience status visuals and delivery location operations"
 }

@@ -1,11 +1,17 @@
-# LUKE_SHOP_ADMIN_WEB — current release v0.9.1
+# LUKE_SHOP_ADMIN_WEB — current release v0.10.0
 
-**Customer Experience Studio Reliability & UI Repair** · 2026-08-15
+**Delivery Operations & Status Visual Selection** · 2026-08-16
 
-Requires Luke Shop Backend v0.11.1 with migration 012 for the new operations/control features.
+Requires Luke Shop Backend v0.12.0 with migration 013 for delivery-location/status-visual features; v0.11.x operations and Store Designer contracts are carried forward.
 
-See `RELEASE_NOTES_v0.9.1.md`, `TECHNICAL_ANALYSIS_v0.9.1.md` and `DEPLOYMENT_CHECKLIST_v0.9.1.md`.
+See `RELEASE_NOTES_v0.10.0.md`, `TECHNICAL_ANALYSIS_v0.10.0.md` and `DEPLOYMENT_CHECKLIST_v0.10.0.md`.
 
+
+## v0.10.0 delivery operations
+
+- Customer Experience can inherit or select a platform-approved fulfillment status visual pack.
+- Order workspace shows precise customer delivery coordinates and active live customer location with accuracy/update time.
+- Fulfillment management separates estimated-ready and estimated-delivery timestamps.
 
 ## Customer Experience v0.9.1 repair
 

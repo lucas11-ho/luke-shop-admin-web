@@ -1,0 +1,16 @@
+import fs from'node:fs';import assert from'node:assert/strict';
+const read=p=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');const pkg=JSON.parse(read('package.json'));const cx=read('src/pages/CustomerExperiencePage.jsx');const orders=read('src/pages/OrdersPage.jsx');const styles=read('src/styles.css');
+const tests=[];const test=(n,f)=>tests.push([n,f]);
+test('release is v0.10.0',()=>assert.equal(pkg.version,'0.10.0'));
+test('Customer Experience keeps status visual pack in draft model',()=>assert.match(cx,/status_visual_pack\s*:\s*'AUTO'/));
+test('Customer Experience consumes backend status visual catalog',()=>assert.match(cx,/status_visual_packs/));
+test('merchant can select automatic or explicit status visual pack',()=>{assert.match(cx,/Status visual pack/);assert.match(cx,/Automatic \(template default\)/)});
+test('status pack is visual-only and semantic statuses stay explicit',()=>assert.match(cx,/semantic statuses such as OUT_FOR_DELIVERY/));
+test('merchant order workspace renders precise delivery location',()=>assert.match(orders,/Precise delivery location/));
+test('precise location links to a real geographic coordinate',()=>assert.match(orders,/google\.com\/maps\?q=/));
+test('merchant order workspace renders customer live location',()=>assert.match(orders,/Customer live location/));
+test('live point shows last ping and accuracy',()=>{assert.match(orders,/Last ping/);assert.match(orders,/Accuracy ±/)});
+test('fulfillment editor separates estimated ready and delivery',()=>{assert.match(orders,/Estimated ready/);assert.match(orders,/Estimated delivery/);assert.match(orders,/estimated_ready_at/);assert.match(orders,/estimated_delivery_at/)});
+test('fulfillment writes use real PATCH backend contract',()=>assert.match(orders,/\/v1\/merchant\/fulfillments\//));
+test('location UI has deliberate business-level presentation',()=>assert.match(styles,/\.admin-location-card/));
+let passed=0;for(const[n,f]of tests){try{f();passed++;console.log(`PASS ${n}`)}catch(e){console.error(`FAIL ${n}`);throw e}}console.log(`${passed}/${tests.length} Luke Shop Admin Web v0.10.0 delivery location/status visual checks passed`);

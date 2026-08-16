@@ -1,33 +1,31 @@
-# API Integration — Merchant Admin v0.9.0
+# API Integration — Merchant Admin v0.10.0
 
-Required backend: Luke Shop Backend v0.11.0.
+Required backend: Luke Shop Backend v0.12.0 with migration 013.
 
-Merchant Admin uses `/v1/merchant/*` only and sends the authenticated tenant slug plus selected store context where applicable. Backend permissions remain authoritative.
+Merchant Admin uses `/v1/merchant/*` and authenticated tenant/store context. Backend permissions remain authoritative.
 
-## Control surfaces
+## Delivery operations
 
-- Stores: list/create/update and Store Designer context selection.
-- Products/categories/variants/media/modifiers: complete supported create/edit/deactivate controls.
-- Inventory: current levels, ledger, audited adjustments, location create/edit/default/status.
-- Orders: detail, controlled state transitions, payment confirm/fail, fulfillment updates.
-- Payments: activity, customer-safe payment-method configuration, internal audited refund workflow.
-- Delivery: method create/edit plus customer-safe provider configuration.
-- Promotions: programs, codes, targets, scheduling and removal/deactivation controls.
-- Customers: lifecycle status, saved-address visibility, status history, recent orders, active sessions.
-- Luke CS & AI: policy, credential creation and credential revocation.
-- Staff & access: staff, roles, permissions, password reset, session revocation.
-- Merchant self-security: profile, password and session management.
-- Audit: tenant-scoped operational/security events.
-- Customer Experience: Store Designer v3, signed Customer Web preview, templates/fonts/media, draft/publish/rollback.
+Order detail consumes the backend shipping-address snapshot and may display:
+- customer-confirmed latitude/longitude
+- GPS accuracy
+- location update time
+- active customer live point / last ping
 
-## Important boundaries
+Merchant Admin does not collect customer GPS itself.
 
-`public_config` is customer-safe configuration only. The UI explicitly warns against placing provider/API secrets there.
+Fulfillment updates use the existing merchant fulfillment PATCH contract and now support separate `estimated_ready_at` and `estimated_delivery_at` values.
 
-The refund control creates and advances Luke refund records; it does not call a payment-provider refund endpoint. Provider references/results are recorded after the external/provider operation.
+## Customer Experience status visuals
 
-No route is fabricated merely to create a button. Unsupported service/internal APIs remain absent from Merchant Admin.
+Customer Experience catalog supplies platform-approved status visual packs. Merchant draft configuration stores `status_visual_pack` as `AUTO` or an explicit canonical pack. `AUTO` inherits the effective template/theme default.
 
-No direct database access is permitted from Merchant Admin.
+The selection changes Customer Web presentation only. It does not mutate order or fulfillment state-machine values.
 
-No unsupported delete or mutation route is invented by the frontend; controls are limited to backend-supported operations.
+## Existing control surfaces carried forward
+
+Stores, products/categories/variants/media/modifiers, inventory, orders, payments/refunds, delivery, promotions, customers, Luke CS & AI, Staff/RBAC, merchant profile/security/audit, and Store Designer v3 remain integrated.
+
+No direct database access is permitted from Merchant Admin. No unsupported service/internal mutation routes are invented by the frontend.
+
+No unsupported delete or mutation route is invented merely to create a UI control; frontend operations remain limited to backend-supported contracts.

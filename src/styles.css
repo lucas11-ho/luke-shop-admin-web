@@ -69,3 +69,4 @@
 .customer-experience-page .page-actions{flex:1 1 520px;justify-content:flex-end;align-items:center;flex-wrap:wrap;min-width:0}
 .customer-experience-page .page-actions .save-state{white-space:nowrap}
 @media(max-width:1250px){.customer-experience-page .page-actions{flex-basis:100%;justify-content:flex-start}.customer-experience-page .page-header{gap:14px}.customer-experience-page .designer-status-bar{margin-top:2px}}
+.admin-location-card{margin-top:12px;padding:12px;border:1px solid var(--border,#e5e7eb);border-radius:12px;background:var(--surface-muted,#f8fafc);display:grid;gap:4px}.admin-location-card.live{border-color:#86efac;background:#f0fdf4}.admin-location-card span{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}.admin-location-card small{color:var(--muted,#667085)}
