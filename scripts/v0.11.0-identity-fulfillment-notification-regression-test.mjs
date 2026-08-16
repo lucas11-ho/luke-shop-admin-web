@@ -1,0 +1,10 @@
+import fs from'node:fs';import assert from'node:assert/strict';const r=p=>fs.readFileSync(new URL(`../${p}`,import.meta.url),'utf8');let n=0;const t=(x,f)=>{f();n++;console.log('PASS',x)};
+t('orders nav has red new-order badge',()=>{const s=r('src/components/AppShell.jsx');assert.ok(s.includes('nav-red-badge'));assert.ok(s.includes('notifications.newOrders'));});
+t('notification bell uses merchant notification API',()=>{const s=r('src/notifications/useMerchantNotifications.js');assert.ok(s.includes('/v1/merchant/notifications'));assert.ok(s.includes('ORDER_CREATED'));assert.ok(s.includes('setInterval'));});
+t('new order sound is user-controllable',()=>{const s=r('src/notifications/useMerchantNotifications.js');assert.ok(s.includes('AudioContext'));assert.ok(s.includes('soundEnabled'));});
+t('fulfillment status dropdown is server restricted',()=>{const s=r('src/pages/OrdersPage.jsx');assert.ok(s.includes('f.allowed_transitions'));assert.ok(!s.includes('FULFILLMENT_STATUSES'));});
+t('fulfillment cards show workflow and grouped items',()=>{const s=r('src/pages/OrdersPage.jsx');assert.ok(s.includes('f.fulfillment_type'));assert.ok(s.includes('Items in this fulfillment'));});
+t('settings manages readable customer ID prefix',()=>{const s=r('src/pages/SettingsPage.jsx');assert.ok(s.includes('Customer ID prefix'));assert.ok(s.includes('customer_identity:identity'));});
+t('settings shows provider readiness',()=>assert.ok(r('src/pages/SettingsPage.jsx').includes('/v1/merchant/customer-auth/options')));
+t('customer directory surfaces readable code and phone',()=>{const s=r('src/pages/CustomersPage.jsx');assert.ok(s.includes('customer_code'));assert.ok(s.includes('phone_e164'));});
+console.log(`v0.11.0 identity/fulfillment/notification regression: ${n}/${n} PASS`);

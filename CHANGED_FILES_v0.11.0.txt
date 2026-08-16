@@ -1,0 +1,27 @@
+Luke Shop admin release changed files
+
+Added (7):
+A  DEPLOYMENT_CHECKLIST_v0.11.0.md
+A  RELEASE_NOTES_v0.11.0.md
+A  TECHNICAL_ANALYSIS_v0.11.0.md
+A  TEST_RESULT_v0.11.0.md
+A  scripts/v0.11.0-identity-fulfillment-notification-regression-test.mjs
+A  src/components/NotificationCenter.jsx
+A  src/notifications/useMerchantNotifications.js
+
+Modified (13):
+M  API_INTEGRATION.md
+M  README.md
+M  package.json
+M  scripts/source-regression-test.mjs
+M  scripts/v0.10.0-delivery-location-status-visual-regression-test.mjs
+M  scripts/v0.8.0-store-designer-v3-regression-test.mjs
+M  scripts/v0.9.0-operations-control-completion-regression-test.mjs
+M  scripts/v0.9.1-customer-experience-reliability-regression-test.mjs
+M  src/components/AppShell.jsx
+M  src/pages/CustomersPage.jsx
+M  src/pages/OrdersPage.jsx
+M  src/pages/SettingsPage.jsx
+M  src/styles.css
+
+Deleted (0):

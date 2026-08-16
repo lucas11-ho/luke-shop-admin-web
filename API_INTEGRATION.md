@@ -29,3 +29,10 @@ Stores, products/categories/variants/media/modifiers, inventory, orders, payment
 No direct database access is permitted from Merchant Admin. No unsupported service/internal mutation routes are invented by the frontend.
 
 No unsupported delete or mutation route is invented merely to create a UI control; frontend operations remain limited to backend-supported contracts.
+
+## v0.11.0 identity, fulfillment and notifications
+
+- Tenant identity settings use `GET /v1/merchant/customer-auth/options` and `PATCH /v1/merchant/tenant/settings`.
+- Customer directory consumes `customer_code`, phone and avatar fields.
+- Order fulfillment controls consume server-provided `fulfillment_type`, `workflow`, grouped `items` and `allowed_transitions`; the UI does not manufacture a generic status list.
+- Notification bell/order badges poll `GET /v1/merchant/notifications` and mark notifications read through the dedicated notification routes.

@@ -1,11 +1,18 @@
-# LUKE_SHOP_ADMIN_WEB — current release v0.10.0
+# LUKE_SHOP_ADMIN_WEB — current release v0.11.0
 
-**Delivery Operations & Status Visual Selection** · 2026-08-16
+**Customer Identity, Type-safe Fulfillment & Order Notifications** · 2026-08-17
 
-Requires Luke Shop Backend v0.12.0 with migration 013 for delivery-location/status-visual features; v0.11.x operations and Store Designer contracts are carried forward.
+Requires Luke Shop Backend v0.13.0 with migration 014. Delivery/location, status visuals, operations and Store Designer contracts are carried forward.
 
-See `RELEASE_NOTES_v0.10.0.md`, `TECHNICAL_ANALYSIS_v0.10.0.md` and `DEPLOYMENT_CHECKLIST_v0.10.0.md`.
+See `RELEASE_NOTES_v0.11.0.md`, `TECHNICAL_ANALYSIS_v0.11.0.md` and `DEPLOYMENT_CHECKLIST_v0.11.0.md`.
 
+
+
+## v0.11.0 release focus
+
+Requires Backend v0.13.0 + migration 014 for customer identity settings, type-safe fulfillment transitions and merchant notification data. New-order sound is browser-controlled and notification delivery is near-real-time polling rather than a fake push channel.
+
+Coordinated versions: Backend v0.13.0, Merchant Admin v0.11.0, Customer Web v0.8.0, Platform Admin v0.6.0.
 
 ## v0.10.0 delivery operations
 
