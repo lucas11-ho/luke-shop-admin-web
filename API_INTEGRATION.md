@@ -36,3 +36,7 @@ No unsupported delete or mutation route is invented merely to create a UI contro
 - Customer directory consumes `customer_code`, phone and avatar fields.
 - Order fulfillment controls consume server-provided `fulfillment_type`, `workflow`, grouped `items` and `allowed_transitions`; the UI does not manufacture a generic status list.
 - Notification bell/order badges poll `GET /v1/merchant/notifications` and mark notifications read through the dedicated notification routes.
+
+
+## Customer Authentication Pro v0.12.1
+Merchant Admin edits only tenant auth policy. Google/Telegram/Turnstile credentials are configured in Backend environment variables and are never read back through this application.

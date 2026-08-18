@@ -1,7 +1,7 @@
 import fs from'node:fs';import assert from'node:assert/strict';
 const read=p=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');const pkg=JSON.parse(read('package.json'));const cx=read('src/pages/CustomerExperiencePage.jsx');const orders=read('src/pages/OrdersPage.jsx');const styles=read('src/styles.css');
 const tests=[];const test=(n,f)=>tests.push([n,f]);
-test('release is v0.10.0',()=>assert.ok(['0.10.0','0.11.0','0.12.0'].includes(pkg.version)));
+test('release is v0.10.0',()=>assert.ok(['0.10.0','0.11.0','0.12.0','0.12.1'].includes(pkg.version)));
 test('Customer Experience keeps status visual pack in draft model',()=>assert.match(cx,/status_visual_pack\s*:\s*'AUTO'/));
 test('Customer Experience consumes backend status visual catalog',()=>assert.match(cx,/status_visual_packs/));
 test('merchant can select automatic or explicit status visual pack',()=>{assert.match(cx,/Status visual pack/);assert.match(cx,/Automatic \(template default\)/)});

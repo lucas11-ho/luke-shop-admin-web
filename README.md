@@ -1,10 +1,11 @@
-# LUKE_SHOP_ADMIN_WEB — current release v0.12.0
+# LUKE_SHOP_ADMIN_WEB — current release v0.12.1
 
-Merchant Admin v0.12.0 adds the merchant-side setup surface for **Luke Commerce Connector v2**. It requires Backend v0.14.0 + migration 015 for the new signed-context metadata. Platform Admin remains v0.6.0.
+Merchant Admin v0.12.1 adds **Customer Authentication Pro controls** for Backend v0.14.1 and Customer Web v0.9.1.
 
-Merchant workflow:
-1. Store Settings → Customer service: configure the HTTPS Luke CS Chat URL and platform route key.
-2. Customer Service policy: keep the AI service credential least-privilege/read-only.
-3. Create/rotate/revoke service credentials from Merchant Admin; credentials never enter Customer Web.
+- Google and Telegram readiness is backend-authoritative.
+- Merchant can enable only production-ready login methods.
+- Turnstile requirements are configurable for email login, signup and optionally social login.
+- Secrets remain on Backend only.
+- Forgot Password remains intentionally unavailable.
 
-See `RELEASE_NOTES_v0.12.0.md`, `TECHNICAL_ANALYSIS_v0.12.0.md`, `TEST_RESULT_v0.12.0.md` and `DEPLOYMENT_CHECKLIST_v0.12.0.md`.
+See `RELEASE_NOTES_v0.12.1.md`, `TECHNICAL_ANALYSIS_v0.12.1.md`, `TEST_RESULT_v0.12.1.md` and `DEPLOYMENT_CHECKLIST_v0.12.1.md`.

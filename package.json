@@ -1,7 +1,7 @@
 {
   "name": "luke-shop-admin-web",
   "private": true,
-  "version": "0.12.0",
+  "version": "0.12.1",
   "type": "module",
   "engines": {
     "node": ">=24"
@@ -12,14 +12,15 @@
     "preview": "vite preview --host 0.0.0.0 --port 4173",
     "check": "node scripts/check-source.mjs",
     "test:source": "node scripts/source-regression-test.mjs",
-    "verify": "npm run check && npm run test:source && npm run test:design && npm run test:designer-v3 && npm run test:operations-v09 && npm run test:experience-reliability-v091 && npm run test:delivery-location-v010 && npm run test:identity-fulfillment-v011 && npm run test:commerce-connector-v2",
+    "verify": "npm run check && npm run test:source && npm run test:design && npm run test:designer-v3 && npm run test:operations-v09 && npm run test:experience-reliability-v091 && npm run test:delivery-location-v010 && npm run test:identity-fulfillment-v011 && npm run test:commerce-connector-v2 && npm run test:auth-pro-v0121",
     "test:design": "node scripts/design-regression-test.mjs",
     "test:designer-v3": "node scripts/v0.8.0-store-designer-v3-regression-test.mjs",
     "test:operations-v09": "node scripts/v0.9.0-operations-control-completion-regression-test.mjs",
     "test:experience-reliability-v091": "node scripts/v0.9.1-customer-experience-reliability-regression-test.mjs",
     "test:delivery-location-v010": "node scripts/v0.10.0-delivery-location-status-visual-regression-test.mjs",
     "test:identity-fulfillment-v011": "node scripts/v0.11.0-identity-fulfillment-notification-regression-test.mjs",
-    "test:commerce-connector-v2": "node scripts/v0.12.0-commerce-connector-v2-regression-test.mjs"
+    "test:commerce-connector-v2": "node scripts/v0.12.0-commerce-connector-v2-regression-test.mjs",
+    "test:auth-pro-v0121": "node scripts/v0.12.1-customer-auth-pro-regression-test.mjs"
   },
   "dependencies": {
     "react": "19.1.1",
@@ -29,5 +30,5 @@
     "@vitejs/plugin-react": "4.7.0",
     "vite": "7.1.2"
   },
-  "description": "Luke Shop Merchant Admin v0.12.0 \u2014 Commerce Connector v2 setup and read-only AI policy controls"
+  "description": "Luke Shop Merchant Admin v0.12.1 \u2014 Customer Authentication Pro controls"
 }

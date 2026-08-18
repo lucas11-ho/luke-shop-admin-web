@@ -1,7 +1,7 @@
 import fs from'node:fs';import assert from'node:assert/strict';
 const read=p=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');const pkg=JSON.parse(read('package.json'));const page=read('src/pages/CustomerExperiencePage.jsx');const api=read('src/api/client.js');const css=read('src/styles.css');
 const tests=[];const test=(n,f)=>tests.push([n,f]);
-test('release is v0.9.1',()=>assert.ok(['0.9.1','0.10.0','0.11.0','0.12.0'].includes(pkg.version)));
+test('release is v0.9.1',()=>assert.ok(['0.9.1','0.10.0','0.11.0','0.12.0','0.12.1'].includes(pkg.version)));
 test('draft save uses PUT and serialized save queue',()=>{assert.match(page,/customer-experience\/draft/);assert.match(page,/method:'PUT'/);assert.match(page,/saveQueue\.current=saveQueue\.current\.catch/)});
 test('publish aborts when draft save fails',()=>assert.match(page,/try\{if\(dirty\)await save\(\{quiet:true\}\)\}catch\{return\}/));
 test('autosave stops after a transport error until explicit retry or another successful save',()=>{assert.match(page,/saveState==='error'/);assert.match(page,/Retry save/)});
