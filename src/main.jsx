@@ -11,4 +11,5 @@ import './vben-dashboard.css';
 import './vben-orders.css';
 import './vben-products.css';
 import './vben-inventory-media.css';
+import './vben-customers.css';
 createRoot(document.getElementById('root')).render(<React.StrictMode><AdminI18nProvider><AuthProvider><App /></AuthProvider></AdminI18nProvider></React.StrictMode>);
