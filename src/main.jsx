@@ -15,4 +15,14 @@ import './vben-customers.css';
 import './vben-payments-delivery.css';
 import './vben-promotions.css';
 import './vben-settings-access.css';
-createRoot(document.getElementById('root')).render(<React.StrictMode><AdminI18nProvider><AuthProvider><App /></AuthProvider></AdminI18nProvider></React.StrictMode>);
+import './cx-v4-store-designer.css';
+
+createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <AdminI18nProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </AdminI18nProvider>
+  </React.StrictMode>
+);
