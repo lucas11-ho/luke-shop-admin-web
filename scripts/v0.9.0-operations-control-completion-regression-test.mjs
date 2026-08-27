@@ -1,7 +1,7 @@
 import fs from'node:fs';import assert from'node:assert/strict';
 const read=p=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');const pkg=JSON.parse(read('package.json'));const app=read('src/app/App.jsx');const shell=read('src/components/AppShell.jsx');const stores=read('src/pages/StoresPage.jsx');const profile=read('src/pages/MyProfilePage.jsx');const audit=read('src/pages/AuditPage.jsx');const products=read('src/pages/ProductsPage.jsx');const inventory=read('src/pages/InventoryPage.jsx');const promos=read('src/pages/PromotionsPage.jsx');const payments=read('src/pages/PaymentsPage.jsx');const delivery=read('src/pages/DeliveryPage.jsx');const cs=read('src/pages/CustomerServicePage.jsx');const customers=read('src/pages/CustomersPage.jsx');
 const tests=[];const test=(n,f)=>tests.push([n,f]);
-test('release is v0.9.0',()=>assert.ok(['0.9.0','0.9.1','0.10.0','0.11.0','0.12.0','0.12.1'].includes(pkg.version)));
+test('release is v0.9.0',()=>assert.ok(['0.9.0','0.9.1','0.10.0','0.11.0','0.12.0','0.12.1','0.13.0'].includes(pkg.version)));
 test('stores profile and audit pages are routed',()=>{for(const x of ["'/stores'","'/my-profile'","'/audit'"])assert.ok(app.includes(x),`missing ${x}`)});
 test('navigation exposes stores profile and audit',()=>{for(const x of ['Stores','My profile','Audit log'])assert.ok(shell.includes(x),`missing ${x}`)});
 test('store manager can list create and update stores',()=>{assert.match(stores,/\/v1\/merchant\/stores/);assert.match(stores,/method:'POST'/);assert.match(stores,/method:'PATCH'/)});
