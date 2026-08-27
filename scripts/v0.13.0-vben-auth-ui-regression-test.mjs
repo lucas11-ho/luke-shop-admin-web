@@ -1,0 +1,16 @@
+import fs from'node:fs';import assert from'node:assert/strict';
+const read=p=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');let n=0;const test=(name,fn)=>{fn();n++;console.log('PASS',name)};
+const login=read('src/pages/LoginPage.jsx'),ui=read('src/components/VbenUI.jsx'),css=read('src/vben-ui.css'),main=read('src/main.jsx'),auth=read('src/auth/AuthContext.jsx'),i18n=read('src/i18n/AdminI18nContext.jsx');
+test('Vben UI layer is loaded after shell styles',()=>{assert.match(main,/import '\.\/vben-shell\.css';\nimport '\.\/vben-ui\.css';/)});
+test('shared Vben controls exist',()=>{for(const name of ['VbenButton','VbenField','VbenInput','VbenPasswordInput','VbenSelect','VbenCard','VbenAlert','VbenBadge','VbenSwitch','VbenEmpty','VbenSkeleton'])assert.ok(ui.includes(`function ${name}`)||ui.includes(`const ${name}`),`missing ${name}`)});
+test('login uses Vben auth layout',()=>{assert.match(login,/vben-auth-page/);assert.match(login,/vben-auth-hero/);assert.match(login,/vben-auth-form/)});
+test('login uses shared Vben form primitives',()=>{for(const name of ['VbenField','VbenInput','VbenPasswordInput','VbenSelect','VbenButton','VbenAlert'])assert.ok(login.includes(name),`missing ${name}`)});
+test('login retains merchant auth contract',()=>{assert.match(auth,/\/v1\/merchant\/auth\/login/);assert.match(login,/await login\(\{tenantSlug:/);assert.match(login,/navigate\('\/dashboard'\)/)});
+test('login keeps 12 character password minimum',()=>assert.match(login,/minLength="12"/));
+test('login supports password visibility toggle',()=>{assert.match(ui,/Show password/);assert.match(ui,/Hide password/);assert.match(ui,/eyeOff/)});
+test('login exposes no backend API base URL',()=>assert.doesNotMatch(login,/api\.baseUrl|VITE_LUKE_SHOP_API_BASE_URL/));
+test('login has busy and disabled submission safety',()=>{assert.match(login,/if\(busy\)return/);assert.match(login,/loading=\{busy\}/);assert.match(login,/disabled=\{!form\.tenantSlug\.trim\(\)/)});
+test('login is localized across supported admin languages',()=>{for(const key of ["'auth.welcome'","'auth.signin'","'auth.tenant'","'auth.password'"])assert.equal((i18n.match(new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g'))||[]).length,3,`missing localized ${key}`)});
+test('auth design is responsive',()=>{assert.match(css,/@media\(max-width:980px\)/);assert.match(css,/@media\(max-width:560px\)/)});
+test('shared controls include accessible focus treatment',()=>assert.match(css,/:focus-visible/));
+console.log(`${n}/${n} Merchant Admin Vben auth and shared UI checks passed`);
