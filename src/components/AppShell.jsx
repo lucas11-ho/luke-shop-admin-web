@@ -6,10 +6,10 @@ import{NotificationCenter}from'./NotificationCenter.jsx';
 import{useAdminI18n}from'../i18n/AdminI18nContext.jsx';
 
 const groups=[
- ['group.operate',[['dashboard','nav.dashboard',null,'dashboard'],['stores','nav.stores','stores.read','stores'],['orders','nav.orders','orders.read','orders'],['products','nav.products','catalog.read','products'],['media-library','nav.media','catalog.read','media'],['inventory','nav.inventory','inventory.read','inventory'],['customers','nav.customers','customers.read','customers']]],
- ['group.grow',[['promotions','nav.promotions','promotions.read','promotions'],['payments','nav.payments','payments.read','payments'],['delivery','nav.delivery','delivery.read','delivery']]],
- ['group.experience',[['customer-experience','nav.experience','customer_experience.read','experience'],['languages','nav.languages','customer_experience.read','languages'],['address-form','nav.address','customer_experience.read','address'],['cs-ai','nav.cs','integrations.customer_service.read','support']]],
- ['group.system',[['my-profile','nav.profile',null,'profile'],['settings','nav.settings','tenant.settings.read','settings'],['access','nav.access',null,'access'],['audit','nav.audit','audit.read','audit']]],
+ ['group.operate',[['dashboard','Dashboard',null,'dashboard','nav.dashboard'],['stores','Stores','stores.read','stores','nav.stores'],['orders','Orders','orders.read','orders','nav.orders'],['products','Products','catalog.read','products','nav.products'],['media-library','Media Library','catalog.read','media','nav.media'],['inventory','Inventory','inventory.read','inventory','nav.inventory'],['customers','Customers','customers.read','customers','nav.customers']]],
+ ['group.grow',[['promotions','Promotions','promotions.read','promotions','nav.promotions'],['payments','Payments','payments.read','payments','nav.payments'],['delivery','Delivery','delivery.read','delivery','nav.delivery']]],
+ ['group.experience',[['customer-experience','Customer Experience','customer_experience.read','experience','nav.experience'],['languages','Languages','customer_experience.read','languages','nav.languages'],['address-form','Address Form','customer_experience.read','address','nav.address'],['cs-ai','Customer Service','integrations.customer_service.read','support','nav.cs']]],
+ ['group.system',[['my-profile','My Profile',null,'profile','nav.profile'],['settings','Settings','tenant.settings.read','settings','nav.settings'],['access','Access',null,'access','nav.access'],['audit','Audit','audit.read','audit','nav.audit']]],
 ];
 
 const iconPaths={
@@ -41,7 +41,6 @@ const iconPaths={
 };
 
 function Icon({name,size=18}){const paths=iconPaths[name]||iconPaths.dashboard;return <svg className="vben-icon" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths.map((d,i)=><path d={d} key={`${name}-${i}`}/>)}</svg>}
-
 function initialCollapsed(){try{return localStorage.getItem('luke-shop-admin.sidebar-collapsed')==='1'}catch{return false}}
 
 export function AppShell({route,children}){
@@ -52,16 +51,14 @@ export function AppShell({route,children}){
  useEffect(()=>{let live=true;api.request('/v1/merchant/stores').then(r=>{if(live)setStores(r.data.stores||[])}).catch(()=>{if(live)setStores([])});return()=>{live=false}},[api]);
  const permissions=session?.user?.permissions||[];
  const visibleGroups=useMemo(()=>groups.map(([group,items])=>[group,items.filter(([, ,perm])=>!perm||permissions.includes(perm))]).filter(([,items])=>items.length),[permissions]);
- const go=key=>navigate(`/${key}`);const found=groups.flatMap(x=>x[1]).find(([key])=>route.startsWith(`/${key}`));const title=found?t(found[1]):'Workspace';const selected=session?.storeId||'';
+ const go=key=>navigate(`/${key}`);const found=groups.flatMap(x=>x[1]).find(([key])=>route.startsWith(`/${key}`));const title=found?t(found[4]||found[1]):'Workspace';const selected=session?.storeId||'';
  const displayName=session?.user?.display_name||session?.user?.email||'Merchant';const role=session?.user?.role||'Merchant user';
  return <div className={`vben-shell ${collapsed?'is-collapsed':''} ${mobile?'is-mobile-open':''}`}>
   <button className="vben-mobile-overlay" aria-label="Close navigation" onClick={()=>setMobile(false)}/>
   <aside className="vben-sidebar">
-   <button className="vben-brand" onClick={()=>go('dashboard')} title="Luke Shop Merchant Admin">
-    <span className="vben-brand-mark">L</span><span className="vben-brand-copy"><strong>Luke Shop</strong><small>Merchant Admin</small></span>
-   </button>
+   <button className="vben-brand" onClick={()=>go('dashboard')} title="Luke Shop Merchant Admin"><span className="vben-brand-mark">L</span><span className="vben-brand-copy"><strong>Luke Shop</strong><small>Merchant Admin</small></span></button>
    <div className="vben-tenant-card" title={session?.tenantSlug||''}><span>{t('shell.tenant')}</span><strong>{session?.tenantSlug||'—'}</strong></div>
-   <nav className="vben-nav" aria-label="Merchant navigation">{visibleGroups.map(([group,items])=><section className="vben-nav-group" key={group}><div className="vben-nav-label">{t(group)}</div>{items.map(([key,label,,icon])=>{const active=route.startsWith(`/${key}`);const badge=key==='orders'?notifications.newOrders:0;return <button key={key} className={`vben-nav-item ${active?'active':''}`} onClick={()=>go(key)} title={collapsed?t(label):undefined} aria-current={active?'page':undefined}><span className="vben-nav-icon"><Icon name={icon}/></span><span className="vben-nav-text">{t(label)}</span>{badge>0&&<b className="vben-nav-badge">{badge>99?'99+':badge}</b>}</button>})}</section>)}</nav>
+   <nav className="vben-nav" aria-label="Merchant navigation">{visibleGroups.map(([group,items])=><section className="vben-nav-group" key={group}><div className="vben-nav-label">{t(group)}</div>{items.map(([key,fallback,,icon,labelKey])=>{const active=route.startsWith(`/${key}`);const badge=key==='orders'?notifications.newOrders:0;const label=t(labelKey||fallback);return <button key={key} className={`vben-nav-item ${active?'active':''}`} onClick={()=>go(key)} title={collapsed?label:undefined} aria-current={active?'page':undefined}><span className="vben-nav-icon"><Icon name={icon}/></span><span className="vben-nav-text">{label}</span>{badge>0&&<b className="vben-nav-badge">{badge>99?'99+':badge}</b>}</button>})}</section>)}</nav>
    <div className="vben-sidebar-bottom"><button className="vben-collapse-button" onClick={()=>setCollapsed(v=>!v)} title={collapsed?'Expand sidebar':'Collapse sidebar'}><Icon name={collapsed?'expand':'collapse'} size={17}/><span>{collapsed?'':'Collapse'}</span></button></div>
   </aside>
   <section className="vben-workspace">
