@@ -3,7 +3,7 @@ const read=(p)=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');
 const pkg=JSON.parse(read('package.json'));let n=0;
 const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
 
-pass(['0.8.0','0.9.0','0.9.1','0.10.0','0.11.0','0.12.0','0.12.1'].includes(pkg.version),'release is v0.8.0');
+pass(['0.8.0','0.9.0','0.9.1','0.10.0','0.11.0','0.12.0','0.12.1','0.13.0'].includes(pkg.version),'release supports v0.13.0');
 pass(pkg.engines.node==='>=24','Node 24+ required');
 pass(pkg.dependencies.react==='19.1.1','React exact version pinned');
 pass(pkg.devDependencies.vite==='7.1.2','Vite exact version pinned');
@@ -141,4 +141,4 @@ pass(read('src/pages/PromotionsPage.jsx').includes('schedule_timezone'),'promoti
 pass(read('src/pages/PromotionsPage.jsx').includes('DateTimePicker'),'promotion starts/ends use popup date-time picker');
 pass(read('src/pages/OrdersPage.jsx').includes('allowed_transitions'),'order actions use backend allowed transitions');
 pass(!read('src/pages/SettingsPage.jsx').includes('<textarea value={JSON'),'raw JSON settings editor is removed');
-console.log(`${n}/${n} Luke Shop Admin Web v0.9.0 source regression checks passed`);
+console.log(`${n}/${n} Luke Shop Admin Web v0.13.0 source regression checks passed`);
