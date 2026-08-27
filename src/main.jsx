@@ -7,4 +7,5 @@ import './styles.css';
 import './localization-controls.css';
 import './vben-shell.css';
 import './vben-ui.css';
+import './vben-dashboard.css';
 createRoot(document.getElementById('root')).render(<React.StrictMode><AdminI18nProvider><AuthProvider><App /></AuthProvider></AdminI18nProvider></React.StrictMode>);
