@@ -6,7 +6,7 @@ const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PAS
 pass(['0.8.0','0.9.0','0.9.1','0.10.0','0.11.0','0.12.0','0.12.1','0.13.0'].includes(pkg.version),'release supports v0.13.0');
 pass(pkg.engines.node==='>=24','Node 24+ required');
 pass(pkg.dependencies.react==='19.1.1','React exact version pinned');
-pass(pkg.devDependencies.vite==='7.1.2','Vite exact version pinned');
+pass(pkg.devDependencies.vite==='7.3.6','Vite exact patched version pinned');
 
 const client=read('src/api/client.js'),auth=read('src/auth/AuthContext.jsx'),shell=read('src/components/AppShell.jsx'),app=read('src/app/App.jsx');
 const cx=read('src/pages/CustomerExperiencePage.jsx'),ui=read('src/components/UI.jsx'),styles=read('src/styles.css'),dashboard=read('src/pages/DashboardPage.jsx'),prod=read('src/pages/ProductsPage.jsx'),inv=read('src/pages/InventoryPage.jsx'),orders=read('src/pages/OrdersPage.jsx'),customers=read('src/pages/CustomersPage.jsx'),payments=read('src/pages/PaymentsPage.jsx'),delivery=read('src/pages/DeliveryPage.jsx'),promos=read('src/pages/PromotionsPage.jsx'),settings=read('src/pages/SettingsPage.jsx'),cs=read('src/pages/CustomerServicePage.jsx'),access=read('src/pages/AccessPage.jsx');
@@ -113,7 +113,6 @@ pass(read('.env.example').includes('VITE_LUKE_SHOP_CUSTOMER_WEB_BASE_URL'),'Cust
 pass(/Backend v0\.(?:11\.(?:0|1)|12\.0|13\.0|14\.[01])/.test(read('README.md')),'README pins compatible Backend contract through v0.14.1');
 pass(read('API_INTEGRATION.md').includes('No direct database access'),'integration documentation prohibits direct DB access');
 pass(read('API_INTEGRATION.md').includes('No unsupported delete'),'integration documentation records API boundary discipline');
-
 
 const assets=read('src/pages/AssetsPage.jsx');
 pass(app.includes("'/media-library':AssetsPage"),'Media Library route is registered');
