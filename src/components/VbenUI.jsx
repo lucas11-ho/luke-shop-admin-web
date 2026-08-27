@@ -1,4 +1,4 @@
-import React,{useId,useState}from'react';
+import React,{useEffect,useId,useState}from'react';
 
 export const vcn=(...values)=>values.filter(Boolean).join(' ');
 
@@ -27,9 +27,14 @@ const paths={
   arrowRight:['M5 12h14','m13 6 6 6-6 6'],
   refresh:['M20 11a8 8 0 1 0 2 5','M20 4v7h-7'],
   pulse:['M3 12h4l2-5 4 10 2-5h6'],
+  mapPin:['M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0','M12 7a3 3 0 1 1 0 6 3 3 0 0 1 0-6'],
+  truck:['M3 6h11v10H3z','M14 10h4l3 3v3h-7z','M7 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4','M18 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4'],
+  history:['M3 12a9 9 0 1 0 3-6.7','M3 4v5h5','M12 7v5l3 2'],
+  filter:['M4 5h16','M7 12h10','M10 19h4'],
+  receipt:['M6 3h12v18l-3-2-3 2-3-2-3 2z','M9 8h6','M9 12h6','M9 16h4'],
 };
 
-export function vbenStatusTone(s=''){const x=String(s).toUpperCase();if(['ACTIVE','PAID','PUBLISHED','DELIVERED','COMPLETED','READY','SUCCEEDED'].includes(x))return'success';if(['FAILED','BLOCKED','DISABLED','CANCELLED','REFUNDED','INACTIVE','ARCHIVED','EXPIRED'].includes(x))return'danger';if(['SUSPENDED','PENDING','PENDING_PAYMENT','PROCESSING','PREPARING','DRAFT','PAUSED','REFUND_PENDING','SCHEDULED'].includes(x))return'warning';return'neutral'}
+export function vbenStatusTone(s=''){const x=String(s).toUpperCase();if(['ACTIVE','PAID','PUBLISHED','DELIVERED','COMPLETED','READY','SUCCEEDED'].includes(x))return'success';if(['FAILED','BLOCKED','DISABLED','CANCELLED','REFUNDED','INACTIVE','ARCHIVED','EXPIRED','PAYMENT_FAILED'].includes(x))return'danger';if(['SUSPENDED','PENDING','PENDING_PAYMENT','PROCESSING','PREPARING','DRAFT','PAUSED','REFUND_PENDING','SCHEDULED','OUT_FOR_DELIVERY'].includes(x))return'warning';return'neutral'}
 
 export function VbenIcon({name,size=18,className=''}){const icon=paths[name]||paths.info;return <svg className={vcn('vui-icon',className)} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icon.map((d,i)=><path d={d} key={`${name}-${i}`}/>)}</svg>}
 
@@ -62,6 +67,14 @@ export function VbenSwitch({checked,onChange,label,description,disabled=false}){
 export function VbenEmpty({title='No data',description='There is nothing to display yet.',action}){return <div className="vui-empty"><div className="vui-empty-mark">◇</div><strong>{title}</strong><span>{description}</span>{action&&<div>{action}</div>}</div>}
 
 export function VbenTable({columns,rows,keyField='id',emptyTitle='No records',emptyDescription='There is nothing to display yet.',ariaLabel='Data table'}){if(!rows?.length)return <VbenEmpty title={emptyTitle} description={emptyDescription}/>;return <div className="vui-table-wrap"><table className="vui-table" aria-label={ariaLabel}><thead><tr>{columns.map(column=><th key={column.key}>{column.label}</th>)}</tr></thead><tbody>{rows.map((row,index)=><tr key={row[keyField]||row.public_id||index}>{columns.map(column=><td key={column.key}>{column.render?column.render(row):row[column.key]??'—'}</td>)}</tr>)}</tbody></table></div>}
+
+export function VbenModal({open,onClose,title,eyebrow='Luke Shop',children,footer,size='lg'}){useEffect(()=>{if(!open)return;const key=e=>e.key==='Escape'&&onClose?.();window.addEventListener('keydown',key);const previous=document.body.style.overflow;document.body.style.overflow='hidden';return()=>{window.removeEventListener('keydown',key);document.body.style.overflow=previous}},[open,onClose]);if(!open)return null;return <div className="vui-modal-backdrop" onMouseDown={e=>e.target===e.currentTarget&&onClose?.()}><section className={vcn('vui-modal',`vui-modal-${size}`)} role="dialog" aria-modal="true" aria-label={title||'Workspace'}><header className="vui-modal-head"><div><span>{eyebrow}</span><h2>{title}</h2></div><button type="button" className="vui-modal-close" onClick={onClose} aria-label="Close"><VbenIcon name="close" size={18}/></button></header><div className="vui-modal-body">{children}</div>{footer&&<footer className="vui-modal-foot">{footer}</footer>}</section></div>}
+
+export function VbenTabs({value,onChange,items}){return <div className="vui-tabs" role="tablist">{items.map(item=><button type="button" role="tab" aria-selected={value===item.value} key={item.value} className={value===item.value?'is-active':''} onClick={()=>onChange(item.value)}>{item.label}{item.count!==undefined&&<span>{item.count}</span>}</button>)}</div>}
+
+export function VbenToast({message,onDone,tone='success'}){useEffect(()=>{if(!message)return;const timer=setTimeout(()=>onDone?.(),3200);return()=>clearTimeout(timer)},[message,onDone]);if(!message)return null;return <div className={vcn('vui-toast',`vui-toast-${tone}`)} role="status"><VbenIcon name={tone==='danger'?'alert':'check'} size={16}/><span>{message}</span></div>}
+
+export function VbenPermissionNote({permission}){return <VbenAlert tone="warning" title="Permission required">Your merchant role does not include {permission}.</VbenAlert>}
 
 export function VbenMoney({value,currency='USD'}){const amount=Number(value||0);return <>{new Intl.NumberFormat(undefined,{style:'currency',currency}).format(amount)}</>}
 export function VbenDateTime({value}){return <>{value?new Date(value).toLocaleString():'—'}</>}
