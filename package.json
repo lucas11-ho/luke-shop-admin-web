@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 4173",
-    "build": "vite build",
+    "build": "node scripts/build.mjs",
     "preview": "vite preview --host 0.0.0.0 --port 4173",
     "deploy": "npm run verify && npm run build && wrangler deploy",
     "deploy:production": "npm run deploy",
