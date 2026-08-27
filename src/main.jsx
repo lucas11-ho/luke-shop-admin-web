@@ -9,4 +9,5 @@ import './vben-shell.css';
 import './vben-ui.css';
 import './vben-dashboard.css';
 import './vben-orders.css';
+import './vben-products.css';
 createRoot(document.getElementById('root')).render(<React.StrictMode><AdminI18nProvider><AuthProvider><App /></AuthProvider></AdminI18nProvider></React.StrictMode>);
