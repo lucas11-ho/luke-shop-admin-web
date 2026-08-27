@@ -1,1 +1,62 @@
-import React,{useState}from'react';import{useAuth}from'../auth/AuthContext.jsx';import{navigate}from'../app/router.js';import{ErrorBox,Field}from'../components/UI.jsx';export function LoginPage(){const{login,api}=useAuth();const[form,setForm]=useState({tenantSlug:'demo',email:'owner@example.com',password:''});const[busy,setBusy]=useState(false);const[err,setErr]=useState(null);const submit=async e=>{e.preventDefault();setBusy(true);setErr(null);try{await login(form);navigate('/dashboard')}catch(x){setErr(x)}finally{setBusy(false)}};return <div className="login-page merchant-login"><div className="login-visual"><div className="login-copy"><div className="brand big"><div className="brand-mark">L</div><div><strong>Luke Shop</strong><span>Merchant workspace</span></div></div><div className="login-kicker">Commerce operations</div><h1>Everything your store team needs. Nothing they don’t.</h1><p>Manage products, stock, orders, customers, payments, delivery, promotions and the customer experience from one focused workspace.</p><div className="feature-strip"><span>Live inventory</span><span>Customer experience</span><span>Tenant isolated</span></div><div className="login-proof"><div><strong>One workspace</strong><span>Catalog → fulfillment</span></div><div><strong>Role aware</strong><span>Permission-scoped access</span></div></div></div></div><div className="login-panel"><form onSubmit={submit}><div className="eyebrow">Client admin access</div><h2>Welcome back</h2><p>Enter the tenant slug and merchant account provisioned for your business.</p><ErrorBox error={err}/><Field label="Tenant slug"><input value={form.tenantSlug} onChange={e=>setForm({...form,tenantSlug:e.target.value})} required/></Field><Field label="Email address"><input type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} required/></Field><Field label="Password"><input type="password" minLength="12" value={form.password} onChange={e=>setForm({...form,password:e.target.value})} required/></Field><button className="primary full" disabled={busy}>{busy?'Opening workspace…':'Open merchant workspace'}</button><small className="api-note"><span/> Secure tenant session · {api.baseUrl}</small></form></div></div>}
+import React,{useMemo,useState}from'react';
+import{useAuth}from'../auth/AuthContext.jsx';
+import{navigate}from'../app/router.js';
+import{useAdminI18n}from'../i18n/AdminI18nContext.jsx';
+import{VbenAlert,VbenButton,VbenField,VbenIcon,VbenInput,VbenPasswordInput,VbenSelect}from'../components/VbenUI.jsx';
+
+function authError(error,t){if(!error)return null;return {title:error.code||t('auth.error_title'),message:error.message||t('auth.error_message')}}
+
+export function LoginPage(){
+ const{login}=useAuth();
+ const{locale,setLocale,locales,t}=useAdminI18n();
+ const[form,setForm]=useState({tenantSlug:'',email:'',password:''});
+ const[busy,setBusy]=useState(false);
+ const[err,setErr]=useState(null);
+ const error=useMemo(()=>authError(err,t),[err,t]);
+ const set=(key,value)=>setForm(current=>({...current,[key]:value}));
+ const submit=async event=>{
+  event.preventDefault();
+  if(busy)return;
+  setBusy(true);setErr(null);
+  try{
+   await login({tenantSlug:form.tenantSlug.trim(),email:form.email.trim(),password:form.password});
+   navigate('/dashboard');
+  }catch(nextError){setErr(nextError)}finally{setBusy(false)}
+ };
+ return <div className="vben-auth-page merchant-login">
+  <aside className="vben-auth-hero" aria-label="Luke Shop Merchant Admin">
+   <div className="vben-auth-brand"><span className="vben-auth-brand-mark">L</span><span className="vben-auth-brand-copy"><strong>Luke Shop</strong><span>Merchant Admin</span></span></div>
+   <div className="vben-auth-hero-copy">
+    <div className="vben-auth-kicker">{t('auth.kicker')}</div>
+    <h1>{t('auth.hero_title')}</h1>
+    <p>{t('auth.hero_desc')}</p>
+    <div className="vben-auth-capabilities">
+     <div className="vben-auth-capability"><i>01</i><div><strong>{t('auth.capability_ops')}</strong><span>{t('auth.capability_ops_desc')}</span></div></div>
+     <div className="vben-auth-capability"><i>02</i><div><strong>{t('auth.capability_roles')}</strong><span>{t('auth.capability_roles_desc')}</span></div></div>
+     <div className="vben-auth-capability"><i>03</i><div><strong>{t('auth.capability_store')}</strong><span>{t('auth.capability_store_desc')}</span></div></div>
+     <div className="vben-auth-capability"><i>04</i><div><strong>{t('auth.capability_tenant')}</strong><span>{t('auth.capability_tenant_desc')}</span></div></div>
+    </div>
+   </div>
+   <div className="vben-auth-hero-foot">Luke Shop · Merchant operations workspace</div>
+  </aside>
+  <main className="vben-auth-main">
+   <div className="vben-auth-top"><div className="vben-auth-locale"><VbenSelect value={locale} onChange={e=>setLocale(e.target.value)} aria-label={t('shell.language')}>{locales.map(item=><option key={item.code} value={item.code}>{item.native}</option>)}</VbenSelect></div></div>
+   <div className="vben-auth-center">
+    <form className="vben-auth-form" onSubmit={submit} noValidate={false}>
+     <div className="vben-auth-form-head">
+      <div className="vben-auth-mobile-brand"><span className="vben-auth-brand-mark">L</span><span className="vben-auth-brand-copy"><strong>Luke Shop</strong><span>Merchant Admin</span></span></div>
+      <h2>{t('auth.welcome')}</h2>
+      <p>{t('auth.signin_desc')}</p>
+     </div>
+     {error&&<VbenAlert tone="danger" title={error.title}>{error.message}</VbenAlert>}
+     <VbenField label={t('auth.tenant')} required><VbenInput icon="store" value={form.tenantSlug} onChange={e=>set('tenantSlug',e.target.value)} placeholder={t('auth.tenant_placeholder')} autoComplete="organization" autoCapitalize="none" spellCheck="false" required autoFocus disabled={busy}/></VbenField>
+     <VbenField label={t('auth.email')} required><VbenInput icon="mail" type="email" value={form.email} onChange={e=>set('email',e.target.value)} placeholder={t('auth.email_placeholder')} autoComplete="username" autoCapitalize="none" spellCheck="false" required disabled={busy}/></VbenField>
+     <VbenField label={t('auth.password')} hint={t('auth.password_hint')} required><VbenPasswordInput icon="lock" minLength="12" value={form.password} onChange={e=>set('password',e.target.value)} placeholder={t('auth.password_placeholder')} autoComplete="current-password" required disabled={busy}/></VbenField>
+     <VbenButton type="submit" size="lg" loading={busy} disabled={!form.tenantSlug.trim()||!form.email.trim()||form.password.length<12} className="vben-auth-submit vui-button-full">{busy?t('auth.opening'):t('auth.signin')}</VbenButton>
+     <div className="vben-auth-session-note"><i/>{t('auth.secure_session')}</div>
+    </form>
+   </div>
+   <div className="vben-auth-help"><VbenIcon name="lock" size={12}/>{t('auth.help')}</div>
+  </main>
+ </div>;
+}
