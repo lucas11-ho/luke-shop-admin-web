@@ -18,6 +18,7 @@ import './vben-settings-access.css';
 import './cx-v4-store-designer.css';
 import './cx-v4-home-builder.css';
 import './cx-v4-product-detail-builder.css';
+import './cx-v4-store-designer-completion-a1.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
