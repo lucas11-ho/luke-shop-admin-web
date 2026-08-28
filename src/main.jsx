@@ -20,6 +20,7 @@ import './cx-v4-home-builder.css';
 import './cx-v4-product-detail-builder.css';
 import './cx-v4-store-designer-completion-a1.css';
 import './cx-v4-footer-builder-a2.css';
+import './cx-v4-explore-builder-a3.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
