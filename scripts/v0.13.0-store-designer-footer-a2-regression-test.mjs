@@ -8,7 +8,7 @@ test('Footer is a first-class Store Designer panel',()=>{assert.match(page,/\['f
 test('Footer changes are categorized for publish review',()=>assert.match(page,/footer:'Footer'/));
 test('Footer defaults match the Backend schema-v4 contract',()=>{assert.match(panel,/enabled:false,layout:'columns'/);assert.match(panel,/show_brand:true/);assert.match(panel,/show_copyright:true/);assert.match(panel,/groups:\[\],social_links:\[\]/)});
 test('Footer exposes only the three Backend layouts',()=>{for(const v of ['columns','compact','minimal'])assert.ok(panel.includes(`value="${v}"`),`missing ${v}`)});
-test('Footer links are bounded to four groups and six links',()=>{assert.match(panel,/footer\.groups\.length>=4/);assert.match(panel,/footer\.groups\.length\/4/);assert.match(panel,/\.length>=6/);assert.match(panel,/\.length\/6/)});
+test('Footer links are bounded to four groups and six links',()=>{assert.match(panel,/footer\.groups\.length>=4/);assert.ok(panel.includes('{footer.groups.length}/4'));assert.match(panel,/\.length>=6/);assert.ok(panel.includes('{(group.links||[]).length}/6'))});
 test('Footer destinations exactly reuse approved Customer Web routes',()=>{for(const v of ['home','explore','cart','orders','profile','signin'])assert.ok(panel.includes(`['${v}'`),`missing ${v}`);assert.doesNotMatch(panel,/privacy|terms|checkout|external_url/)});
 test('Footer social networks exactly use Backend allowlist',()=>{for(const v of ['facebook','instagram','telegram','tiktok','youtube','x'])assert.ok(panel.includes(`['${v}'`),`missing ${v}`)});
 test('Footer copy limits mirror Backend',()=>{assert.match(panel,/maxLength="240"/);assert.match(panel,/maxLength="180"/);assert.match(panel,/maxLength="80"/)});
