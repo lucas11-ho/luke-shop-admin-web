@@ -1,0 +1,50 @@
+name: A2 Footer integration patch
+on:
+  push:
+    branches:
+      - feature/store-designer-footer-builder-a2
+    paths:
+      - .github/workflows/a2-footer-integration-patch.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/store-designer-footer-builder-a2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Integrate Footer Builder
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('src/pages/CustomerExperiencePage.jsx')
+          s=p.read_text()
+          replacements=[
+            ("import{VbenButton,VbenIcon}from'../components/VbenUI.jsx';", "import{VbenButton,VbenIcon}from'../components/VbenUI.jsx';\nimport{FooterBuilderA2}from'../components/FooterBuilderA2.jsx';"),
+            ("},navigation:['home','explore','cart','orders','profile'],home:{sections:", "},navigation:['home','explore','cart','orders','profile'],footer:{enabled:false,layout:'columns',tagline:'',show_brand:true,show_copyright:true,copyright_text:'',groups:[],social_links:[]},home:{sections:"),
+            ("['store','Store identity','◎'],['header','Header','☰'],['templates','Templates','▧']", "['store','Store identity','◎'],['header','Header','☰'],['footer','Footer','▤'],['templates','Templates','▧']"),
+            ("features:'Features',seo:'Search & sharing'", "features:'Features',footer:'Footer',seo:'Search & sharing'"),
+            ("{active==='header'&&<HeaderPanel draft={draft} update={update} mutate={mutate} setPicker={setPicker}/>} {active==='templates'", "{active==='header'&&<HeaderPanel draft={draft} update={update} mutate={mutate} setPicker={setPicker}/>} {active==='footer'&&<FooterBuilderA2 draft={draft} mutate={mutate}/>} {active==='templates'")
+          ]
+          for old,new in replacements:
+            count=s.count(old)
+            if count!=1:
+              raise SystemExit(f'Expected exactly one marker, found {count}: {old[:100]}')
+            s=s.replace(old,new,1)
+          p.write_text(s)
+          PY
+          git diff --check
+          git diff -- src/pages/CustomerExperiencePage.jsx
+      - name: Commit integration
+        shell: bash
+        run: |
+          git config user.name "lucas11-ho"
+          git config user.email "lacus.mm.ph@gmail.com"
+          git add src/pages/CustomerExperiencePage.jsx
+          git commit -m "Store Designer A2: integrate Footer Builder workspace"
+          git push origin HEAD:feature/store-designer-footer-builder-a2
