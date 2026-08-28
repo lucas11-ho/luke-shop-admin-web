@@ -16,6 +16,7 @@ import './vben-payments-delivery.css';
 import './vben-promotions.css';
 import './vben-settings-access.css';
 import './cx-v4-store-designer.css';
+import './cx-v4-home-builder.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
