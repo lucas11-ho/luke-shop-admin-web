@@ -11,6 +11,7 @@ import './sidebar-navigation-v2.css';
 import './vben-dashboard.css';
 import './vben-orders.css';
 import './vben-products.css';
+import './product-policy-digital.css';
 import './vben-inventory-media.css';
 import './vben-customers.css';
 import './vben-vip-loyalty.css';
