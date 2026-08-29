@@ -10,8 +10,9 @@ for(const token of ['Overview','Levels','Benefits & Rules','Members','/v1/mercha
 for(const benefit of ['FREE_DELIVERY','CASHBACK','VOUCHER','GIFT'])assert.ok(page.includes(benefit));
 for(const mode of ['SPEND','ORDERS','AND','OR'])assert.ok(page.includes(mode));
 assert.doesNotMatch(page,/cashback_balance|estimated customer value|synthetic reward/i);
-assert.ok(page.includes('Automatic free-delivery, cashback issuance, voucher issuance and gift fulfillment will be connected'));
+assert.ok(page.includes('Benefit execution accounting is connected'));
+assert.ok(page.includes('/v1/merchant/vip/execution'));
 const app=fs.readFileSync(new URL('../src/app/App.jsx',import.meta.url),'utf8');assert.ok(app.includes("'/vip-loyalty':VipLoyaltyPage"));
 const main=fs.readFileSync(new URL('../src/main.jsx',import.meta.url),'utf8');assert.ok(main.includes("'./sidebar-navigation-v2.css'"));assert.ok(main.includes("'./vben-vip-loyalty.css'"));
 const navCss=fs.readFileSync(new URL('../src/sidebar-navigation-v2.css',import.meta.url),'utf8');assert.match(navCss,/vben-nav-parent/);assert.match(navCss,/vben-nav-children/);
-console.log('PASS compact accordion sidebar, VIP workspace tabs, loyalty permissions, API wiring, bounded benefit configuration, and no synthetic reward balances');
+console.log('PASS compact accordion sidebar, VIP workspace tabs, loyalty permissions, API wiring, bounded benefit configuration, execution-phase contract, and no synthetic reward balances');
