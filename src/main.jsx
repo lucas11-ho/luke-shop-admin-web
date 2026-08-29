@@ -13,6 +13,7 @@ import './vben-products.css';
 import './vben-inventory-media.css';
 import './vben-customers.css';
 import './vben-payments-delivery.css';
+import './tokenpay-gateway-v1.css';
 import './vben-promotions.css';
 import './vben-settings-access.css';
 import './cx-v4-store-designer.css';
