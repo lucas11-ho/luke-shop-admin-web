@@ -4,7 +4,7 @@ import{VbenAlert,VbenBadge,VbenButton,VbenCard,VbenField,VbenInput,VbenSelect,Vb
 const defaults={app_id:'',mch_id:'',app_secret:'',chain:'TRON',currency:'USDT',expire_second:600,locale:'en',to_address:''};
 const byteLength=value=>new TextEncoder().encode(String(value||'')).length;
 
-export function TokenPayProviderConfig({api,method,canManage,onConfigured,onError,onToast}){
+export function TokenPayProviderConfig({api,method,canManage,onConfigured,onStatusChange,onError,onToast}){
  const[form,setForm]=useState(defaults),[status,setStatus]=useState({configured:false}),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false);
  const configured=Boolean(status?.configured);
  const methodId=method?.id;
@@ -21,13 +21,15 @@ export function TokenPayProviderConfig({api,method,canManage,onConfigured,onErro
    const provider=result.data?.provider||{};
    const credentials=provider.credentials||{};
    const settings=provider.settings||{};
-   setStatus(provider.credential_status||{configured:false});
+   const credentialStatus=provider.credential_status||{configured:false};
+   setStatus(credentialStatus);
+   onStatusChange?.(Boolean(credentialStatus.configured));
    setForm({
     app_id:credentials.app_id||'',mch_id:credentials.mch_id||'',app_secret:'',
     chain:settings.chain||'TRON',currency:settings.currency||'USDT',expire_second:Number(settings.expire_second||600),
     locale:settings.locale==='zh_cn'?'zh_cn':'en',to_address:settings.to_address||'',
    });
-  }catch(error){onError?.(error)}finally{setLoading(false)}
+  }catch(error){onStatusChange?.(false);onError?.(error)}finally{setLoading(false)}
  };
  useEffect(()=>{load()},[endpoint]);
 
@@ -44,7 +46,9 @@ export function TokenPayProviderConfig({api,method,canManage,onConfigured,onErro
    const provider=result.data?.provider||{};
    const credentials=provider.credentials||{};
    const settings=provider.settings||body;
-   setStatus(provider.credential_status||{configured:true});
+   const credentialStatus=provider.credential_status||{configured:true};
+   setStatus(credentialStatus);
+   onStatusChange?.(Boolean(credentialStatus.configured));
    setForm(current=>({...current,app_id:credentials.app_id||body.app_id,mch_id:credentials.mch_id||body.mch_id,app_secret:'',chain:settings.chain||body.chain,currency:settings.currency||body.currency,expire_second:Number(settings.expire_second||body.expire_second),locale:settings.locale||body.locale,to_address:settings.to_address||''}));
    onConfigured?.(settings);
    onToast?.(configured?'TokenPay gateway configuration updated':'TokenPay gateway credentials stored securely');
