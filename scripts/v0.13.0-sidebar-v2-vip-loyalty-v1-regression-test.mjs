@@ -1,0 +1,17 @@
+import assert from'node:assert/strict';import fs from'node:fs';
+const shell=fs.readFileSync(new URL('../src/components/AppShell.jsx',import.meta.url),'utf8');
+for(const label of ["label:'Commerce'","label:'Customers'","label:'Growth'","label:'Storefront'","label:'Workspace'","label:'Settings'"])assert.ok(shell.includes(label),`missing accordion ${label}`);
+assert.ok(shell.includes("['vip-loyalty','VIP & Loyalty','loyalty.read'"));
+assert.ok(shell.includes("localStorage.setItem('luke-shop-admin.sidebar-group'"));
+assert.ok(shell.includes("openGroup===group.key"));
+assert.doesNotMatch(shell,/group\.operate|group\.grow|group\.experience|group\.system/);
+const page=fs.readFileSync(new URL('../src/pages/VipLoyaltyPage.jsx',import.meta.url),'utf8');
+for(const token of ['Overview','Levels','Benefits & Rules','Members','/v1/merchant/vip/overview','/v1/merchant/vip/program','/v1/merchant/vip/levels','/v1/merchant/vip/benefits','/v1/merchant/vip/members','/v1/merchant/vip/evaluate','loyalty.read','loyalty.manage'])assert.ok(page.includes(token),`missing ${token}`);
+for(const benefit of ['FREE_DELIVERY','CASHBACK','VOUCHER','GIFT'])assert.ok(page.includes(benefit));
+for(const mode of ['SPEND','ORDERS','AND','OR'])assert.ok(page.includes(mode));
+assert.doesNotMatch(page,/cashback_balance|estimated customer value|synthetic reward/i);
+assert.ok(page.includes('Automatic free-delivery, cashback issuance, voucher issuance and gift fulfillment will be connected'));
+const app=fs.readFileSync(new URL('../src/app/App.jsx',import.meta.url),'utf8');assert.ok(app.includes("'/vip-loyalty':VipLoyaltyPage"));
+const main=fs.readFileSync(new URL('../src/main.jsx',import.meta.url),'utf8');assert.ok(main.includes("'./sidebar-navigation-v2.css'"));assert.ok(main.includes("'./vben-vip-loyalty.css'"));
+const navCss=fs.readFileSync(new URL('../src/sidebar-navigation-v2.css',import.meta.url),'utf8');assert.match(navCss,/vben-nav-parent/);assert.match(navCss,/vben-nav-children/);
+console.log('PASS compact accordion sidebar, VIP workspace tabs, loyalty permissions, API wiring, bounded benefit configuration, and no synthetic reward balances');

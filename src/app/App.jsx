@@ -8,6 +8,7 @@ import{ProductsPage}from'../pages/ProductsPage.jsx';
 import{InventoryPage}from'../pages/InventoryPage.jsx';
 import{OrdersPage}from'../pages/OrdersPage.jsx';
 import{CustomersPage}from'../pages/CustomersPage.jsx';
+import{VipLoyaltyPage}from'../pages/VipLoyaltyPage.jsx';
 import{PaymentsPage}from'../pages/PaymentsPage.jsx';
 import{DeliveryPage}from'../pages/DeliveryPage.jsx';
 import{PromotionsPage}from'../pages/PromotionsPage.jsx';
@@ -22,5 +23,5 @@ import{MyProfilePage}from'../pages/MyProfilePage.jsx';
 import{AuditPage}from'../pages/AuditPage.jsx';
 import{LanguagesPage}from'../pages/LanguagesPage.jsx';
 import{AddressFormPage}from'../pages/AddressFormPage.jsx';
-const pages={'/dashboard':DashboardPage,'/stores':StoresPage,'/my-profile':MyProfilePage,'/audit':AuditPage,'/products':ProductsPage,'/media-library':AssetsPage,'/inventory':InventoryPage,'/orders':OrdersPage,'/customers':CustomersPage,'/payments':PaymentsPage,'/delivery':DeliveryPage,'/promotions':PromotionsPage,'/settings':SettingsPage,'/customer-experience':CustomerExperiencePage,'/languages':LanguagesPage,'/address-form':AddressFormPage,'/cs-ai':CustomerServicePage,'/access':AccessPage};
+const pages={'/dashboard':DashboardPage,'/stores':StoresPage,'/my-profile':MyProfilePage,'/audit':AuditPage,'/products':ProductsPage,'/media-library':AssetsPage,'/inventory':InventoryPage,'/orders':OrdersPage,'/customers':CustomersPage,'/vip-loyalty':VipLoyaltyPage,'/payments':PaymentsPage,'/delivery':DeliveryPage,'/promotions':PromotionsPage,'/settings':SettingsPage,'/customer-experience':CustomerExperiencePage,'/languages':LanguagesPage,'/address-form':AddressFormPage,'/cs-ai':CustomerServicePage,'/access':AccessPage};
 export function App(){const{session}=useAuth();const route=useHashRoute();if(!session){if(route!=='/login')queueMicrotask(()=>navigate('/login'));return <LoginPage/>}if(route==='/login')queueMicrotask(()=>navigate('/dashboard'));const Page=pages[route]||NotFoundPage;return <AppShell route={route}><Page/></AppShell>}
