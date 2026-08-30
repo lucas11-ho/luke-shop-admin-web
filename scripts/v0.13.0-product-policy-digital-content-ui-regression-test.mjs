@@ -30,7 +30,9 @@ for(const type of ['DIGITAL_IMAGE','DIGITAL_VIDEO'])assert.ok(delivery.includes(
 for(const access of ['VIEW_ONLY','DOWNLOAD_ONLY','VIEW_AND_DOWNLOAD'])assert.ok(delivery.includes(access),`conversion assistant missing ${access}`);
 assert.ok(delivery.includes('Product Nature can change only when the product has no order history'),'Conversion UI must disclose historical-order protection');
 assert.ok(delivery.includes('active customer cart is repaired automatically'),'Conversion UI must disclose active-cart repair');
-const deliveryForm=delivery.slice(delivery.indexOf('function DeliveryForm'));
+const deliveryFormStart=['function DeliveryForm','function MethodForm'].map(x=>delivery.indexOf(x)).filter(x=>x>=0).sort((a,b)=>a-b)[0]??-1;
+assert.ok(deliveryFormStart>=0,'Global Delivery Method form component must exist');
+const deliveryForm=delivery.slice(deliveryFormStart,delivery.indexOf('function ZoneForm')>deliveryFormStart?delivery.indexOf('function ZoneForm'):undefined);
 assert.ok(deliveryForm.includes('<option>SHIPPING</option>')&&deliveryForm.includes('<option>LOCAL_DELIVERY</option>')&&deliveryForm.includes('<option>PICKUP</option>'),'Global Delivery Method form must keep physical delivery modes');
 assert.ok(!deliveryForm.includes('<option>DIGITAL_ACCESS</option>')&&!deliveryForm.includes('<option>DIGITAL_DOWNLOAD</option>'),'Digital entitlement modes must not be modeled as fee/ETA Delivery Methods');
 
