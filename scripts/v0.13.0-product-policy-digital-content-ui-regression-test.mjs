@@ -1,6 +1,7 @@
 import assert from'node:assert/strict';
 import fs from'node:fs';
 const page=fs.readFileSync(new URL('../src/pages/ProductsPage.jsx',import.meta.url),'utf8');
+const delivery=fs.readFileSync(new URL('../src/pages/DeliveryPage.jsx',import.meta.url),'utf8');
 const main=fs.readFileSync(new URL('../src/main.jsx',import.meta.url),'utf8');
 const css=fs.readFileSync(new URL('../src/product-policy-digital.css',import.meta.url),'utf8');
 for(const type of ['PHYSICAL','FOOD','DIGITAL_IMAGE','DIGITAL_VIDEO','SERVICE'])assert.ok(page.includes(type),`missing product nature ${type}`);
@@ -20,6 +21,19 @@ assert.ok(page.includes("FOOD:{")&&page.includes("modes:['LOCAL_DELIVERY','PICKU
 assert.ok(page.includes("SERVICE:{")&&page.includes("modes:['NONE']"));
 assert.ok(page.includes('Attach purchased files as PRIVATE media'));
 assert.ok(page.includes('Public media remains storefront preview content'));
+
+assert.ok(delivery.includes('Digital products use Product Nature, not Delivery Methods'),'Delivery settings must explain the product-level digital boundary');
+assert.ok(delivery.includes('DIGITAL_ACCESS')&&delivery.includes('DIGITAL_DOWNLOAD'),'Delivery guidance must name the secure digital fulfillment modes');
+assert.ok(delivery.includes("/nature`"),'Existing-product digital conversion must call the guarded Backend Product Nature contract');
+assert.ok(delivery.includes('Convert existing product to digital'),'Merchant must have an accessible conversion workflow for legacy products');
+for(const type of ['DIGITAL_IMAGE','DIGITAL_VIDEO'])assert.ok(delivery.includes(type),`conversion assistant missing ${type}`);
+for(const access of ['VIEW_ONLY','DOWNLOAD_ONLY','VIEW_AND_DOWNLOAD'])assert.ok(delivery.includes(access),`conversion assistant missing ${access}`);
+assert.ok(delivery.includes('Product Nature can change only when the product has no order history'),'Conversion UI must disclose historical-order protection');
+assert.ok(delivery.includes('active customer cart is repaired automatically'),'Conversion UI must disclose active-cart repair');
+const deliveryForm=delivery.slice(delivery.indexOf('function DeliveryForm'));
+assert.ok(deliveryForm.includes('<option>SHIPPING</option>')&&deliveryForm.includes('<option>LOCAL_DELIVERY</option>')&&deliveryForm.includes('<option>PICKUP</option>'),'Global Delivery Method form must keep physical delivery modes');
+assert.ok(!deliveryForm.includes('<option>DIGITAL_ACCESS</option>')&&!deliveryForm.includes('<option>DIGITAL_DOWNLOAD</option>'),'Digital entitlement modes must not be modeled as fee/ETA Delivery Methods');
+
 assert.ok(main.includes("'./product-policy-digital.css'"),'product-policy UI stylesheet must load');
 assert.match(css,/vben-product-policy-box/);assert.match(css,/vben-product-nature-summary/);assert.match(css,/vben-product-private-media/);
-console.log('PASS guided Product Nature fulfillment matrix, digital policy persistence-before-publish, PRIVATE purchased content defaults, and saved access-mode precedence');
+console.log('PASS guided Product Nature matrix, protected digital content, legacy digital conversion assistant, active-cart repair guidance and physical-only Delivery Method boundary');
