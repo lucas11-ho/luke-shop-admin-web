@@ -1,0 +1,24 @@
+import React,{useEffect,useMemo,useState}from'react';
+import{useAuth}from'../auth/AuthContext.jsx';
+import{DeliveryPage}from'./DeliveryPage.jsx';
+
+const cash=(value,currency='USD')=>{try{return new Intl.NumberFormat(undefined,{style:'currency',currency}).format(Number(value||0))}catch{return `${currency} ${Number(value||0).toFixed(2)}`}};
+const human=value=>String(value||'').replaceAll('_',' ').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+
+export function DeliveryWorkspacePage(){const[view,setView]=useState('cod');return <div className="delivery-workspace-v1"><div className="delivery-workspace-switch" data-testid="delivery-workspace-switch"><button className={view==='operations'?'active':''} onClick={()=>setView('operations')}>Operations</button><button className={view==='cod'?'active':''} onClick={()=>setView('cod')}>COD cash</button></div>{view==='operations'?<DeliveryPage/>:<CodCashPanel/>}</div>}
+
+function CodCashPanel(){
+ const{api,has}=useAuth();const[rows,setRows]=useState([]),[status,setStatus]=useState(''),[loading,setLoading]=useState(true),[busy,setBusy]=useState(''),[error,setError]=useState(null),[note,setNote]=useState('');
+ const load=async()=>{setError(null);setLoading(true);try{const r=await api.request('/v1/merchant/delivery/cod',{query:{status:status||undefined,limit:200}});setRows(r.data.collections||[])}catch(e){setError(e)}finally{setLoading(false)}};
+ useEffect(()=>{load()},[status]);
+ const totals=useMemo(()=>({collected:rows.filter(x=>x.status==='COLLECTED').length,remitted:rows.filter(x=>x.status==='REMITTED').length,reconciled:rows.filter(x=>x.status==='RECONCILED').length}),[rows]);
+ const act=async(row,action)=>{setBusy(`${action}:${row.id}`);setError(null);try{await api.request(`/v1/merchant/delivery/cod/${encodeURIComponent(row.id)}/${action}`,{method:'POST',body:{note:note.trim()||undefined}});setNote('');await load()}catch(e){setError(e)}finally{setBusy('')}};
+ return <section className="cod-admin-page" data-testid="cod-cash-admin-v1">
+  <header className="cod-admin-head"><div><span className="driver-eyebrow">Delivery finance</span><h2>COD cash custody</h2><p>Driver collection, merchant remittance, and payment reconciliation remain separate audited steps.</p></div><select value={status} onChange={e=>setStatus(e.target.value)}><option value="">All states</option><option value="COLLECTED">Collected</option><option value="REMITTED">Remitted</option><option value="RECONCILED">Reconciled</option></select></header>
+  {error&&<div className="driver-error"><strong>{error.code||'COD operation failed'}</strong><span>{error.message}</span>{error.requestId&&<small>Request {error.requestId}</small>}</div>}
+  <div className="cod-admin-summary"><div><strong>{totals.collected}</strong><span>In driver custody</span></div><div><strong>{totals.remitted}</strong><span>Awaiting reconciliation</span></div><div><strong>{totals.reconciled}</strong><span>Reconciled</span></div></div>
+  <div className="cod-admin-note">Reconcile is intentionally available only to users who have both <strong>delivery.manage</strong> and <strong>payments.manage</strong>. Driver collection alone never marks payment paid.</div>
+  <label className="cod-admin-note">Action note (optional)<textarea value={note} onChange={e=>setNote(e.target.value)} maxLength="1000" placeholder="Receipt, handover, discrepancy or reconciliation reference"/></label>
+  {loading?<div className="driver-loading">Loading COD custody ledger…</div>:<div className="cod-admin-list">{rows.length?rows.map(row=><article key={row.id} className="cod-admin-row"><div><h3>{row.order_number}</h3><p>{row.driver_name} · {human(row.dispatch_status)}</p></div><div className="cod-admin-money"><strong>{cash(row.collected_amount,row.currency)}</strong><span>Expected {cash(row.expected_amount,row.currency)}</span></div><div><strong className="cod-admin-status">{human(row.status)}</strong><p>Payment: {human(row.payment_record_status)}</p></div><div className="cod-admin-actions">{row.status==='COLLECTED'&&has('delivery.manage')&&<button className="driver-button secondary" disabled={busy===`remit:${row.id}`} onClick={()=>act(row,'remit')}>{busy===`remit:${row.id}`?'Saving…':'Mark remitted'}</button>}{row.status==='REMITTED'&&has('delivery.manage')&&has('payments.manage')&&<button className="driver-button primary" disabled={busy===`reconcile:${row.id}`} onClick={()=>act(row,'reconcile')}>{busy===`reconcile:${row.id}`?'Reconciling…':'Reconcile payment'}</button>}{row.status==='REMITTED'&&(!has('payments.manage')||!has('delivery.manage'))&&<span className="cod-admin-status">Payments authority required</span>}</div></article>):<div className="driver-empty-card compact"><h3>No COD custody records</h3><p>Records appear only after an assigned driver confirms the exact server-authoritative cash amount while out for delivery.</p></div>}</div>}
+ </section>;
+}

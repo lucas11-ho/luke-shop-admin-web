@@ -16,6 +16,7 @@ import './vben-inventory-media.css';
 import './vben-customers.css';
 import './vben-vip-loyalty.css';
 import './vben-payments-delivery.css';
+import './driver-mobile-cod.css';
 import './tokenpay-gateway-v1.css';
 import './vben-promotions.css';
 import './vben-settings-access.css';
