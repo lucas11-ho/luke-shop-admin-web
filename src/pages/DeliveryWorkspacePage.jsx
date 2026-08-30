@@ -5,7 +5,7 @@ import{DeliveryPage}from'./DeliveryPage.jsx';
 const cash=(value,currency='USD')=>{try{return new Intl.NumberFormat(undefined,{style:'currency',currency}).format(Number(value||0))}catch{return `${currency} ${Number(value||0).toFixed(2)}`}};
 const human=value=>String(value||'').replaceAll('_',' ').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
 
-export function DeliveryWorkspacePage(){const[view,setView]=useState('operations');return <div className="delivery-workspace-v1"><div className="delivery-workspace-switch" data-testid="delivery-workspace-switch"><button className={view==='operations'?'active':''} onClick={()=>setView('operations')}>Operations</button><button className={view==='cod'?'active':''} onClick={()=>setView('cod')}>COD cash</button></div>{view==='operations'?<DeliveryPage/>:<CodCashPanel/>}</div>}
+export function DeliveryWorkspacePage(){const[view,setView]=useState('cod');return <div className="delivery-workspace-v1"><div className="delivery-workspace-switch" data-testid="delivery-workspace-switch"><button className={view==='operations'?'active':''} onClick={()=>setView('operations')}>Operations</button><button className={view==='cod'?'active':''} onClick={()=>setView('cod')}>COD cash</button></div>{view==='operations'?<DeliveryPage/>:<CodCashPanel/>}</div>}
 
 function CodCashPanel(){
  const{api,has}=useAuth();const[rows,setRows]=useState([]),[status,setStatus]=useState(''),[loading,setLoading]=useState(true),[busy,setBusy]=useState(''),[error,setError]=useState(null),[note,setNote]=useState('');
