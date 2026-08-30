@@ -16,6 +16,14 @@ async function parseResponse(res){
   return payload;
 }
 
+export async function fetchAuthenticatedBlob(path){
+  const session=readStoredSession();if(!session?.accessToken)throw new ApiError('Sign in to view this private delivery content.',{status:401,code:'UNAUTHORIZED'});
+  const headers={Accept:'*/*',Authorization:`Bearer ${session.accessToken}`};if(session.tenantSlug)headers['x-tenant-slug']=session.tenantSlug;if(session.storeId)headers['x-store-id']=session.storeId;
+  let res;try{res=await fetch(`${API_BASE}${path}`,{headers});}catch{throw new ApiError('Unable to load private delivery content.',{code:'NETWORK_OR_CORS_ERROR'});}
+  if(!res.ok){let payload=null;try{payload=await res.json()}catch{}const e=payload?.error||{};throw new ApiError(e.message||`Request failed (${res.status})`,{status:res.status,code:e.code||'HTTP_ERROR',requestId:e.request_id||null,details:e.details||null});}
+  return res.blob();
+}
+
 export function createApi({ getSession, onSession }){
   let refreshPromise=null;
   let liveSession=getSession();
