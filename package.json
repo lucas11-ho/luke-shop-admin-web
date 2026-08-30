@@ -15,7 +15,7 @@
     "cf:types": "wrangler types",
     "check": "node scripts/check-source.mjs",
     "test:source": "node scripts/source-regression-test.mjs",
-    "verify": "npm run check && npm run test:source && npm run test:design && npm run test:designer-v3 && npm run test:operations-v09 && npm run test:experience-reliability-v091 && npm run test:delivery-location-v010 && npm run test:identity-fulfillment-v011 && npm run test:commerce-connector-v2 && npm run test:auth-pro-v0121 && npm run test:platform-sync-v0130 && npm run test:vben-auth && npm run test:vben-dashboard && npm run test:vben-orders && npm run test:vben-products && npm run test:vben-inventory-media && npm run test:vben-customers && npm run test:vben-payments-delivery && npm run test:vben-promotions && npm run test:vben-settings-access && npm run test:cx-v4-designer && npm run test:cx-v4-home-builder && npm run test:cx-v4-product-detail && npm run test:store-designer-a1 && npm run test:store-designer-footer-a2 && npm run test:store-designer-explore-a3 && npm run test:store-designer-cart-checkout-a4 && npm run test:payments-tokenpay-v1 && npm run test:sidebar-vip-v1 && npm run test:vip-loyalty-v1-1 && npm run test:product-policy-digital-ui",
+    "verify": "npm run check && npm run test:source && npm run test:design && npm run test:designer-v3 && npm run test:operations-v09 && npm run test:experience-reliability-v091 && npm run test:delivery-location-v010 && npm run test:identity-fulfillment-v011 && npm run test:commerce-connector-v2 && npm run test:auth-pro-v0121 && npm run test:platform-sync-v0130 && npm run test:vben-auth && npm run test:vben-dashboard && npm run test:vben-orders && npm run test:vben-products && npm run test:vben-inventory-media && npm run test:vben-customers && npm run test:vben-payments-delivery && npm run test:vben-promotions && npm run test:vben-settings-access && npm run test:cx-v4-designer && npm run test:cx-v4-home-builder && npm run test:cx-v4-product-detail && npm run test:store-designer-a1 && npm run test:store-designer-footer-a2 && npm run test:store-designer-explore-a3 && npm run test:store-designer-cart-checkout-a4 && npm run test:payments-tokenpay-v1 && npm run test:sidebar-vip-v1 && npm run test:vip-loyalty-v1-1 && npm run test:product-policy-digital-ui && npm run test:delivery-operations-admin",
     "test:design": "node scripts/design-regression-test.mjs",
     "test:designer-v3": "node scripts/v0.8.0-store-designer-v3-regression-test.mjs",
     "test:operations-v09": "node scripts/v0.9.0-operations-control-completion-regression-test.mjs",
@@ -44,7 +44,8 @@
     "test:payments-tokenpay-v1": "node scripts/v0.13.0-tokenpay-payment-gateway-regression-test.mjs",
     "test:sidebar-vip-v1": "node scripts/v0.13.0-sidebar-v2-vip-loyalty-v1-regression-test.mjs",
     "test:vip-loyalty-v1-1": "node scripts/v0.13.0-vip-loyalty-benefit-execution-v1-1-regression-test.mjs",
-    "test:product-policy-digital-ui": "node scripts/v0.13.0-product-policy-digital-content-ui-regression-test.mjs"
+    "test:product-policy-digital-ui": "node scripts/v0.13.0-product-policy-digital-content-ui-regression-test.mjs",
+    "test:delivery-operations-admin": "node scripts/v0.13.0-delivery-operations-admin-v1-regression-test.mjs"
   },
   "dependencies": {
     "react": "19.1.1",
