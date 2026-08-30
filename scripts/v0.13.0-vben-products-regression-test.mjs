@@ -17,6 +17,6 @@ t('modifier group and option contracts remain operational',()=>{assert.ok(page.i
 t('catalog permissions remain enforced',()=>{assert.ok(page.includes("has('catalog.read')"));assert.ok(page.includes("has('catalog.write')"));assert.ok(page.includes("has('inventory.write')"))});
 t('unsupported product delete endpoint is still absent',()=>assert.ok(!page.includes("api.request(`/v1/merchant/products/${encodeURIComponent(selected)}`,{method:'DELETE'")));
 t('Products has professional catalog metrics and five-tab workspace',()=>{for(const token of ['VbenMetric','Published','Drafts','Inventory tracked',"value:'overview'","value:'variants'","value:'media'","value:'modifiers'","value:'inventory'"])assert.ok(page.includes(token))});
-t('media privacy and inventory availability remain visible',()=>{assert.ok(page.includes("visibility:'PUBLIC'"));assert.ok(page.includes('<option>PRIVATE</option>'));assert.ok(page.includes("totalStock(detail.inventory,'available')"))});
+t('media privacy and inventory availability remain visible',()=>{assert.ok(page.includes("visibility:'PUBLIC'"));assert.ok(page.includes('value="PUBLIC"'));assert.ok(page.includes('value="PRIVATE"'));assert.ok(page.includes("totalStock(detail.inventory,'available')"))});
 t('Products layout has responsive desktop tablet and mobile rules',()=>{for(const token of ['@media(max-width:1180px)','@media(max-width:820px)','@media(max-width:560px)','.vben-product-media-grid','.vben-product-mode-grid'])assert.ok(css.includes(token))});
 console.log(`${n}/${n} Merchant Admin Vben Products checks passed`);
