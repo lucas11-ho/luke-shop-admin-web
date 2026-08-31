@@ -12,7 +12,7 @@ export function AuthProvider({children}){
     const u=data.data.user,t=data.data.tokens;
     const next={tenantSlug,storeId:'',accessToken:t.access_token,refreshToken:t.refresh_token,expiresIn:t.expires_in,user:u}; setSession(next); return next;
   };
-  const logout=async()=>{ try { if(session?.accessToken) await api.request('/v1/merchant/auth/logout',{method:'POST',body:{}}); } catch {} finally { setSession(null); location.hash='#/login'; } };
+  const logout=async(target='/login')=>{ try { if(session?.accessToken) await api.request('/v1/merchant/auth/logout',{method:'POST',body:{}}); } catch {} finally { setSession(null); location.hash=`#${target}`; } };
   const updateStore=(storeId)=>setSession(session?{...session,storeId:storeId.trim()}:session);
   const refreshProfile=async()=>{ const data=await api.request('/v1/merchant/me'); const next={...session,user:data.data.user}; setSession(next); return next; };
   const has=(permission)=>Boolean(session?.user?.permissions?.includes(permission));
