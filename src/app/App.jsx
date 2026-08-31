@@ -6,6 +6,7 @@ import{LoginPage}from'../pages/LoginPage.jsx';
 import{DriverLoginPage}from'../pages/DriverLoginPage.jsx';
 import{OperationsLoginPage}from'../pages/OperationsLoginPage.jsx';
 import{DashboardPage}from'../pages/DashboardPage.jsx';
+import{OperationsDashboardPage}from'../pages/OperationsDashboardPage.jsx';
 import{ProductsPage}from'../pages/ProductsPage.jsx';
 import{InventoryPage}from'../pages/InventoryPage.jsx';
 import{OrdersPage}from'../pages/OrdersPage.jsx';
@@ -34,7 +35,7 @@ import{MyProfilePage}from'../pages/MyProfilePage.jsx';
 import{AuditPage}from'../pages/AuditPage.jsx';
 import{LanguagesPage}from'../pages/LanguagesPage.jsx';
 import{AddressFormPage}from'../pages/AddressFormPage.jsx';
-const pages={'/dashboard':DashboardPage,'/stores':StoresPage,'/my-profile':MyProfilePage,'/driver-messages':DriverMessagesPage,'/driver-access':DriverAccessPage,'/driver-settings':DriverAppSettingsPage,'/delivery-settings':DeliverySettingsPage,'/audit':AuditPage,'/products':ProductsPage,'/media-library':AssetsPage,'/inventory':InventoryPage,'/orders':OrdersPage,'/customers':CustomersPage,'/vip-loyalty':VipLoyaltyPage,'/payments':PaymentsPage,'/delivery':DeliveryPage,'/delivery-cod':DeliveryWorkspacePage,'/delivery-control':DeliveryControlPage,'/promotions':PromotionsPage,'/settings':SettingsPage,'/customer-experience':CustomerExperiencePage,'/languages':LanguagesPage,'/address-form':AddressFormPage,'/cs-ai':CustomerServicePage,'/access':AccessPage};
+const pages={'/dashboard':DashboardPage,'/operations':OperationsDashboardPage,'/stores':StoresPage,'/my-profile':MyProfilePage,'/driver-messages':DriverMessagesPage,'/driver-access':DriverAccessPage,'/driver-settings':DriverAppSettingsPage,'/delivery-settings':DeliverySettingsPage,'/audit':AuditPage,'/products':ProductsPage,'/media-library':AssetsPage,'/inventory':InventoryPage,'/orders':OrdersPage,'/customers':CustomersPage,'/vip-loyalty':VipLoyaltyPage,'/payments':PaymentsPage,'/delivery':DeliveryPage,'/delivery-cod':DeliveryWorkspacePage,'/delivery-control':DeliveryControlPage,'/promotions':PromotionsPage,'/settings':SettingsPage,'/customer-experience':CustomerExperiencePage,'/languages':LanguagesPage,'/address-form':AddressFormPage,'/cs-ai':CustomerServicePage,'/access':AccessPage};
 function exclusiveWorkspace(user){const roles=user?.roles||[];if(roles.includes('OWNER')||roles.length!==1)return null;if(roles[0]==='DRIVER')return'/driver';if(roles[0]==='KITCHEN')return'/kitchen';if(roles[0]==='CASHIER')return'/cashier';return null}
 export function App(){
  const{session}=useAuth();const route=useHashRoute();const driverRoute=route==='/driver'||route==='/driver-login',kitchenRoute=route==='/kitchen'||route==='/kitchen-login',cashierRoute=route==='/cashier'||route==='/cashier-login';
