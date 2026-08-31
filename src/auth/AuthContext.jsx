@@ -12,7 +12,7 @@ export function AuthProvider({children}){
     const u=data.data.user,t=data.data.tokens;
     const next={tenantSlug,storeId:'',accessToken:t.access_token,refreshToken:t.refresh_token,expiresIn:t.expires_in,user:u}; setSession(next); return next;
   };
-  const logout=async(target=null)=>{ const driverRoute=location.hash==='#/driver'||location.hash==='#/driver-login'; const route=typeof target==='string'?target:(driverRoute?'/driver-login':'/login'); try { if(session?.accessToken) await api.request('/v1/merchant/auth/logout',{method:'POST',body:{}}); } catch {} finally { setSession(null); location.hash=`#${route}`; } };
+  const logout=async(target=null)=>{const hash=location.hash;let fallback='/login';if(hash==='#/driver'||hash==='#/driver-login')fallback='/driver-login';else if(hash==='#/kitchen'||hash==='#/kitchen-login')fallback='/kitchen-login';else if(hash==='#/cashier'||hash==='#/cashier-login')fallback='/cashier-login';const route=typeof target==='string'?target:fallback;try { if(session?.accessToken) await api.request('/v1/merchant/auth/logout',{method:'POST',body:{}}); } catch {} finally { setSession(null); location.hash=`#${route}`; }};
   const updateStore=(storeId)=>setSession(session?{...session,storeId:storeId.trim()}:session);
   const refreshProfile=async()=>{ const data=await api.request('/v1/merchant/me'); const next={...session,user:data.data.user}; setSession(next); return next; };
   const has=(permission)=>Boolean(session?.user?.permissions?.includes(permission));

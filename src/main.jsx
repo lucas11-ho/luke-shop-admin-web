@@ -19,6 +19,7 @@ import './vben-payments-delivery.css';
 import './driver-mobile-cod.css';
 import './delivery-experience-admin-v1.css';
 import './driver-mobile-pro-v1.css';
+import './kitchen-cashier-operations-v1.css';
 import './tokenpay-gateway-v1.css';
 import './vben-promotions.css';
 import './vben-settings-access.css';
