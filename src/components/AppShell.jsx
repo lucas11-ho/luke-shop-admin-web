@@ -9,10 +9,12 @@ const dashboard=['dashboard','Dashboard',null,'dashboard','nav.dashboard'];
 const navGroups=[
  {key:'commerce',label:'Commerce',icon:'orders',items:[['orders','Orders','orders.read','orders','nav.orders'],['products','Products','catalog.read','products','nav.products'],['inventory','Inventory','inventory.read','inventory','nav.inventory']]},
  {key:'customers',label:'Customers',icon:'customers',items:[['customers','Customers','customers.read','customers','nav.customers'],['vip-loyalty','VIP & Loyalty','loyalty.read','loyalty',null]]},
- {key:'growth',label:'Growth',icon:'promotions',items:[['promotions','Promotions','promotions.read','promotions','nav.promotions'],['payments','Payments','payments.read','payments','nav.payments'],['delivery','Delivery','delivery.read','delivery','nav.delivery']]},
+ {key:'operations',label:'Operations',icon:'delivery',items:[['operations','Operations overview',null,'dashboard',null],['kitchen','Kitchen','kitchen.read','orders',null],['cashier','Cashier','cashier.read','payments',null],['delivery','Delivery operations','delivery.read','delivery','nav.delivery'],['delivery-control','Live delivery control','delivery.read','delivery',null],['delivery-cod','COD cash','delivery.read','payments',null],['driver-access','Driver login access','delivery.manage','profile',null],['delivery-settings','Delivery & Fulfillment','delivery.manage','settings',null],['driver-settings','Driver App settings','delivery.manage','settings',null]]},
+ {key:'growth',label:'Growth',icon:'promotions',items:[['promotions','Promotions','promotions.read','promotions','nav.promotions']]},
+ {key:'finance',label:'Finance',icon:'payments',items:[['payments','Payments','payments.read','payments','nav.payments']]},
  {key:'storefront',label:'Storefront',icon:'experience',items:[['customer-experience','Customer Experience','customer_experience.read','experience','nav.experience'],['media-library','Media Library','catalog.read','media','nav.media'],['languages','Languages','customer_experience.read','languages','nav.languages'],['address-form','Address Form','customer_experience.read','address','nav.address']]},
  {key:'workspace',label:'Workspace',icon:'stores',items:[['stores','Stores','stores.read','stores','nav.stores'],['cs-ai','Customer Service','integrations.customer_service.read','support','nav.cs']]},
- {key:'settings',label:'Settings',icon:'settings',items:[['settings','Store Settings','tenant.settings.read','settings','nav.settings'],['access','Access',null,'access','nav.access'],['audit','Audit log','audit.read','audit','nav.audit'],['my-profile','My profile',null,'profile','nav.profile']]},
+ {key:'settings',label:'Settings',icon:'settings',items:[['settings','Store Settings','tenant.settings.read','settings','nav.settings'],['access','Staff & Access',null,'access','nav.access'],['audit','Audit log','audit.read','audit','nav.audit'],['my-profile','My profile',null,'profile','nav.profile']]},
 ];
 
 const iconPaths={
