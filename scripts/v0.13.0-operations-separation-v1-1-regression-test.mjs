@@ -1,6 +1,7 @@
 import fs from'node:fs';
 const read=path=>fs.readFileSync(new URL(`../${path}`,import.meta.url),'utf8');
 const app=read('src/app/App.jsx');
+const shell=read('src/components/AppShell.jsx');
 const operations=read('src/pages/OperationsDashboardPage.jsx');
 const handoff=read('src/pages/StaffWebHandoffPage.jsx');
 const driverAccess=read('src/pages/DriverAccessPage.jsx');
@@ -13,6 +14,7 @@ for(const removed of ['DriverLoginPage','OperationsLoginPage','DriverPage','Kitc
 must(app.includes("'/driver':'driver'")&&app.includes("'/kitchen':'kitchen'")&&app.includes("'/cashier':'cashier'"),'legacy operational routes must hand off safely');
 must(app.includes('isOperationalOnly')&&app.includes('operationalPermissions'),'operational-only Merchant users must be separated from Admin shell');
 must(app.includes('<StaffWebHandoffPage'),'Staff Web handoff route missing');
+must(shell.includes("['staff-web','Staff Web'")&&!shell.includes("['kitchen','Kitchen'")&&!shell.includes("['cashier','Cashier'"),'Merchant Admin navigation must expose Staff Web instead of duplicate daily workspaces');
 must(!operations.includes("'/kitchen','Open Kitchen'")&&!operations.includes("'/cashier','Open Cashier'"),'owner command center must not launch duplicate Kitchen/Cashier runtimes');
 must(operations.includes("['Staff Web'")&&operations.includes("'/staff-web'"),'owner command center must expose Staff Web handoff');
 must(handoff.includes('VITE_LUKE_SHOP_STAFF_WEB_BASE_URL')&&handoff.includes('Merchant Admin remains the owner'),'handoff must explain separation and configuration');
