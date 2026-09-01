@@ -1,0 +1,23 @@
+import fs from'node:fs';
+const read=path=>fs.readFileSync(new URL(`../${path}`,import.meta.url),'utf8');
+const app=read('src/app/App.jsx');
+const operations=read('src/pages/OperationsDashboardPage.jsx');
+const handoff=read('src/pages/StaffWebHandoffPage.jsx');
+const driverAccess=read('src/pages/DriverAccessPage.jsx');
+const driverSettings=read('src/pages/DriverAppSettingsPage.jsx');
+const config=read('src/config/staffWeb.js');
+const env=read('.env.example');
+const must=(ok,message)=>{if(!ok)throw new Error(message)};
+
+for(const removed of ['DriverLoginPage','OperationsLoginPage','DriverPage','KitchenPage','CashierPage'])must(!app.includes(`import{${removed}}`)&&!app.includes(`import {${removed}}`),`${removed} runtime must not be imported by Merchant Admin App`);
+must(app.includes("'/driver':'driver'")&&app.includes("'/kitchen':'kitchen'")&&app.includes("'/cashier':'cashier'"),'legacy operational routes must hand off safely');
+must(app.includes('isOperationalOnly')&&app.includes('operationalPermissions'),'operational-only Merchant users must be separated from Admin shell');
+must(app.includes('<StaffWebHandoffPage'),'Staff Web handoff route missing');
+must(!operations.includes("'/kitchen','Open Kitchen'")&&!operations.includes("'/cashier','Open Cashier'"),'owner command center must not launch duplicate Kitchen/Cashier runtimes');
+must(operations.includes("['Staff Web'")&&operations.includes("'/staff-web'"),'owner command center must expose Staff Web handoff');
+must(handoff.includes('VITE_LUKE_SHOP_STAFF_WEB_BASE_URL')&&handoff.includes('Merchant Admin remains the owner'),'handoff must explain separation and configuration');
+must(driverAccess.includes("staffWebHref('driver')")&&!driverAccess.includes('location.origin}/#/driver'),'Driver onboarding must use Staff Web origin');
+must(driverSettings.includes("staffWebHref('driver')")&&!driverSettings.includes('Drivers open <strong>#/driver'),'Driver App settings must use Staff Web origin');
+must(config.includes('VITE_LUKE_SHOP_STAFF_WEB_BASE_URL')&&config.includes('/#/'),'Staff Web URL helper missing');
+must(env.includes('VITE_LUKE_SHOP_STAFF_WEB_BASE_URL'),'Staff Web public origin must be documented');
+console.log('Operations Separation v1.1 regression: PASS');
