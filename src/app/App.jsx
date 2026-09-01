@@ -27,6 +27,7 @@ import{PromotionsPage}from'../pages/PromotionsPage.jsx';
 import{SettingsPage}from'../pages/SettingsPage.jsx';
 import{CustomerServicePage}from'../pages/CustomerServicePage.jsx';
 import{AccessPage}from'../pages/AccessPage.jsx';
+import{StaffStoreAccessPage}from'../pages/StaffStoreAccessPage.jsx';
 import{NotFoundPage}from'../pages/NotFoundPage.jsx';
 import{CustomerExperiencePage}from'../pages/CustomerExperiencePage.jsx';
 import{AssetsPage}from'../pages/AssetsPage.jsx';
@@ -35,7 +36,7 @@ import{MyProfilePage}from'../pages/MyProfilePage.jsx';
 import{AuditPage}from'../pages/AuditPage.jsx';
 import{LanguagesPage}from'../pages/LanguagesPage.jsx';
 import{AddressFormPage}from'../pages/AddressFormPage.jsx';
-const pages={'/dashboard':DashboardPage,'/operations':OperationsDashboardPage,'/stores':StoresPage,'/my-profile':MyProfilePage,'/driver-messages':DriverMessagesPage,'/driver-access':DriverAccessPage,'/driver-settings':DriverAppSettingsPage,'/delivery-settings':DeliverySettingsPage,'/audit':AuditPage,'/products':ProductsPage,'/media-library':AssetsPage,'/inventory':InventoryPage,'/orders':OrdersPage,'/customers':CustomersPage,'/vip-loyalty':VipLoyaltyPage,'/payments':PaymentsPage,'/delivery':DeliveryPage,'/delivery-cod':DeliveryWorkspacePage,'/delivery-control':DeliveryControlPage,'/promotions':PromotionsPage,'/settings':SettingsPage,'/customer-experience':CustomerExperiencePage,'/languages':LanguagesPage,'/address-form':AddressFormPage,'/cs-ai':CustomerServicePage,'/access':AccessPage};
+const pages={'/dashboard':DashboardPage,'/operations':OperationsDashboardPage,'/stores':StoresPage,'/my-profile':MyProfilePage,'/driver-messages':DriverMessagesPage,'/driver-access':DriverAccessPage,'/driver-settings':DriverAppSettingsPage,'/delivery-settings':DeliverySettingsPage,'/audit':AuditPage,'/products':ProductsPage,'/media-library':AssetsPage,'/inventory':InventoryPage,'/orders':OrdersPage,'/customers':CustomersPage,'/vip-loyalty':VipLoyaltyPage,'/payments':PaymentsPage,'/delivery':DeliveryPage,'/delivery-cod':DeliveryWorkspacePage,'/delivery-control':DeliveryControlPage,'/promotions':PromotionsPage,'/settings':SettingsPage,'/customer-experience':CustomerExperiencePage,'/languages':LanguagesPage,'/address-form':AddressFormPage,'/cs-ai':CustomerServicePage,'/access':AccessPage,'/staff-store-access':StaffStoreAccessPage};
 function exclusiveWorkspace(user){const roles=user?.roles||[];if(roles.includes('OWNER')||roles.length!==1)return null;if(roles[0]==='DRIVER')return'/driver';if(roles[0]==='KITCHEN')return'/kitchen';if(roles[0]==='CASHIER')return'/cashier';return null}
 export function App(){
  const{session}=useAuth();const route=useHashRoute();const driverRoute=route==='/driver'||route==='/driver-login',kitchenRoute=route==='/kitchen'||route==='/kitchen-login',cashierRoute=route==='/cashier'||route==='/cashier-login';
