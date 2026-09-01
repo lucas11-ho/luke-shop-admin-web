@@ -31,6 +31,7 @@ import './cx-v4-footer-builder-a2.css';
 import './cx-v4-explore-builder-a3.css';
 import './cx-v4-cart-checkout-builder-a4.css';
 import './admin-operations-typography-v1.css';
+import './staff-web-extraction-prep-v1.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
