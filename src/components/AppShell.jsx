@@ -14,7 +14,7 @@ const navGroups=[
  {key:'finance',label:'Finance',icon:'payments',items:[['payments','Payments','payments.read','payments','nav.payments']]},
  {key:'storefront',label:'Storefront',icon:'experience',items:[['customer-experience','Customer Experience','customer_experience.read','experience','nav.experience'],['media-library','Media Library','catalog.read','media','nav.media'],['languages','Languages','customer_experience.read','languages','nav.languages'],['address-form','Address Form','customer_experience.read','address','nav.address']]},
  {key:'workspace',label:'Workspace',icon:'stores',items:[['stores','Stores','stores.read','stores','nav.stores'],['cs-ai','Customer Service','integrations.customer_service.read','support','nav.cs']]},
- {key:'settings',label:'Settings',icon:'settings',items:[['settings','Store Settings','tenant.settings.read','settings','nav.settings'],['access','Staff & Access',null,'access','nav.access'],['audit','Audit log','audit.read','audit','nav.audit'],['my-profile','My profile',null,'profile','nav.profile']]},
+ {key:'settings',label:'Settings',icon:'settings',items:[['settings','Store Settings','tenant.settings.read','settings','nav.settings'],['access','Staff & Access',null,'access','nav.access'],['staff-store-access','Staff store access','merchant.staff.read','access',null],['audit','Audit log','audit.read','audit','nav.audit'],['my-profile','My profile',null,'profile','nav.profile']]},
 ];
 
 const iconPaths={
