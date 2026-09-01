@@ -22,7 +22,8 @@ const iconPaths={
 };
 function Icon({name,size=18,className=''}){const paths=iconPaths[name]||iconPaths.dashboard;return <svg className={`vben-icon ${className}`} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths.map((d,i)=><path d={d} key={`${name}-${i}`}/>)}</svg>}
 function initialCollapsed(){try{return localStorage.getItem('luke-shop-admin.sidebar-collapsed')==='1'}catch{return false}}
-function activeGroup(route,groups=navGroups){return groups.find(group=>group.items.some(([key])=>route.startsWith(`/${key}`)))?.key||''}
+function routeMatches(route,key){const base=`/${key}`;return route===base||route.startsWith(`${base}/`)}
+function activeGroup(route,groups=navGroups){return groups.find(group=>group.items.some(([key])=>routeMatches(route,key)))?.key||''}
 function initialGroup(route){try{return activeGroup(route)||localStorage.getItem('luke-shop-admin.sidebar-group')||''}catch{return activeGroup(route)}}
 
 export function AppShell({route,children}){
@@ -35,7 +36,7 @@ export function AppShell({route,children}){
  const permissions=session?.user?.permissions||[];
  const visibleGroups=useMemo(()=>navGroups.map(group=>({...group,items:group.items.filter(([, ,perm])=>!perm||permissions.includes(perm))})).filter(group=>group.items.length),[permissions]);
  const allItems=useMemo(()=>[dashboard,...visibleGroups.flatMap(group=>group.items)],[visibleGroups]);
- const go=key=>navigate(`/${key}`);const found=allItems.find(([key])=>route.startsWith(`/${key}`));const labelOf=item=>item?.[4]?t(item[4]):item?.[1]||'Workspace';const title=labelOf(found);const selected=session?.storeId||'';
+ const go=key=>navigate(`/${key}`);const found=allItems.find(([key])=>routeMatches(route,key));const labelOf=item=>item?.[4]?t(item[4]):item?.[1]||'Workspace';const title=labelOf(found);const selected=session?.storeId||'';
  const displayName=session?.user?.display_name||session?.user?.email||'Merchant';const role=session?.user?.role||'Merchant user';const dashboardActive=route==='/dashboard';
  const toggleGroup=key=>{if(collapsed){setCollapsed(false);setOpenGroup(key);return;}setOpenGroup(value=>value===key?'':key)};
  return <div className={`vben-shell ${collapsed?'is-collapsed':''} ${mobile?'is-mobile-open':''}`}>
@@ -45,9 +46,9 @@ export function AppShell({route,children}){
    <div className="vben-tenant-card" title={session?.tenantSlug||''}><span>{t('shell.tenant')}</span><strong>{session?.tenantSlug||'—'}</strong></div>
    <nav className="vben-nav vben-nav-v2" aria-label="Merchant navigation">
     <button className={`vben-nav-item vben-nav-root ${dashboardActive?'active':''}`} onClick={()=>go('dashboard')} title={collapsed?labelOf(dashboard):undefined} aria-current={dashboardActive?'page':undefined}><span className="vben-nav-icon"><Icon name="dashboard"/></span><span className="vben-nav-text">{labelOf(dashboard)}</span></button>
-    {visibleGroups.map(group=>{const expanded=openGroup===group.key,groupActive=group.items.some(([key])=>route.startsWith(`/${key}`)),orderBadge=group.key==='commerce'?notifications.newOrders:0;return <section className={`vben-nav-accordion ${expanded?'is-open':''} ${groupActive?'has-active':''}`} key={group.key}>
+    {visibleGroups.map(group=>{const expanded=openGroup===group.key,groupActive=group.items.some(([key])=>routeMatches(route,key)),orderBadge=group.key==='commerce'?notifications.newOrders:0;return <section className={`vben-nav-accordion ${expanded?'is-open':''} ${groupActive?'has-active':''}`} key={group.key}>
       <button className={`vben-nav-item vben-nav-parent ${groupActive?'active-parent':''}`} onClick={()=>toggleGroup(group.key)} aria-expanded={expanded} title={collapsed?group.label:undefined}><span className="vben-nav-icon"><Icon name={group.icon}/></span><span className="vben-nav-text">{group.label}</span>{orderBadge>0&&<b className="vben-nav-badge nav-red-badge">{orderBadge>99?'99+':orderBadge}</b>}<Icon name="chevron" size={14} className="vben-nav-arrow"/></button>
-      {!collapsed&&<div className="vben-nav-children">{group.items.map(item=>{const[key,, ,icon]=item,active=route.startsWith(`/${key}`),badge=key==='orders'?notifications.newOrders:0,label=labelOf(item);return <button key={key} className={`vben-nav-item vben-nav-child ${active?'active':''}`} onClick={()=>go(key)} aria-current={active?'page':undefined}><span className="vben-nav-branch"/><span className="vben-nav-icon"><Icon name={icon} size={16}/></span><span className="vben-nav-text">{label}</span>{badge>0&&<b className="vben-nav-badge nav-red-badge">{badge>99?'99+':badge}</b>}</button>})}</div>}
+      {!collapsed&&<div className="vben-nav-children">{group.items.map(item=>{const[key,, ,icon]=item,active=routeMatches(route,key),badge=key==='orders'?notifications.newOrders:0,label=labelOf(item);return <button key={key} className={`vben-nav-item vben-nav-child ${active?'active':''}`} onClick={()=>go(key)} aria-current={active?'page':undefined}><span className="vben-nav-branch"/><span className="vben-nav-icon"><Icon name={icon} size={16}/></span><span className="vben-nav-text">{label}</span>{badge>0&&<b className="vben-nav-badge nav-red-badge">{badge>99?'99+':badge}</b>}</button>})}</div>}
      </section>})}
    </nav>
    <div className="vben-sidebar-bottom"><button className="vben-collapse-button" onClick={()=>setCollapsed(v=>!v)} title={collapsed?'Expand sidebar':'Collapse sidebar'}><Icon name={collapsed?'expand':'collapse'} size={17}/><span>{collapsed?'':'Collapse'}</span></button></div>

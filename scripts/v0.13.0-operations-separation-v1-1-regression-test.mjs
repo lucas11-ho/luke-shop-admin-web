@@ -15,6 +15,9 @@ must(app.includes("'/driver':'driver'")&&app.includes("'/kitchen':'kitchen'")&&a
 must(app.includes('isOperationalOnly')&&app.includes('operationalPermissions'),'operational-only Merchant users must be separated from Admin shell');
 must(app.includes('<StaffWebHandoffPage'),'Staff Web handoff route missing');
 must(shell.includes("['staff-web','Staff Web'")&&!shell.includes("['kitchen','Kitchen'")&&!shell.includes("['cashier','Cashier'"),'Merchant Admin navigation must expose Staff Web instead of duplicate daily workspaces');
+must(shell.includes('function routeMatches(route,key)')&&shell.includes('route===base||route.startsWith(`${base}/`)'),'Admin sidebar route matching must distinguish sibling routes such as /delivery and /delivery-settings');
+must(shell.includes('allItems.find(([key])=>routeMatches(route,key))'),'Admin breadcrumb/title must use exact route-aware matching');
+must(shell.includes('group.items.some(([key])=>routeMatches(route,key))')&&shell.includes('active=routeMatches(route,key)'),'Admin group and child active states must use exact route-aware matching');
 must(!operations.includes("'/kitchen','Open Kitchen'")&&!operations.includes("'/cashier','Open Cashier'"),'owner command center must not launch duplicate Kitchen/Cashier runtimes');
 must(operations.includes("['Staff Web'")&&operations.includes("'/staff-web'"),'owner command center must expose Staff Web handoff');
 must(handoff.includes('VITE_LUKE_SHOP_STAFF_WEB_BASE_URL')&&handoff.includes('Merchant Admin remains the owner'),'handoff must explain separation and configuration');
