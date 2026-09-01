@@ -12,8 +12,8 @@ export function StaffLoginPage(){
     event.preventDefault();if(busy)return;setBusy(true);setError(null);
     try{
       const next=await login({tenantSlug:form.tenantSlug.trim(),email:form.email.trim(),password:form.password});
-      const staffOnly=isStaffOnlyUser(next.user),workspaces=resolveStaffWorkspaces(next.user);
-      navigate(staffOnly&&workspaces.length?'/staff':'/dashboard');
+      const workspaces=resolveStaffWorkspaces(next.user),staffOnly=isStaffOnlyUser(next.user);
+      navigate(staffOnly?(workspaces.length===1?workspaces[0].route:'/staff'):'/dashboard');
     }catch(nextError){setError(nextError)}finally{setBusy(false)}
   };
   return <div className="vben-auth-page staff-login-page">
