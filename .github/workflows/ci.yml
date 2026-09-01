@@ -15,6 +15,7 @@ jobs:
       VITE_APP_ENV: production
       VITE_LUKE_SHOP_API_BASE_URL: https://api.example.invalid
       VITE_LUKE_SHOP_CUSTOMER_WEB_BASE_URL: https://shop.example.invalid
+      VITE_LUKE_SHOP_STAFF_WEB_BASE_URL: https://staff.example.invalid
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -26,6 +27,8 @@ jobs:
         run: npm run verify
       - name: Staff store access Admin regression
         run: node scripts/v0.13.0-staff-store-access-admin-v1-regression-test.mjs
+      - name: Operations Separation v1.1 regression
+        run: node scripts/v0.13.0-operations-separation-v1-1-regression-test.mjs
       - name: Build production bundle
         run: npm run build
       - name: Dependency audit
