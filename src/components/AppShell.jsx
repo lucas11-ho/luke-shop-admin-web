@@ -8,7 +8,7 @@ import{useAdminI18n}from'../i18n/AdminI18nContext.jsx';
 const dashboard=['dashboard','Dashboard',null,'dashboard','nav.dashboard'];
 const navGroups=[
  {key:'commerce',label:'Commerce',icon:'orders',items:[['orders','Orders','orders.read','orders','nav.orders'],['products','Products','catalog.read','products','nav.products'],['inventory','Inventory','inventory.read','inventory','nav.inventory']]},
- {key:'customers',label:'Customers',icon:'customers',items:[['customers','Customers','customers.read','customers'],['vip-loyalty','VIP & Loyalty','loyalty.read','loyalty',null]]},
+ {key:'customers',label:'Customers',icon:'customers',items:[['customers','Customers','customers.read','customers','nav.customers'],['vip-loyalty','VIP & Loyalty','loyalty.read','loyalty',null]]},
  {key:'operations',label:'Operations',icon:'delivery',items:[['operations','Operations overview',null,'dashboard',null],['staff-web','Staff Web',null,'delivery',null],['delivery','Delivery operations','delivery.read','delivery','nav.delivery'],['delivery-control','Live delivery control','delivery.read','delivery',null],['delivery-cod','COD cash','delivery.read','payments',null],['driver-access','Driver login access','delivery.manage','profile',null],['delivery-settings','Delivery & Fulfillment','delivery.manage','settings',null],['driver-settings','Driver App settings','delivery.manage','settings',null]]},
  {key:'growth',label:'Growth',icon:'promotions',items:[['promotions','Promotions','promotions.read','promotions','nav.promotions']]},
  {key:'finance',label:'Finance',icon:'payments',items:[['payments','Payments','payments.read','payments','nav.payments']]},
