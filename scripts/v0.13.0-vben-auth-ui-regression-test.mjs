@@ -7,8 +7,8 @@ test('login uses Vben auth layout',()=>{assert.match(login,/vben-auth-page/);ass
 test('login uses shared Vben form primitives',()=>{for(const name of ['VbenField','VbenInput','VbenPasswordInput','VbenSelect','VbenButton','VbenAlert'])assert.ok(login.includes(name),`missing ${name}`)});
 test('login retains merchant auth contract',()=>{assert.match(auth,/\/v1\/merchant\/auth\/login/);assert.match(login,/await login\(\{tenantSlug:/);assert.match(login,/navigate\(destination\(next\.user\)\)/)});
 test('login preserves Dashboard as the default merchant destination',()=>{assert.match(login,/return'\/dashboard'/)});
-test('login supports dedicated operations-role destinations',()=>{for(const pair of [["'DRIVER'","'/driver'"],["'KITCHEN'","'/kitchen'"],["'CASHIER'","'/cashier'"]]){assert.ok(login.includes(pair[0]),`missing role ${pair[0]}`);assert.ok(login.includes(pair[1]),`missing destination ${pair[1]}`)}});
-test('login keeps OWNER in Merchant Admin',()=>{assert.match(login,/roles\.includes\('OWNER'\).*return'\/dashboard'/)});
+test('canonical operational roles hand off to Staff Web',()=>{for(const role of ['DRIVER','KITCHEN','CASHIER','DISPATCHER'])assert.ok(login.includes(`'${role}'`),`missing operational role ${role}`);assert.match(login,/return'\/staff-web'/);for(const obsolete of ["'/driver'","'/kitchen'","'/cashier'"])assert.ok(!login.includes(obsolete),`obsolete Merchant Admin destination remains ${obsolete}`)});
+test('OWNER remains in Merchant Admin',()=>{assert.match(login,/!roles\.includes\('OWNER'\)/);assert.match(login,/return'\/dashboard'/)});
 test('login keeps 12 character password minimum',()=>assert.match(login,/minLength="12"/));
 test('login supports password visibility toggle',()=>{assert.match(ui,/Show password/);assert.match(ui,/Hide password/);assert.match(ui,/eyeOff/)});
 test('login exposes no backend API base URL',()=>assert.doesNotMatch(login,/api\.baseUrl|VITE_LUKE_SHOP_API_BASE_URL/));
