@@ -1,0 +1,34 @@
+name: Apply VIP Cashback Redemption Admin v1
+
+on:
+  push:
+    branches:
+      - feat/vip-cashback-redemption-v1
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/vip-cashback-redemption-v1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Apply deterministic VIP policy integration
+        run: node scripts/apply-vip-cashback-redemption-admin-v1.mjs
+      - name: Commit VIP policy integration
+        shell: bash
+        run: |
+          if git diff --quiet -- src/pages/VipLoyaltyPage.jsx package.json; then
+            echo 'VIP policy integration already applied.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/pages/VipLoyaltyPage.jsx package.json
+          git commit -m 'Integrate VIP cashback redemption policy controls'
+          git push origin HEAD:feat/vip-cashback-redemption-v1

@@ -1,0 +1,15 @@
+import fs from'node:fs';import assert from'node:assert/strict';
+const read=p=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');
+const page=read('src/pages/VipLoyaltyPage.jsx'),card=read('src/components/VipRedemptionPolicyCard.jsx'),api=read('src/api/client.js'),css=read('src/vip-cashback-redemption-admin-v1.css'),pkg=JSON.parse(read('package.json'));
+const tests=[];const test=(n,f)=>tests.push([n,f]);
+test('VIP overview renders the dedicated cashback redemption policy card',()=>{assert.match(page,/VipRedemptionPolicyCard/);assert.match(page,/<VipRedemptionPolicyCard currency=\{currency\}\/>/)});
+test('Policy reads exact Backend store-scoped redemption endpoint',()=>{assert.match(card,/api\.request\('\/v1\/merchant\/vip\/redemption-policy'\)/);assert.match(card,/result\.data\.store/);assert.match(card,/result\.data\.policy/)});
+test('Policy writes exact Backend request fields only',()=>{assert.match(card,/method:'PUT'/);assert.match(card,/body:\{cashback_redemption_enabled:!!form\.cashback_redemption_enabled,max_percent:maxPercent,min_amount:minAmount\}/);assert.doesNotMatch(card,/vip_cashback_amount|reward_balance\s*:/)});
+test('Merchant Admin distinguishes configured switch from effective policy',()=>{assert.match(card,/policy\?\.enabled/);assert.match(card,/policy\?\.program_enabled/);assert.match(card,/WAITING FOR VIP PROGRAM/)});
+test('Policy mutation requires loyalty.manage in the UI',()=>{assert.match(card,/has\('loyalty\.manage'\)/);assert.match(card,/disabled=\{!canManage\}/);assert.match(card,/canManage&&<div className="vip-member-actions"/)});
+test('Working-store switch reloads policy and API sends x-store-id',()=>{assert.match(card,/useEffect\(\(\)=>\{load\(\)\},\[session\?\.storeId\]\)/);assert.match(api,/headers\['x-store-id'\]=session\.storeId/)});
+test('Admin copy preserves server authority and does not claim reward spending authority',()=>{assert.match(card,/Backend remains authoritative for spendable reward balance, reward validity, policy limits and the final payable amount/);assert.match(card,/never spends customer rewards, creates payment proof, or calculates the final checkout redemption/)});
+test('Policy limits mirror Backend schema bounds',()=>{assert.match(card,/maxPercent<0\|\|maxPercent>100/);assert.match(card,/minAmount<0\|\|minAmount>1000000/)});
+test('Responsive policy styles exist',()=>{assert.match(css,/vip-redemption-policy-card/);assert.match(css,/@media\(max-width:720px\)/)});
+test('VIP cashback Admin regression is part of normal verify',()=>{assert.equal(pkg.scripts['test:vip-cashback-redemption-policy-admin-v1'],'node scripts/v0.13.0-vip-cashback-redemption-policy-admin-v1-regression-test.mjs');assert.match(pkg.scripts.verify,/test:vip-cashback-redemption-policy-admin-v1/)});
+let passed=0;for(const[n,f]of tests){try{f();passed++;console.log(`PASS ${n}`)}catch(e){console.error(`FAIL ${n}`);throw e}}console.log(`${passed}/${tests.length} Merchant Admin VIP Cashback Redemption Policy v1 checks passed`);
