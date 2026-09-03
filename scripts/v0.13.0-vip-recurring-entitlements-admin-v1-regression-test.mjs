@@ -10,7 +10,7 @@ const checks=[
   [issuance.includes("api.request('/v1/merchant/vip/issuance-policy')"),'Admin reads store-scoped recurring issuance policy'],
   [issuance.includes("api.request('/v1/merchant/vip/issuance-policy',{method:'PUT'")&&issuance.includes('recurring_entitlement_issuance_enabled:requested'),'Admin saves only the Backend issuance toggle'],
   [issuance.includes("api.request('/v1/merchant/vip/issuance/run',{method:'POST'")],'Admin exposes an explicit Backend run-now operation'],
-  [issuance.includes("/entitlements/issue`"),'Admin uses the Backend manual entitlement issuance endpoint'],
+  [issuance.includes('/entitlements/issue'),'Admin uses the Backend manual entitlement issuance endpoint'],
   [issuance.includes("item.frequency==='MANUAL'")&&issuance.includes("['VOUCHER','GIFT'].includes(item.benefit_type)"),'Manual benefit picker is limited to active manual voucher/gift rules'],
   [issuance.includes('const usedKey=requestKey')&&issuance.includes('if(result.data.created)setRequestKey(newRequestKey())'),'Manual retry key remains stable until Backend confirms a newly created grant'],
   [issuance.includes('request_key:usedKey'),'Manual issuance sends the retry-safe request key to Backend'],
