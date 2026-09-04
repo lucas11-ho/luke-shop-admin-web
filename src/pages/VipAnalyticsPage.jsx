@@ -1,4 +1,4 @@
-import React,{useEffect,useMemo,useState}from'react';
+import React,{useEffect,useState}from'react';
 import{useAuth}from'../auth/AuthContext.jsx';
 import{navigate}from'../app/router.js';
 import{VbenAlert,VbenBadge,VbenButton,VbenCard,VbenDateTime,VbenField,VbenMetric,VbenMoney,VbenPermissionNote,VbenSelect,VbenSkeleton,VbenTable}from'../components/VbenUI.jsx';
@@ -20,14 +20,14 @@ export function VipAnalyticsPage(){
  const rewardRows=analytics?.reward_by_type||[],entitlementRows=analytics?.entitlements_by_status||[],levelRows=analytics?.by_level||[],activityRows=analytics?.recent_activity||[],topBalances=analytics?.top_reward_balances||[];
  const movementTotal=Number(summary.tier_entries||0)+Number(summary.tier_upgrades||0)+Number(summary.tier_downgrades||0);
  const periodLabel=analytics?.period?`${new Date(analytics.period.start).toLocaleDateString()} – ${new Date(analytics.period.end).toLocaleDateString()}`:`Last ${days} days`;
- const activityColumns=useMemo(()=>[
+ const activityColumns=[
   {key:'occurred_at',label:'Time',render:r=><VbenDateTime value={r.occurred_at}/>},
   {key:'kind',label:'Activity',render:r=><VbenBadge tone={kindTone(r.kind)}>{r.kind}</VbenBadge>},
   {key:'customer',label:'Customer',render:r=><div className="vip-analytics-customer"><strong>{r.display_name||'Unnamed customer'}</strong><small>{r.customer_code||r.customer_id}</small></div>},
   {key:'detail',label:'Detail',render:r=><div className="vip-analytics-detail"><strong>{r.status||'—'}</strong><small>{r.detail||'—'}</small></div>},
   {key:'amount',label:'Amount',render:r=>r.amount===null||r.amount===undefined?'—':signedMoney(r.amount,r.currency||currency)},
   {key:'actor_type',label:'Actor',render:r=><span>{r.actor_type||'—'}</span>},
- ],[currency]);
+ ];
  const levelColumns=[
   {key:'name',label:'Level',render:r=><div className="vip-analytics-level"><i style={{background:r.badge_color||'#64748b'}}/><strong>{r.name}</strong><small>{r.code}</small></div>},
   {key:'members',label:'Members'},
