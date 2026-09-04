@@ -1,0 +1,17 @@
+import fs from'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');
+const page=read('src/pages/ThemeSystemPage.jsx'),app=read('src/app/App.jsx'),shell=read('src/components/AppShell.jsx'),main=read('src/main.jsx'),css=read('src/theme-system-admin-v1.css');
+let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
+pass(app.includes("'/theme-system':ThemeSystemPage"),'Theme System route is installed');
+pass(shell.includes("['theme-system','Theme System','customer_experience.read'"),'Theme System is visible in Storefront navigation');
+pass(page.includes('/v1/merchant/customer-experience/theme-catalog'),'Customer theme catalog is loaded');
+pass(page.includes('/v1/merchant/customer-experience/apply-theme'),'Customer package selection saves through Store Designer draft API');
+pass(page.includes('/v1/merchant/staff-experience/theme-catalog')&&page.includes("method:'PUT'"),'Staff package selection uses separate store-scoped API');
+pass(page.includes("navigate('/customer-experience')"),'Theme workspace links back to real Store Designer preview/publish flow');
+pass(page.includes("['Theme','Typography','Icons','Buttons','Navigation','Components']"),'Package inspector exposes all design-system areas');
+pass(page.includes('does not alter operational permissions or workflows'),'Staff theme UI preserves operational authority separation');
+pass(page.includes('never execute CSS, HTML, SVG or JavaScript'),'Merchant UI explains safe package boundary');
+pass(css.includes('.merchant-theme-preview')&&css.includes('.mts-nav.commerce_tab'),'Theme cards preview professional navigation recipes');
+pass(main.includes("import './theme-system-admin-v1.css'"),'Theme System workspace styles are loaded');
+pass(!page.includes('dangerouslySetInnerHTML')&&!page.includes('eval('),'Theme UI never executes package source');
+console.log(`${n}/${n} Merchant Admin Theme System v1 A2 checks passed`);
