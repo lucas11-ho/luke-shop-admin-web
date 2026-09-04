@@ -28,6 +28,7 @@ import{StaffNotificationsPage}from'../pages/StaffNotificationsPage.jsx';
 import{StaffWebHandoffPage}from'../pages/StaffWebHandoffPage.jsx';
 import{NotFoundPage}from'../pages/NotFoundPage.jsx';
 import{CustomerExperiencePage}from'../pages/CustomerExperiencePage.jsx';
+import{ThemeSystemPage}from'../pages/ThemeSystemPage.jsx';
 import{AssetsPage}from'../pages/AssetsPage.jsx';
 import{StoresPage}from'../pages/StoresPage.jsx';
 import{MyProfilePage}from'../pages/MyProfilePage.jsx';
@@ -35,7 +36,7 @@ import{AuditPage}from'../pages/AuditPage.jsx';
 import{LanguagesPage}from'../pages/LanguagesPage.jsx';
 import{AddressFormPage}from'../pages/AddressFormPage.jsx';
 
-const pages={'/dashboard':DashboardPage,'/operations':OperationsDashboardPage,'/stores':StoresPage,'/my-profile':MyProfilePage,'/driver-messages':DriverMessagesPage,'/driver-access':DriverAccessPage,'/driver-settings':DriverAppSettingsPage,'/delivery-settings':DeliverySettingsPage,'/audit':AuditPage,'/products':ProductsPage,'/media-library':AssetsPage,'/inventory':InventoryPage,'/orders':OrdersPage,'/customers':CustomersPage,'/vip-loyalty':VipLoyaltyPage,'/vip-analytics':VipAnalyticsPage,'/payments':PaymentsPage,'/delivery':DeliveryPage,'/delivery-cod':DeliveryWorkspacePage,'/delivery-control':DeliveryControlPage,'/promotions':PromotionsPage,'/settings':SettingsPage,'/customer-experience':CustomerExperiencePage,'/languages':LanguagesPage,'/address-form':AddressFormPage,'/cs-ai':CustomerServicePage,'/access':AccessPage,'/staff-store-access':StaffStoreAccessPage,'/staff-notifications':StaffNotificationsPage};
+const pages={'/dashboard':DashboardPage,'/operations':OperationsDashboardPage,'/stores':StoresPage,'/my-profile':MyProfilePage,'/driver-messages':DriverMessagesPage,'/driver-access':DriverAccessPage,'/driver-settings':DriverAppSettingsPage,'/delivery-settings':DeliverySettingsPage,'/audit':AuditPage,'/products':ProductsPage,'/media-library':AssetsPage,'/inventory':InventoryPage,'/orders':OrdersPage,'/customers':CustomersPage,'/vip-loyalty':VipLoyaltyPage,'/vip-analytics':VipAnalyticsPage,'/payments':PaymentsPage,'/delivery':DeliveryPage,'/delivery-cod':DeliveryWorkspacePage,'/delivery-control':DeliveryControlPage,'/promotions':PromotionsPage,'/settings':SettingsPage,'/customer-experience':CustomerExperiencePage,'/theme-system':ThemeSystemPage,'/languages':LanguagesPage,'/address-form':AddressFormPage,'/cs-ai':CustomerServicePage,'/access':AccessPage,'/staff-store-access':StaffStoreAccessPage,'/staff-notifications':StaffNotificationsPage};
 const legacyStaffRoutes={'/driver':'driver','/driver-login':'driver','/kitchen':'kitchen','/kitchen-login':'kitchen','/cashier':'cashier','/cashier-login':'cashier','/dispatcher':'dispatcher'};
 const operationalPermissions=new Set(['orders.read','delivery.read','delivery.manage','kitchen.read','kitchen.manage','cashier.read','cashier.manage']);
 const operationalSignals=new Set(['delivery.read','delivery.manage','kitchen.read','kitchen.manage','cashier.read','cashier.manage']);
