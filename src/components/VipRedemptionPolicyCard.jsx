@@ -1,5 +1,6 @@
 import React,{useEffect,useState}from'react';
 import{useAuth}from'../auth/AuthContext.jsx';
+import{navigate}from'../app/router.js';
 import{VbenAlert,VbenBadge,VbenButton,VbenCard,VbenField,VbenInput,VbenSkeleton,VbenSwitch,VbenToast}from'./VbenUI.jsx';
 import{VipIssuanceControls}from'./VipIssuanceControls.jsx';
 import'../vip-cashback-redemption-admin-v1.css';
@@ -26,7 +27,7 @@ export function VipRedemptionPolicyCard({currency='USD'}){
     <VbenSwitch checked={form.cashback_redemption_enabled} onChange={value=>setForm(v=>({...v,cashback_redemption_enabled:value}))} label="Allow cashback redemption at checkout" description="Disabled by default. Enable only after Backend migration 033 and the customer checkout rollout are deployed and verified." disabled={!canManage}/>
     <div className="vip-form-grid vip-redemption-policy-grid"><VbenField label="Maximum payable percent" hint="0–100. Backend applies this cap to the server-calculated payable amount."><VbenInput data-testid="vip-redemption-max-percent" type="number" min="0" max="100" step="0.01" disabled={!canManage} value={form.max_percent} onChange={e=>setForm(v=>({...v,max_percent:e.target.value}))}/></VbenField><VbenField label={`Minimum redemption (${currency})`} hint="Customer requests below this amount are rejected by Backend."><VbenInput data-testid="vip-redemption-min-amount" type="number" min="0" max="1000000" step="0.01" disabled={!canManage} value={form.min_amount} onChange={e=>setForm(v=>({...v,min_amount:e.target.value}))}/></VbenField></div>
     <div className="vip-redemption-authority-note"><strong>Authority boundary</strong><span>Merchant Admin only edits this selected store’s policy. It never spends customer rewards, creates payment proof, or calculates the final checkout redemption.</span></div>
-    {canManage&&<div className="vip-member-actions"><VbenButton loading={saving} onClick={save}>Save redemption policy</VbenButton></div>}
+    <div className="vip-member-actions"><VbenButton variant="secondary" onClick={()=>navigate('/vip-analytics')}>Open loyalty analytics</VbenButton>{canManage&&<VbenButton loading={saving} onClick={save}>Save redemption policy</VbenButton>}</div>
    </div>}
    <VbenToast message={toast} onDone={()=>setToast('')}/>
   </VbenCard>
