@@ -4,10 +4,10 @@ const page=fs.readFileSync(new URL('../src/pages/VipLoyaltyPage.jsx',import.meta
 for(const token of ['/v1/merchant/vip/execution','/v1/merchant/vip/execution-policy','/rewards','/rewards/adjust','IMMEDIATE','SCHEDULED','MANUAL','Reward balance','Cashback earned · 30d','Available entitlements','Reward ledger','Voucher & gift entitlements','ADMIN ADJUSTMENT','REFUND_CLAWBACK'])assert.ok(page.includes(token),`missing ${token}`);
 assert.ok(page.includes('Every-order free delivery is applied during checkout'));
 assert.ok(page.includes('Cashback is posted at completion'));
-assert.ok(page.includes('Customer redemption UI remains a separate controlled rollout'));
+assert.ok(page.includes('Customer checkout redemption remains server-authoritative and is enabled per store through the cashback redemption policy above.'));
 assert.doesNotMatch(page,/fake reward balance|synthetic reward balance|Automatic issuance\/redemption accounting is not simulated/);
 assert.ok(page.includes("execution?.evaluated_customers"));
 assert.ok(page.includes("execution?.vip_members"));
 assert.ok(page.includes("execution?.without_level"));
 assert.ok(page.includes("memberRewards.balance"));
-console.log('PASS VIP v1.1 Admin execution policy, evaluated/member counts, real ledger balance, entitlements, refund-clawback visibility and audited reward adjustment UI');
+console.log('PASS VIP v1.1 Admin execution policy, evaluated/member counts, real ledger balance, entitlements, refund-clawback visibility, controlled redemption boundary and audited reward adjustment UI');
