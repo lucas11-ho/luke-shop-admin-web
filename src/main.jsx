@@ -37,6 +37,7 @@ import './theme-system-icons-a3.css';
 import './theme-navigation-composer-a4.css';
 import './theme-controls-composer-a5.css';
 import './theme-product-typography-composer-a6.css';
+import './theme-commerce-surfaces-composer-a7.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
