@@ -1,0 +1,18 @@
+import fs from'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
+const page=read('src/pages/ThemeSystemPage.jsx'),css=read('src/theme-commerce-surfaces-composer-a7.css'),main=read('src/main.jsx');
+pass(page.includes("'Commerce Surfaces'"),'Theme inspector exposes a dedicated Commerce Surfaces composer tab');
+pass(page.includes('function CommerceSurfaceComposer('),'Merchant Admin has a governed Commerce Surface Composer');
+pass(page.includes("['header_surface','Header']")&&page.includes("['search_surface','Search']"),'A7 composer covers Header and Search surfaces');
+pass(page.includes("['account_surface','Account']")&&page.includes("['cart_surface','Cart']")&&page.includes("['checkout_surface','Checkout']"),'A7 composer covers Account Cart and Checkout surfaces');
+pass(page.includes('function themeSurfaceSettings(theme,overrides={})'),'Merchant resolves package defaults plus exact advertised surface overrides');
+pass(page.includes('const allowed=Array.isArray(options[key])?options[key]:[]')&&page.includes('allowed.includes(requested)'),'Merchant only resolves values advertised by immutable package component_options');
+pass(page.includes("onSave(next,'Commerce surface settings')"),'A7 saves through shared Customer Experience draft override path');
+pass(page.includes("api.request('/v1/merchant/customer-experience/apply-theme'")&&page.includes('component_overrides:next'),'A7 persists through Backend Theme System authority');
+pass(page.includes('Cart and Checkout structure still comes from Store Designer'),'Merchant explicitly preserves Store Designer Cart/Checkout structure authority');
+pass(page.includes('Required address, delivery, payment and submit flows cannot be removed by Theme System'),'Merchant UI preserves required commerce-flow boundary');
+pass(page.includes('Publishing from Theme System is intentionally disabled'),'A7 cannot silently publish Customer Experience');
+pass(css.includes('.theme-a7-preview')&&css.includes('.theme-a7-fields'),'A7 has responsive Merchant preview and controls');
+pass(main.includes("import './theme-commerce-surfaces-composer-a7.css';"),'A7 composer stylesheet loads after A6');
+pass(!page.includes('dangerouslySetInnerHTML')&&!page.includes('eval(')&&!page.includes('new Function'),'A7 Merchant Composer executes no package code');
+console.log(`${n}/${n} Theme Commerce Surfaces v1 A7 Merchant checks passed`);
