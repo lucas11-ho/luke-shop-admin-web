@@ -1,6 +1,6 @@
 import fs from'node:fs';
 const read=p=>fs.readFileSync(p,'utf8');let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
-const page=read('src/pages/ThemeSystemPage.jsx'),icons=read('src/components/ThemePhosphorIcon.jsx'),css=read('src/theme-system-icons-a3.css'),pkg=JSON.parse(read('package.json'));
+const page=read('src/pages/ThemeSystemPage.jsx'),icons=read('src/components/ThemePhosphorIcon.jsx'),css=read('src/theme-system-icons-a3.css'),statusCss=read('src/theme-system-admin-v1.css'),pkg=JSON.parse(read('package.json'));
 pass(pkg.dependencies?.['@phosphor-icons/react']==='2.1.10','Merchant Admin pins Phosphor icon renderer');
 pass(icons.includes("from '@phosphor-icons/react'")&&icons.includes('PHOSPHOR_NAV_ICONS'),'Merchant Admin uses professional Phosphor icons');
 pass(page.includes("['home','Home','nav_home_icon']")&&page.includes("['profile','Account','nav_profile_icon']"),'All five Customer navigation slots are independently configurable');
@@ -10,5 +10,9 @@ pass(page.includes("'/v1/merchant/customer-experience/apply-theme'")&&page.inclu
 pass(page.includes('Reset defaults')&&page.includes('Save icons to draft'),'Merchant can reset or save without auto-publishing');
 pass(page.includes('ThemePhosphorIcon')&&!page.includes("['⌂'")&&!page.includes('▦')&&!page.includes('▣'),'Theme preview no longer uses Unicode placeholder glyphs');
 pass(css.includes('.theme-icon-grid')&&css.includes('button.selected'),'Professional icon chooser has a clear selected state');
+pass(page.includes('customerLiveSelection')&&page.includes('customerHasDraft')&&page.includes('Live storefront')&&page.includes('Unpublished draft'),'Theme System displays live and draft Customer theme state separately');
+pass(page.includes('NOT LIVE YET')&&page.includes('Customer theme changes are not live'),'Pending theme changes are clearly identified as unpublished');
+pass(page.includes("navigate('/customer-experience')")&&!page.includes("'/v1/merchant/customer-experience/publish'"),'Theme System directs publishing to Store Designer and cannot accidentally publish unrelated draft changes');
+pass(statusCss.includes('.theme-state-badge.live')&&statusCss.includes('.theme-state-badge.pending'),'Live and pending states have distinct visual status treatments');
 pass(!page.includes('dangerouslySetInnerHTML')&&!icons.includes('dangerouslySetInnerHTML'),'Merchant icon picker never injects raw SVG/HTML');
-console.log(`${n}/${n} Merchant Theme System v1 A3 icon checks passed`);
+console.log(`${n}/${n} Merchant Theme System v1 A3 icon/status checks passed`);
