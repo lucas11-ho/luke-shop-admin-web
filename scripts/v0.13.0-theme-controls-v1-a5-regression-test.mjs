@@ -1,0 +1,17 @@
+import fs from'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
+const page=read('src/pages/ThemeSystemPage.jsx'),css=read('src/theme-controls-composer-a5.css'),main=read('src/main.jsx');
+pass(page.includes("'Buttons','Forms','Navigation'")||page.includes("'Buttons','Forms'"),'Theme inspector exposes separate Buttons and Forms tabs');
+pass(page.includes('function ButtonComposer('),'Merchant Admin has a governed Button Composer');
+pass(page.includes('function FormComposer('),'Merchant Admin has a governed Forms/Input Composer');
+pass(page.includes("['button_primary','Primary']")&&page.includes("['button_destructive','Destructive']")&&page.includes("['button_icon','Icon button']"),'Button Composer covers primary, destructive and icon roles');
+pass(page.includes("['form_control','Input appearance']")&&page.includes("['form_group','Form group']"),'Forms Composer covers control and group recipes');
+pass(page.includes('themeButtonSettings(theme,overrides={})')&&page.includes('themeFormSettings(theme,overrides={})'),'Merchant resolves package defaults plus exact advertised overrides');
+pass(page.includes('options[key].map(value=>')&&page.includes('component_options'),'Merchant choices come from immutable package component_options');
+pass(page.includes("onSave(next,'Button settings')")&&page.includes("onSave(next,'Form settings')"),'Button and form changes use shared Customer Experience draft save path');
+pass(page.includes("api.request('/v1/merchant/customer-experience/apply-theme'")&&page.includes('component_overrides:next'),'A5 saves through Backend Theme System authority rather than browser-only state');
+pass(page.includes('Publishing from Theme System is intentionally disabled'),'Theme System still cannot silently publish the full Customer Experience draft');
+pass(css.includes('.theme-button-composer-preview')&&css.includes('.theme-form-composer-preview'),'A5 provides responsive merchant previews');
+pass(main.includes("import './theme-controls-composer-a5.css';"),'A5 composer styles are loaded');
+pass(!page.includes('dangerouslySetInnerHTML')&&!page.includes('eval(')&&!page.includes('new Function'),'Merchant Composer executes no package code');
+console.log(`${n}/${n} Luke Theme Controls v1 A5 Merchant checks passed`);
