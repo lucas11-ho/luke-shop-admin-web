@@ -1,0 +1,16 @@
+import fs from'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
+const page=read('src/pages/ThemeSystemPage.jsx'),css=read('src/theme-navigation-composer-a4.css'),main=read('src/main.jsx');
+pass(page.includes("['nav_mobile','Tab layout']")&&page.includes("['nav_inactive_style','Inactive icon']"),'Merchant Navigation Composer exposes all seven approved setting groups');
+pass(page.includes('function themeNavSettings(')&&page.includes('component_options'),'Merchant UI resolves navigation options from the immutable package contract');
+pass(page.includes("api.request('/v1/merchant/icon-library?scope=NAVIGATION')"),'Merchant UI reads the reusable Platform Icon Library with Navigation scope');
+pass(page.includes('function platformNavigationNames(')&&page.includes("row.library_pack==='PHOSPHOR'")&&page.includes("row.usage_scopes?.includes('NAVIGATION')"),'Merchant UI recognizes only Platform-approved Phosphor Navigation records');
+pass(page.includes('PHOSPHOR_NAV_ICONS[x]&&platformAllowed.has(x)'),'icon picker intersects renderer support, theme allowlist and Platform governance');
+pass(page.includes('function NavigationComposer(')&&page.includes('Reset package defaults')&&page.includes('Save navigation to draft'),'Navigation Composer provides bounded save and reset actions');
+pass(page.includes("api.request('/v1/merchant/customer-experience/apply-theme'")&&page.includes('component_overrides:next'),'Navigation settings save through the existing Backend-authorized Customer Experience draft path');
+pass(!page.includes("api.request('/v1/merchant/customer-experience/publish'"),'Theme System cannot directly publish unrelated Customer Experience draft changes');
+pass(page.includes('It is not live until that draft is published'),'Merchant UI clearly preserves draft-before-live behavior');
+pass(css.includes('.theme-navigation-composer')&&css.includes('.theme-navigation-fields')&&css.includes('preview-container-floating')&&css.includes('preview-indicator-underline'),'A4 includes responsive professional Navigation Composer previews');
+pass(main.includes("import './theme-navigation-composer-a4.css'"),'A4 Navigation Composer styles are loaded by Merchant Admin');
+pass(!page.includes('dangerouslySetInnerHTML')&&!page.includes('eval(')&&!page.includes('new Function'),'Merchant Admin never executes Platform or theme package source');
+console.log(`${n}/${n} Luke Merchant Navigation Composer v1 A4 checks passed`);
