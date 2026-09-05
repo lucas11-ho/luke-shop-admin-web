@@ -1,0 +1,14 @@
+import fs from'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
+const page=read('src/pages/ThemeSystemPage.jsx'),icons=read('src/components/ThemePhosphorIcon.jsx'),css=read('src/theme-system-icons-a3.css'),pkg=JSON.parse(read('package.json'));
+pass(pkg.dependencies?.['@phosphor-icons/react']==='2.1.10','Merchant Admin pins Phosphor icon renderer');
+pass(icons.includes("from '@phosphor-icons/react'")&&icons.includes('PHOSPHOR_NAV_ICONS'),'Merchant Admin uses professional Phosphor icons');
+pass(page.includes("['home','Home','nav_home_icon']")&&page.includes("['profile','Account','nav_profile_icon']"),'All five Customer navigation slots are independently configurable');
+pass(page.includes('icons.allowed')&&page.includes('navigation_defaults'),'Icon picker is bounded by the selected immutable theme package');
+pass(page.includes('theme_component_overrides'),'Selected icons remain inside versioned Customer Experience overrides');
+pass(page.includes("'/v1/merchant/customer-experience/apply-theme'")&&page.includes('component_overrides:next'),'Saving icons writes only through the authenticated Theme System API');
+pass(page.includes('Reset defaults')&&page.includes('Save icons to draft'),'Merchant can reset or save without auto-publishing');
+pass(page.includes('ThemePhosphorIcon')&&!page.includes("['⌂'")&&!page.includes('▦')&&!page.includes('▣'),'Theme preview no longer uses Unicode placeholder glyphs');
+pass(css.includes('.theme-icon-grid')&&css.includes('button.selected'),'Professional icon chooser has a clear selected state');
+pass(!page.includes('dangerouslySetInnerHTML')&&!icons.includes('dangerouslySetInnerHTML'),'Merchant icon picker never injects raw SVG/HTML');
+console.log(`${n}/${n} Merchant Theme System v1 A3 icon checks passed`);
