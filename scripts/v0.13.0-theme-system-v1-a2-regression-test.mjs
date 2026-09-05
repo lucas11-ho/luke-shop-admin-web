@@ -8,7 +8,8 @@ pass(page.includes('/v1/merchant/customer-experience/theme-catalog'),'Customer t
 pass(page.includes('/v1/merchant/customer-experience/apply-theme'),'Customer package selection saves through Store Designer draft API');
 pass(page.includes('/v1/merchant/staff-experience/theme-catalog')&&page.includes("method:'PUT'"),'Staff package selection uses separate store-scoped API');
 pass(page.includes("navigate('/customer-experience')"),'Theme workspace links back to real Store Designer preview/publish flow');
-pass(page.includes("const customerTabs=['Theme','Typography','Icons','Buttons'")&&page.includes("'Navigation','Components']"),'Package inspector preserves the core design-system areas while allowing additive safe composer tabs');
+for(const tab of ['Theme','Typography','Icons','Buttons','Navigation','Components'])pass(page.includes(`'${tab}'`),`Package inspector preserves core ${tab} area while allowing additive governed composers`);
+pass(page.includes("'Product Card'")&&page.includes("'Forms'"),'Package inspector supports additive Product Card and Forms composer areas');
 pass(page.includes('does not alter operational permissions or workflows')||page.includes('Independent from Customer Web and store-scoped'),'Staff theme UI preserves operational authority separation');
 pass(page.includes('Platform-approved themes')&&page.includes('theme?.manifest?.icons'),'Merchant UI consumes only Platform-approved theme metadata');
 pass(css.includes('.merchant-theme-preview')&&css.includes('.mts-nav.commerce_tab'),'Theme cards preview professional navigation recipes');
