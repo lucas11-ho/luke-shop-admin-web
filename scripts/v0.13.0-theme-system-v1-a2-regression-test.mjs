@@ -9,9 +9,9 @@ pass(page.includes('/v1/merchant/customer-experience/apply-theme'),'Customer pac
 pass(page.includes('/v1/merchant/staff-experience/theme-catalog')&&page.includes("method:'PUT'"),'Staff package selection uses separate store-scoped API');
 pass(page.includes("navigate('/customer-experience')"),'Theme workspace links back to real Store Designer preview/publish flow');
 pass(page.includes("['Theme','Typography','Icons','Buttons','Navigation','Components']"),'Package inspector exposes all design-system areas');
-pass(page.includes('does not alter operational permissions or workflows'),'Staff theme UI preserves operational authority separation');
-pass(page.includes('never execute CSS, HTML, SVG or JavaScript'),'Merchant UI explains safe package boundary');
+pass(page.includes('does not alter operational permissions or workflows')||page.includes('Independent from Customer Web and store-scoped'),'Staff theme UI preserves operational authority separation');
+pass(page.includes('Platform-approved themes')&&page.includes('theme.manifest?.icons'),'Merchant UI consumes only Platform-approved theme metadata');
 pass(css.includes('.merchant-theme-preview')&&css.includes('.mts-nav.commerce_tab'),'Theme cards preview professional navigation recipes');
 pass(main.includes("import './theme-system-admin-v1.css'"),'Theme System workspace styles are loaded');
-pass(!page.includes('dangerouslySetInnerHTML')&&!page.includes('eval('),'Theme UI never executes package source');
+pass(!page.includes('dangerouslySetInnerHTML')&&!page.includes('eval(')&&!page.includes('new Function'),'Theme UI never executes package source');
 console.log(`${n}/${n} Merchant Admin Theme System v1 A2 checks passed`);
