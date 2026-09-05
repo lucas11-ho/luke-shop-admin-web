@@ -31,6 +31,8 @@ jobs:
         run: node scripts/v0.13.0-theme-system-v1-a3-regression-test.mjs
       - name: Theme Navigation Composer v1 A4 merchant guard
         run: node scripts/v0.13.0-theme-navigation-composer-v1-a4-regression-test.mjs
+      - name: Theme Controls v1 A5 button/form merchant guard
+        run: node scripts/v0.13.0-theme-controls-v1-a5-regression-test.mjs
       - name: Staff store access Admin regression
         run: node scripts/v0.13.0-staff-store-access-admin-v1-regression-test.mjs
       - name: Operations Separation v1.1 regression
