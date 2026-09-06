@@ -15,7 +15,7 @@ export function AuthProvider({children}){
       const result=await baseApi.request(path,options);
       if(path==='/v1/merchant/stores'&&(!options.method||options.method==='GET')&&session?.user?.store_scope?.mode==='ASSIGNED_STORES'&&Array.isArray(result?.data?.stores)){
         const allowed=new Set(activeScopeStores(session.user).map(store=>store.id));
-        return {...result,data:{...result.data,stores:result.data.stores.filter(store=>allowed.has(store?.id))}};
+        return {...result,data:{...result.data,stores:result.data.stores.filter(store=>store&&allowed.has(store.id))}};
       }
       return result;
     },
@@ -28,8 +28,8 @@ export function AuthProvider({children}){
     const next={tenantSlug,storeId:u.store_scope?.default_store_id||'',accessToken:t.access_token,refreshToken:t.refresh_token,expiresIn:t.expires_in,user:u}; setSession(next); return next;
   };
   const logout=async(target=null)=>{const hash=location.hash;let fallback='/login';if(hash==='#/driver'||hash==='#/driver-login')fallback='/driver-login';else if(hash==='#/kitchen'||hash==='#/kitchen-login')fallback='/kitchen-login';else if(hash==='#/cashier'||hash==='#/cashier-login')fallback='/cashier-login';const route=typeof target==='string'?target:fallback;try { if(session?.accessToken) await api.request('/v1/merchant/auth/logout',{method:'POST',body:{}}); } catch {} finally { setSession(null); location.hash=`#${route}`; }};
-  const updateStore=(storeId)=>{if(!session)return;const trimmed=String(storeId||'').trim();const scope=session.user?.store_scope;if(scope?.mode==='ASSIGNED_STORES'&&trimmed&&!activeScopeStores(session.user).some(store=>store?.id===trimmed))return;setSession({...session,storeId:trimmed});};
-  const refreshProfile=async()=>{ const data=await api.request('/v1/merchant/me'); const user=data?.data?.user;if(!user)throw new Error('Merchant profile returned an invalid response.');const stores=activeScopeStores(user),allowed=stores.some(store=>store?.id===session?.storeId),storeId=user.store_scope?.mode==='ASSIGNED_STORES'?(allowed?session.storeId:(user.store_scope?.default_store_id||'')):session?.storeId||'';const next={...session,storeId,user}; setSession(next); return next; };
+  const updateStore=(storeId)=>{if(!session)return;const trimmed=String(storeId||'').trim();const scope=session.user?.store_scope;if(scope?.mode==='ASSIGNED_STORES'&&trimmed&&!activeScopeStores(session.user).some(store=>store.id===trimmed))return;setSession({...session,storeId:trimmed});};
+  const refreshProfile=async()=>{ const data=await api.request('/v1/merchant/me'); const user=data?.data?.user;if(!user)throw new Error('Merchant profile returned an invalid response.');const stores=activeScopeStores(user),allowed=stores.some(store=>store.id===session?.storeId),storeId=user.store_scope?.mode==='ASSIGNED_STORES'?(allowed?session.storeId:(user.store_scope?.default_store_id||'')):session?.storeId||'';const next={...session,storeId,user}; setSession(next); return next; };
   const has=(permission)=>permissionsOf(session?.user).includes(permission);
   return <AuthContext.Provider value={{session,setSession,api,login,logout,updateStore,refreshProfile,has}}>{children}</AuthContext.Provider>;
 }
