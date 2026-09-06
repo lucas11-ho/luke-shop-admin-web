@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from './app/App.jsx';
 import { AuthProvider } from './auth/AuthContext.jsx';
 import { AdminI18nProvider } from './i18n/AdminI18nContext.jsx';
+import './components/PlatformIconPicker.jsx';
 import './styles.css';
 import './localization-controls.css';
 import './vben-shell.css';
@@ -38,6 +39,7 @@ import './theme-navigation-composer-a4.css';
 import './theme-controls-composer-a5.css';
 import './theme-product-typography-composer-a6.css';
 import './theme-commerce-surfaces-composer-a7.css';
+import './platform-icon-picker.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>

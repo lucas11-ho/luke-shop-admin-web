@@ -1,0 +1,17 @@
+import fs from'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
+const picker=read('src/components/PlatformIconPicker.jsx'),theme=read('src/pages/ThemeSystemPage.jsx'),main=read('src/main.jsx'),css=read('src/platform-icon-picker.css');
+pass(picker.includes("const SCOPES=new Set(['NAVIGATION','TOPIC','CATEGORY','ACCOUNT','ACTION'])"),'Reusable picker owns the same bounded icon usage scopes');
+pass(picker.includes("api.request(`/v1/merchant/icon-library?scope=${encodeURIComponent(normalized)}`)"),'Reusable picker can load only the requested governed merchant scope');
+pass(picker.includes("row?.status==='PUBLISHED'")&&picker.includes('row.usage_scopes?.includes(normalized)'),'Picker fails closed to PUBLISHED icons carrying the requested scope');
+pass(picker.includes("icon.source_type==='CUSTOM_IMAGE'")&&picker.includes("icon.source_type==='LIBRARY'")&&picker.includes("icon.library_pack==='PHOSPHOR'"),'Picker supports Platform custom images and current renderer-backed Phosphor library icons');
+pass(picker.includes('<picture')&&picker.includes('prefers-color-scheme: dark')&&picker.includes('prefers-color-scheme: light'),'Custom icon preview safely selects optional dark/light artwork with default fallback');
+pass(picker.includes("path.startsWith('/v1/icon-assets/')")&&picker.includes("!path.includes('://')"),'Custom artwork renderer accepts only Backend-owned icon asset paths, never arbitrary URLs');
+pass(picker.includes('valueOf=identity')&&picker.includes('onSelect?.(row)'),'Picker is reusable for future icon-key selections while allowing adapters such as navigation glyph values');
+pass(picker.includes("${row?.category||''}")&&picker.includes("(row?.tags||[]).join(' ')"),'Picker supports category/tag/name/key search');
+pass(theme.includes("row.library_pack==='PHOSPHOR'")&&theme.includes("PHOSPHOR_NAV_ICONS[x]")&&theme.includes("next[key]=current[slot]"),'Existing Theme System Navigation remains Phosphor-glyph-only and keeps its proven storage contract');
+pass(!theme.includes("source_type==='CUSTOM_IMAGE'&&row.usage_scopes?.includes('NAVIGATION')"),'A8 does not silently enable image-backed Customer bottom navigation');
+pass(main.includes("import './components/PlatformIconPicker.jsx';")&&main.includes("import './platform-icon-picker.css';"),'Reusable picker module and styles are compiled in production');
+pass(css.includes('.platform-icon-picker-grid')&&css.includes('.platform-icon-picker-picture'),'Reusable picker has responsive grid and custom artwork styling');
+pass(!picker.includes('dangerouslySetInnerHTML')&&!picker.includes('<svg')&&!picker.includes('eval(')&&!picker.includes('new Function'),'Merchant picker executes no icon markup or arbitrary code');
+console.log(`${n}/${n} Platform Icon Library v1 A2 Merchant checks passed`);
