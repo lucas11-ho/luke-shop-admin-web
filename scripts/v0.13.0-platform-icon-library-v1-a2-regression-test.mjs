@@ -1,7 +1,8 @@
 import fs from'node:fs';
 const read=p=>fs.readFileSync(p,'utf8');let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
 const picker=read('src/components/PlatformIconPicker.jsx'),theme=read('src/pages/ThemeSystemPage.jsx'),main=read('src/main.jsx'),css=read('src/platform-icon-picker.css');
-pass(picker.includes("const SCOPES=new Set(['NAVIGATION','TOPIC','CATEGORY','ACCOUNT','ACTION'])"),'Reusable picker owns the same bounded icon usage scopes');
+pass(picker.includes("const SCOPES=new Set(['NAVIGATION','TOPIC','CATEGORY','ACCOUNT','ACTION','MENU'])"),'Reusable picker owns the complete bounded icon usage scopes including Menu');
+pass(['NAVIGATION','TOPIC','CATEGORY','ACCOUNT','ACTION'].every(scope=>picker.includes(`'${scope}'`))&&picker.includes("'MENU'"),'MENU is additive and preserves every original picker scope');
 pass(picker.includes("api.request(`/v1/merchant/icon-library?scope=${encodeURIComponent(normalized)}`)"),'Reusable picker can load only the requested governed merchant scope');
 pass(picker.includes("row?.status==='PUBLISHED'")&&picker.includes('row.usage_scopes?.includes(normalized)'),'Picker fails closed to PUBLISHED icons carrying the requested scope');
 pass(picker.includes("icon.source_type==='CUSTOM_IMAGE'")&&picker.includes("icon.source_type==='LIBRARY'")&&picker.includes("icon.library_pack==='PHOSPHOR'"),'Picker supports Platform custom images and current renderer-backed Phosphor library icons');
