@@ -45,6 +45,8 @@ jobs:
         run: node scripts/v0.13.0-category-icon-integration-v1-a9-1-regression-test.mjs
       - name: Menu Icon Integration v1 A9.2 merchant guard
         run: node scripts/v0.13.0-menu-icon-integration-v1-a9-2-regression-test.mjs
+      - name: Merchant runtime resilience guard
+        run: node scripts/v0.13.0-merchant-runtime-resilience-regression-test.mjs
       - name: Staff store access Admin regression
         run: node scripts/v0.13.0-staff-store-access-admin-v1-regression-test.mjs
       - name: Operations Separation v1.1 regression
