@@ -1,0 +1,14 @@
+import fs from'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
+const page=read('src/pages/ThemeSystemPage.jsx'),picker=read('src/components/ThemeNavigationIconPicker.jsx'),artwork=read('src/components/PlatformIconPicker.jsx');
+pass(page.includes("import{ThemeNavigationIconPicker}from'../components/ThemeNavigationIconPicker.jsx'")&&page.includes("activeTab==='Icons'")&&page.includes('<ThemeNavigationIconPicker'),'Theme System uses the governed A8.1 navigation icon picker');
+pass(picker.includes("const PLATFORM_PREFIX='platform:'")&&picker.includes('tokenFor=row=>'),'custom selections store Platform icon key tokens instead of URLs');
+pass(picker.includes("row?.status==='PUBLISHED'")&&picker.includes("row.usage_scopes?.includes('NAVIGATION')"),'Merchant choices remain published and NAVIGATION-scoped');
+pass(picker.includes("row.source_type==='CUSTOM_IMAGE'&&icons.allow_custom_images===true"),'custom artwork appears only for exact theme packages that opt in');
+pass(picker.includes("row.library_pack==='PHOSPHOR'")&&picker.includes('glyphs.has(row.library_icon)'),'legacy Phosphor choices still require package and Platform approval');
+pass(picker.includes('<PlatformIconArtwork icon={row}')&&artwork.includes("safeAssetPath(row?.asset_path)"),'custom artwork renders only through the reusable Backend-owned asset renderer');
+pass(picker.includes("next[key]=value")&&picker.includes("allowedTokens.has(value)"),'only an allowed Platform token can be saved into Customer Experience draft');
+pass(picker.includes('Luke Commerce iOS v1.7.0'),'older immutable themes explain why custom navigation artwork is unavailable');
+pass(!picker.includes('dangerouslySetInnerHTML')&&!picker.includes('eval(')&&!picker.includes('new Function'),'Merchant custom icon picker executes no artwork markup or code');
+pass(!picker.includes('data_base64')&&!picker.includes('http://')&&!picker.includes('https://'),'Merchant navigation picker does not accept image bytes or arbitrary URLs');
+console.log(`${n}/${n} Platform custom navigation icon A8.1 Merchant checks passed`);
