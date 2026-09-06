@@ -15,7 +15,7 @@ const normalizeIcon=row=>{
  return {...row,key,name:safeString(row.name).trim()||key,category:safeString(row.category).trim(),source_type:safeString(row.source_type).trim().toUpperCase(),library_pack:safeString(row.library_pack).trim().toUpperCase(),library_icon:safeString(row.library_icon).trim().toLowerCase(),status:safeString(row.status).trim().toUpperCase(),usage_scopes:normalizeStringList(row.usage_scopes).map(scope=>scope.toUpperCase()),tags:normalizeStringList(row.tags)};
 };
 const assetUrl=(row,variant='default')=>{const path=safeAssetPath(row?.asset_path);if(!path)return'';return `${API_BASE}${path}${variant==='default'?'':`?variant=${variant}`}`};
-const searchableText=row=>`${row.name} ${row.key} ${row.category} ${row.tags.join(' ')}`.toLowerCase();
+const searchableText=row=>`${row?.name||''} ${row?.key||''} ${row?.category||''} ${(row?.tags||[]).join(' ')}`.toLowerCase();
 
 class PlatformIconArtworkBoundary extends React.Component{
  constructor(props){super(props);this.state={failed:false};}
@@ -50,7 +50,7 @@ export function PlatformIconPicker({api,scope,icons=null,selected='',valueOf=ide
  const source=useMemo(()=>safeList(Array.isArray(icons)?icons:remote).map(normalizeIcon).filter(Boolean),[icons,remote]);
  const predicate=typeof filter==='function'?filter:includeAll;
  const valueReader=typeof valueOf==='function'?valueOf:identity;
- const visible=useMemo(()=>{const q=query.trim().toLowerCase();return source.filter(row=>{let allowed=false;try{allowed=predicate(row)!==false}catch{return false}return row.status==='PUBLISHED'&&row.usage_scopes.includes(normalized)&&allowed&&(row.source_type==='CUSTOM_IMAGE'||row.source_type==='LIBRARY')}).filter(row=>!q||searchableText(row).includes(q))},[source,normalized,predicate,query]);
+ const visible=useMemo(()=>{const q=query.trim().toLowerCase();return source.filter(row=>{let allowed=false;try{allowed=predicate(row)!==false}catch{return false}return row?.status==='PUBLISHED'&&row.usage_scopes?.includes(normalized)&&allowed&&(row.source_type==='CUSTOM_IMAGE'||row.source_type==='LIBRARY')}).filter(row=>!q||searchableText(row).includes(q))},[source,normalized,predicate,query]);
  if(!validScope)return <div className="platform-icon-picker-state error">Unsupported icon scope.</div>;
  return <section className="platform-icon-picker" data-icon-scope={normalized}>{searchable&&<div className="platform-icon-picker-search"><input type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder={`Search ${normalized.toLowerCase()} icons…`} aria-label={`Search ${normalized.toLowerCase()} icons`}/></div>}{loading?<div className="platform-icon-picker-state">Loading approved icons…</div>:error?<div className="platform-icon-picker-state error">{error}</div>:visible.length===0?<div className="platform-icon-picker-state"><strong>{emptyTitle}</strong><span>Only Platform-published icons approved for this use can appear here.</span></div>:<div className="platform-icon-picker-grid">{visible.map(row=>{let value='';try{value=safeString(valueReader(row))}catch{}const active=value===safeString(selected);return <button type="button" key={row.key} className={active?'selected':''} disabled={disabled} onClick={()=>onSelect?.(row)} title={row.name} aria-pressed={active}><PlatformIconArtwork icon={row}/><span>{row.name}</span>{row.category&&<small>{row.category}</small>}</button>})}</div>}</section>;
 }
