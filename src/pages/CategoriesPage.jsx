@@ -4,6 +4,7 @@ import{PlatformIconArtwork,PlatformIconPicker}from'../components/PlatformIconPic
 import{VbenAlert,VbenBadge,VbenButton,VbenCard,VbenEmpty,VbenField,VbenInput,VbenModal,VbenPermissionNote,VbenSelect,VbenSkeleton,VbenTable,VbenTextarea,VbenToast,vbenStatusTone}from'../components/VbenUI.jsx';
 
 const blank={name:'',slug:'',description:'',status:'ACTIVE',sort_order:0,icon_key:''};
+const safeList=value=>Array.isArray(value)?value:[];
 
 function ErrorBox({error}){return error?<VbenAlert tone="danger" title={error.code||'Request failed'}>{error.message||String(error)}</VbenAlert>:null}
 
@@ -11,7 +12,7 @@ export function CategoriesPage(){
  const{api,has}=useAuth();
  const[rows,setRows]=useState([]),[icons,setIcons]=useState([]),[loading,setLoading]=useState(true),[error,setError]=useState(null),[toast,setToast]=useState('');
  const[form,setForm]=useState(blank),[edit,setEdit]=useState(null),[originalIcon,setOriginalIcon]=useState(''),[busy,setBusy]=useState(false);
- const iconMap=useMemo(()=>new Map(icons.map(icon=>[icon.key,icon])),[icons]);
+ const iconMap=useMemo(()=>new Map(safeList(icons).filter(icon=>icon&&typeof icon==='object').map(icon=>[icon.key,icon])),[icons]);
 
  const load=async()=>{setLoading(true);setError(null);try{
    const[cats,refs,library]=await Promise.all([
@@ -19,16 +20,18 @@ export function CategoriesPage(){
      api.request('/v1/merchant/category-icons'),
      api.request('/v1/merchant/icon-library?scope=CATEGORY'),
    ]);
-   const byCategory=new Map((refs.data.category_icons||[]).map(row=>[row.category_id,row.icon_key||'']));
-   setRows((cats.data.categories||[]).map(row=>({...row,icon_key:byCategory.get(row.public_id)||''})));
-   setIcons(library.data.icons||[]);
- }catch(e){setError(e)}finally{setLoading(false)}};
+   const categoryRows=safeList(cats?.data?.categories),iconRefs=safeList(refs?.data?.category_icons),libraryIcons=safeList(library?.data?.icons);
+   const byCategory=new Map(iconRefs.filter(row=>row&&typeof row==='object').map(row=>[row.category_id,row.icon_key||'']));
+   setRows(categoryRows.filter(row=>row&&typeof row==='object').map(row=>({...row,icon_key:byCategory.get(row.public_id)||''})));
+   setIcons(libraryIcons.filter(icon=>icon&&typeof icon==='object'));
+ }catch(e){setRows([]);setIcons([]);setError(e)}finally{setLoading(false)}};
  useEffect(()=>{load()},[]);
 
  const create=async event=>{event.preventDefault();setBusy(true);setError(null);let createdId='';try{
    const body={name:form.name.trim(),status:form.status,sort_order:Number(form.sort_order||0)};
    if(form.slug.trim())body.slug=form.slug.trim();if(form.description.trim())body.description=form.description.trim();
-   const created=await api.request('/v1/merchant/categories',{method:'POST',body});createdId=created.data.category.public_id;
+   const created=await api.request('/v1/merchant/categories',{method:'POST',body});createdId=created?.data?.category?.public_id;
+   if(!createdId)throw new Error('Category creation returned an invalid response.');
    if(form.icon_key)await api.request(`/v1/merchant/categories/${encodeURIComponent(createdId)}/icon`,{method:'PUT',body:{icon_key:form.icon_key}});
    setForm(blank);setToast('Category created');await load();
  }catch(e){await load().catch(()=>{});setError(createdId?{code:e.code||'CATEGORY_ICON_SAVE_FAILED',message:`Category was created, but the selected icon could not be saved. ${e.message||'Choose another approved Category icon and edit the category.'}`}:e)}finally{setBusy(false)}};
@@ -74,5 +77,5 @@ export function CategoriesPage(){
 }
 
 function CategoryIconField({api,icons,selected,onChange,currentUnavailable=false}){
- return <VbenField label="Category icon" hint="Only icons currently published by the Platform Owner for Category use are selectable."><div className="category-icon-picker-wrap">{currentUnavailable&&<VbenAlert tone="warning" title="Existing icon is no longer selectable">You can keep this existing icon by leaving it unchanged, clear it, or choose another currently approved icon.</VbenAlert>}<div className="category-icon-picker-actions"><span>{selected?`Selected: ${selected}`:'No icon selected'}</span>{selected&&<VbenButton type="button" size="sm" variant="secondary" onClick={()=>onChange('')}>Clear icon</VbenButton>}</div><PlatformIconPicker api={api} icons={icons} scope="CATEGORY" selected={selected} onSelect={row=>onChange(row.key)} emptyTitle="No Category icons published"/></div></VbenField>;
+ return <VbenField label="Category icon" hint="Only icons currently published by the Platform Owner for Category use are selectable."><div className="category-icon-picker-wrap">{currentUnavailable&&<VbenAlert tone="warning" title="Existing icon is no longer selectable">You can keep this existing icon by leaving it unchanged, clear it, or choose another currently approved icon.</VbenAlert>}<div className="category-icon-picker-actions"><span>{selected?`Selected: ${selected}`:'No icon selected'}</span>{selected&&<VbenButton type="button" size="sm" variant="secondary" onClick={()=>onChange('')}>Clear icon</VbenButton>}</div><PlatformIconPicker api={api} icons={safeList(icons)} scope="CATEGORY" selected={selected} onSelect={row=>onChange(row.key)} emptyTitle="No Category icons published"/></div></VbenField>;
 }
