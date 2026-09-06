@@ -39,6 +39,8 @@ jobs:
         run: node scripts/v0.13.0-theme-commerce-surfaces-v1-a7-regression-test.mjs
       - name: Platform Icon Library v1 A2 reusable picker guard
         run: node scripts/v0.13.0-platform-icon-library-v1-a2-regression-test.mjs
+      - name: Platform custom navigation icons v1 A8.1 merchant guard
+        run: node scripts/v0.13.0-platform-custom-navigation-icons-v1-a8-1-regression-test.mjs
       - name: Staff store access Admin regression
         run: node scripts/v0.13.0-staff-store-access-admin-v1-regression-test.mjs
       - name: Operations Separation v1.1 regression
