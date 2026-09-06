@@ -1,7 +1,7 @@
 import React,{useEffect,useMemo,useState}from'react';
 import{ThemePhosphorIcon,PHOSPHOR_NAV_ICONS}from'./ThemePhosphorIcon.jsx';
 
-const SCOPES=new Set(['NAVIGATION','TOPIC','CATEGORY','ACCOUNT','ACTION']);
+const SCOPES=new Set(['NAVIGATION','TOPIC','CATEGORY','ACCOUNT','ACTION','MENU']);
 const API_BASE=String(import.meta.env.VITE_LUKE_SHOP_API_BASE_URL||'').replace(/\/$/,'');
 const identity=row=>row?.key||'';
 const includeAll=()=>true;
