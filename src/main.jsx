@@ -42,6 +42,7 @@ import './theme-product-typography-composer-a6.css';
 import './theme-commerce-surfaces-composer-a7.css';
 import './platform-icon-picker.css';
 import './category-icons-a9-1.css';
+import './menu-shortcuts-a9-2.css';
 import './app-error-boundary.css';
 
 createRoot(document.getElementById('root')).render(

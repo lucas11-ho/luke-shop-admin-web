@@ -1,0 +1,16 @@
+import fs from'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
+const page=read('src/pages/MenuShortcutsPage.jsx'),app=read('src/app/App.jsx'),shell=read('src/components/AppShell.jsx'),picker=read('src/components/PlatformIconPicker.jsx'),main=read('src/main.jsx');
+pass(app.includes("import{MenuShortcutsPage}from'../pages/MenuShortcutsPage.jsx'")&&app.includes("'/menu-shortcuts':MenuShortcutsPage"),'Merchant Admin routes a dedicated Menu Shortcuts workspace');
+pass(shell.includes("['menu-shortcuts','Menu Shortcuts','customer_experience.read','menu',null]"),'Menu Shortcuts is visible under Storefront with Customer Experience read authority');
+pass(page.includes("api.request('/v1/merchant/menu-shortcuts')")&&page.includes("api.request('/v1/merchant/icon-library?scope=MENU')"),'Menu manager loads persisted shortcuts and exact-scope Platform-approved MENU choices');
+pass(page.includes('<PlatformIconPicker api={api} icons={icons} scope="MENU"'),'Menu create/edit uses the reusable governed PlatformIconPicker');
+pass(picker.includes("'ACTION','MENU'")&&picker.includes("row?.status==='PUBLISHED'")&&picker.includes("row.usage_scopes?.includes(normalized)"),'Reusable picker supports MENU and offers only published icons for the exact requested scope');
+pass(page.includes("const canManage=has('customer_experience.manage')")&&page.includes('if(!canManage)return'),'Menu mutations are hidden and guarded for read-only Merchant users');
+pass(page.includes("const DESTINATIONS=[['HOME','Home'],['EXPLORE','Explore / Promotions'],['CART','Cart'],['ORDERS','Orders'],['PROFILE','Account']]")&&!page.includes("['EXTERNAL'"),'Menu destinations are intentionally bounded to internal Shope destinations');
+pass(page.includes('arbitrary URLs are not accepted')&&page.includes('External links are intentionally unavailable'),'Merchant UX clearly communicates the no-arbitrary-URL contract');
+pass(page.includes('currentUnavailable')&&page.includes('Existing icon is no longer selectable'),'Merchant UI explains historical retired/scope-removed icon semantics');
+pass(picker.includes('safeAssetPath(row?.asset_path)')&&!picker.includes('dangerouslySetInnerHTML'),'Custom artwork uses Backend-owned safe asset paths without executable markup');
+pass(main.includes("import './menu-shortcuts-a9-2.css';"),'A9.2 menu manager styles are loaded');
+pass(!page.includes('type="file"')&&!page.includes('data_base64')&&!page.includes('dangerouslySetInnerHTML')&&!page.includes('eval(')&&!page.includes('new Function'),'Merchant Menu manager cannot upload, inject or execute icon/navigation source');
+console.log(`${n}/${n} Menu Icon Integration v1 A9.2 Merchant checks passed`);
