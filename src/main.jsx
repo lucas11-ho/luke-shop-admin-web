@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from './app/App.jsx';
 import { AuthProvider } from './auth/AuthContext.jsx';
 import { AdminI18nProvider } from './i18n/AdminI18nContext.jsx';
+import './components/PlatformIconPicker.jsx';
 import './styles.css';
 import './localization-controls.css';
 import './vben-shell.css';
