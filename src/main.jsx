@@ -40,6 +40,7 @@ import './theme-controls-composer-a5.css';
 import './theme-product-typography-composer-a6.css';
 import './theme-commerce-surfaces-composer-a7.css';
 import './platform-icon-picker.css';
+import './category-icons-a9-1.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>

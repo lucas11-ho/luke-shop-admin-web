@@ -1,0 +1,15 @@
+import fs from'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
+const page=read('src/pages/CategoriesPage.jsx'),app=read('src/app/App.jsx'),shell=read('src/components/AppShell.jsx'),picker=read('src/components/PlatformIconPicker.jsx'),main=read('src/main.jsx');
+pass(app.includes("import{CategoriesPage}from'../pages/CategoriesPage.jsx'")&&app.includes("'/categories':CategoriesPage"),'Merchant Admin routes a dedicated Categories workspace');
+pass(shell.includes("['categories','Categories','catalog.read','products',null]"),'Categories workspace is visible under Commerce with catalog.read authority');
+pass(page.includes("api.request('/v1/merchant/category-icons')")&&page.includes("api.request('/v1/merchant/icon-library?scope=CATEGORY')"),'Category manager loads stored references and Platform-approved CATEGORY choices');
+pass(page.includes('<PlatformIconPicker api={api} icons={icons} scope="CATEGORY"'),'Category create/edit uses the reusable governed PlatformIconPicker');
+pass(page.includes("/icon`,{method:'PUT',body:{icon_key:")||page.includes("/icon`,{method:'PUT'"),'Category icon selection is persisted through Backend authority');
+pass(page.includes("if(nextIcon!==originalIcon)"),'unrelated edits preserve existing retired icons instead of revalidating them');
+pass(page.includes('currentUnavailable')&&page.includes('Existing icon is no longer selectable'),'Merchant UI explains existing-but-retired icon semantics');
+pass(picker.includes("row?.status==='PUBLISHED'")&&picker.includes("row.usage_scopes?.includes(normalized)"),'Reusable picker offers only published icons for the requested exact scope');
+pass(picker.includes("safeAssetPath(row?.asset_path)")&&!picker.includes('dangerouslySetInnerHTML'),'Custom artwork uses Backend-owned safe asset paths without executable markup');
+pass(main.includes("import './category-icons-a9-1.css';"),'A9.1 category manager styles are loaded');
+pass(!page.includes('eval(')&&!page.includes('new Function')&&!page.includes('data_base64'),'Client category manager cannot execute or upload icon source');
+console.log(`${n}/${n} Category Icon Integration v1 A9.1 Merchant checks passed`);
