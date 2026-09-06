@@ -25,21 +25,20 @@ export function CategoriesPage(){
  }catch(e){setError(e)}finally{setLoading(false)}};
  useEffect(()=>{load()},[]);
 
- const create=async event=>{event.preventDefault();setBusy(true);setError(null);try{
+ const create=async event=>{event.preventDefault();setBusy(true);setError(null);let createdId='';try{
    const body={name:form.name.trim(),status:form.status,sort_order:Number(form.sort_order||0)};
    if(form.slug.trim())body.slug=form.slug.trim();if(form.description.trim())body.description=form.description.trim();
-   const created=await api.request('/v1/merchant/categories',{method:'POST',body});
-   if(form.icon_key)await api.request(`/v1/merchant/categories/${encodeURIComponent(created.data.category.public_id)}/icon`,{method:'PUT',body:{icon_key:form.icon_key}});
+   const created=await api.request('/v1/merchant/categories',{method:'POST',body});createdId=created.data.category.public_id;
+   if(form.icon_key)await api.request(`/v1/merchant/categories/${encodeURIComponent(createdId)}/icon`,{method:'PUT',body:{icon_key:form.icon_key}});
    setForm(blank);setToast('Category created');await load();
- }catch(e){setError(e);await load().catch(()=>{})}finally{setBusy(false)}};
+ }catch(e){await load().catch(()=>{});setError(createdId?{code:e.code||'CATEGORY_ICON_SAVE_FAILED',message:`Category was created, but the selected icon could not be saved. ${e.message||'Choose another approved Category icon and edit the category.'}`}:e)}finally{setBusy(false)}};
 
  const openEdit=row=>{setEdit({...row});setOriginalIcon(row.icon_key||'')};
- const save=async()=>{if(!edit)return;setBusy(true);setError(null);try{
-   await api.request(`/v1/merchant/categories/${encodeURIComponent(edit.public_id)}`,{method:'PATCH',body:{name:edit.name.trim(),slug:edit.slug.trim(),description:edit.description?.trim()||null,status:edit.status,sort_order:Number(edit.sort_order||0)}});
-   const nextIcon=edit.icon_key||'';
+ const save=async()=>{if(!edit)return;setBusy(true);setError(null);const nextIcon=edit.icon_key||'';let detailsSaved=false;try{
+   await api.request(`/v1/merchant/categories/${encodeURIComponent(edit.public_id)}`,{method:'PATCH',body:{name:edit.name.trim(),slug:edit.slug.trim(),description:edit.description?.trim()||null,status:edit.status,sort_order:Number(edit.sort_order||0)}});detailsSaved=true;
    if(nextIcon!==originalIcon)await api.request(`/v1/merchant/categories/${encodeURIComponent(edit.public_id)}/icon`,{method:'PUT',body:{icon_key:nextIcon||null}});
    setEdit(null);setOriginalIcon('');setToast('Category updated');await load();
- }catch(e){setError(e)}finally{setBusy(false)}};
+ }catch(e){await load().catch(()=>{});setError(detailsSaved&&nextIcon!==originalIcon?{code:e.code||'CATEGORY_ICON_SAVE_FAILED',message:`Category details were saved, but the icon change was rejected. ${e.message||'Choose another approved Category icon.'}`}:e)}finally{setBusy(false)}};
 
  if(!has('catalog.read'))return <VbenPermissionNote permission="catalog.read"/>;
  const columns=[
