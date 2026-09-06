@@ -1,6 +1,6 @@
 import fs from'node:fs';
 const read=p=>fs.readFileSync(p,'utf8');let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
-const main=read('src/main.jsx'),boundary=read('src/components/AppErrorBoundary.jsx'),css=read('src/app-error-boundary.css'),auth=read('src/auth/AuthContext.jsx'),notifications=read('src/notifications/useMerchantNotifications.js'),categories=read('src/pages/CategoriesPage.jsx');
+const main=read('src/main.jsx'),boundary=read('src/components/AppErrorBoundary.jsx'),css=read('src/app-error-boundary.css'),auth=read('src/auth/AuthContext.jsx'),notifications=read('src/notifications/useMerchantNotifications.js'),categories=read('src/pages/CategoriesPage.jsx'),picker=read('src/components/PlatformIconPicker.jsx');
 pass(main.includes('<AppErrorBoundary>')&&main.indexOf('<AppErrorBoundary>')<main.indexOf('<AdminI18nProvider>'),'Root recovery boundary protects providers and application rendering');
 pass(main.includes("import './app-error-boundary.css'"),'Recovery screen styling is included in the production bundle');
 pass(boundary.includes('getDerivedStateFromError')&&boundary.includes('componentDidCatch'),'Recovery boundary handles render and lifecycle failures');
@@ -12,5 +12,9 @@ pass(auth.includes('permissionsOf(session?.user).includes(permission)'),'Permiss
 pass(notifications.includes('readSoundPreference')&&notifications.includes('try{return localStorage.getItem')&&notifications.includes('try{localStorage.setItem'),'Notification preferences cannot crash app startup when browser storage is unavailable');
 pass(notifications.includes('safeList(d?.data?.notifications)'),'Notification rendering normalizes malformed collection responses');
 pass(categories.includes('safeList(cats?.data?.categories)')&&categories.includes('safeList(refs?.data?.category_icons)')&&categories.includes('safeList(library?.data?.icons)'),'Category workspace normalizes all three parallel API collection responses');
+pass(categories.includes('safeText(row.description)')&&categories.includes('safeNumber(row.sort_order)'),'Category records are reduced to render-safe scalar fields before entering UI state');
 pass(categories.includes('setRows([]);setIcons([]);setError(e)'),'Category load failures fail visibly without leaving stale unsafe render state');
+pass(picker.includes('normalizeStringList')&&picker.includes('usage_scopes:normalizeStringList')&&picker.includes('tags:normalizeStringList'),'Governed icon picker normalizes array-backed scopes and tags before filtering or search');
+pass(picker.includes('class PlatformIconArtworkBoundary')&&picker.includes('getDerivedStateFromError'),'Each governed icon artwork has a local render boundary instead of crashing the Merchant workspace');
+pass(picker.includes('safeList(result?.data?.icons)')&&picker.includes('safeList(Array.isArray(icons)?icons:remote).map(normalizeIcon).filter(Boolean)'),'Remote and supplied icon collections reject malformed records before rendering');
 console.log(`${n}/${n} Merchant Admin runtime resilience checks passed`);
