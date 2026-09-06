@@ -1,0 +1,16 @@
+import fs from'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');let n=0;const pass=(ok,msg)=>{if(!ok)throw new Error(`FAIL ${msg}`);n++;console.log(`PASS ${msg}`)};
+const main=read('src/main.jsx'),boundary=read('src/components/AppErrorBoundary.jsx'),css=read('src/app-error-boundary.css'),auth=read('src/auth/AuthContext.jsx'),notifications=read('src/notifications/useMerchantNotifications.js'),categories=read('src/pages/CategoriesPage.jsx');
+pass(main.includes('<AppErrorBoundary>')&&main.indexOf('<AppErrorBoundary>')<main.indexOf('<AdminI18nProvider>'),'Root recovery boundary protects providers and application rendering');
+pass(main.includes("import './app-error-boundary.css'"),'Recovery screen styling is included in the production bundle');
+pass(boundary.includes('getDerivedStateFromError')&&boundary.includes('componentDidCatch'),'Recovery boundary handles render and lifecycle failures');
+pass(boundary.includes("sessionStorage.removeItem(SESSION_KEY)")&&boundary.includes("window.location.hash='#/login'"),'Recovery can clear the tab-scoped Merchant session and return to sign in');
+pass(!boundary.includes('this.state.error')&&!boundary.includes('error.message')&&!boundary.includes('componentStack'),'Recovery UI does not expose exception or component details');
+pass(css.includes('@media(max-width:640px)')&&css.includes('.app-fatal-error-actions{flex-direction:column}'),'Recovery screen remains usable on narrow mobile viewports');
+pass(auth.includes('const safeList=value=>Array.isArray(value)?value:[]')&&auth.includes('Array.isArray(result?.data?.stores)'),'Auth/store filtering rejects malformed collection payloads instead of rendering through them');
+pass(auth.includes('permissionsOf(session?.user).includes(permission)'),'Permission checks normalize malformed permission collections');
+pass(notifications.includes('readSoundPreference')&&notifications.includes('try{return localStorage.getItem')&&notifications.includes('try{localStorage.setItem'),'Notification preferences cannot crash app startup when browser storage is unavailable');
+pass(notifications.includes('safeList(d?.data?.notifications)'),'Notification rendering normalizes malformed collection responses');
+pass(categories.includes('safeList(cats?.data?.categories)')&&categories.includes('safeList(refs?.data?.category_icons)')&&categories.includes('safeList(library?.data?.icons)'),'Category workspace normalizes all three parallel API collection responses');
+pass(categories.includes('setRows([]);setIcons([]);setError(e)'),'Category load failures fail visibly without leaving stale unsafe render state');
+console.log(`${n}/${n} Merchant Admin runtime resilience checks passed`);
