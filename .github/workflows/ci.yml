@@ -32,7 +32,7 @@ jobs:
       - name: Theme Navigation Composer v1 A4 merchant guard
         run: node scripts/v0.13.0-theme-navigation-composer-v1-a4-regression-test.mjs
       - name: Theme Controls v1 A5 button/form merchant guard
-        run: node scripts/v0.13.0-theme-controls-v1-a5-regression-test.mjs
+        run: node scripts/v0.13.0-theme-controls-composer-v1-a5-regression-test.mjs
       - name: Theme Product + Typography Composer v1 A6 merchant guard
         run: node scripts/v0.13.0-theme-product-typography-v1-a6-regression-test.mjs
       - name: Theme Commerce Surfaces v1 A7 merchant guard
@@ -45,6 +45,8 @@ jobs:
         run: node scripts/v0.13.0-category-icon-integration-v1-a9-1-regression-test.mjs
       - name: Menu Icon Integration v1 A9.2 merchant guard
         run: node scripts/v0.13.0-menu-icon-integration-v1-a9-2-regression-test.mjs
+      - name: Business Command Center v1 A10.1 merchant guard
+        run: node scripts/v0.13.0-business-command-center-v1-a10-1-regression-test.mjs
       - name: Merchant runtime resilience guard
         run: node scripts/v0.13.0-merchant-runtime-resilience-regression-test.mjs
       - name: Staff store access Admin regression
