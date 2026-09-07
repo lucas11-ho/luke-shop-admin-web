@@ -1,4 +1,4 @@
-import React,{useEffect,useMemo,useState}from'react';
+import React,{useEffect,useState}from'react';
 import{useAuth}from'../auth/AuthContext.jsx';
 import{navigate}from'../app/router.js';
 import{VbenAlert,VbenBadge,VbenButton,VbenCard,VbenDateTime,VbenIcon,VbenMetric,VbenMoney,VbenSelect,VbenSkeleton,VbenTable,vbenStatusTone}from'../components/VbenUI.jsx';
@@ -21,13 +21,13 @@ export function DashboardPage(){
   available.payments&&{key:'payments',label:'Payment attention',value:paymentAttention,detail:`${count(payments.failed)} failed · ${count(payments.refund_attention)} refunds`,icon:'payments',tone:paymentAttention?'warning':'success',route:'/payments'},
   available.delivery&&{key:'cod',label:'COD to reconcile',value:<VbenMoney value={delivery.cod_reconciliation_amount} currency={codCurrency}/>,detail:`${count(delivery.cod_reconciliation_count)} store-held collections`,icon:'receipt',tone:count(delivery.cod_reconciliation_count)?'warning':'success',route:'/delivery-cod'},
  ].filter(Boolean);
- const attention=useMemo(()=>[
+ const attention=[
   available.payments&&{key:'payment',icon:'payments',tone:paymentAttention?'warning':'success',value:paymentAttention,title:'Payment exceptions',description:`${count(payments.pending)} pending · ${count(payments.failed)} failed · ${count(payments.refund_attention)} refund requests`,route:'/payments'},
   available.delivery&&{key:'cod',icon:'receipt',tone:count(delivery.cod_reconciliation_count)?'warning':'success',value:count(delivery.cod_reconciliation_count),title:'COD reconciliation',description:`${count(delivery.cod_driver_custody_count)} with drivers · ${count(delivery.cod_reconciliation_count)} received by store`,route:'/delivery-cod'},
   available.inventory&&{key:'stock',icon:'inventory',tone:count(inventory.out_of_stock)?'warning':'success',value:count(inventory.low_stock),title:'Inventory risk',description:`${count(inventory.out_of_stock)} out of stock · ${count(inventory.low_stock)} at five or fewer available`,route:'/inventory'},
   available.delivery&&{key:'dispatch',icon:'truck',tone:count(delivery.ready_unassigned)?'warning':'success',value:count(delivery.ready_unassigned),title:'Ready without driver',description:`${count(delivery.active_dispatches)} active deliveries · ${count(delivery.awaiting_acceptance)} awaiting driver acceptance`,route:'/operations'},
   available.kitchen&&{key:'kitchen',icon:'box',tone:count(kitchen.waiting)?'warning':'success',value:count(kitchen.waiting),title:'Kitchen workload',description:`${count(kitchen.ready)} ready for pickup or dispatch`,route:'/operations'},
- ].filter(Boolean),[available,paymentAttention,payments,delivery,inventory,kitchen]);
+ ].filter(Boolean);
  const orderColumns=[{key:'order_number',label:'Order'},{key:'customer_display_name',label:'Customer'},{key:'status',label:'Status',render:r=><VbenBadge tone={vbenStatusTone(r.status)}>{r.status||'UNKNOWN'}</VbenBadge>},{key:'payment_status',label:'Payment',render:r=><VbenBadge tone={vbenStatusTone(r.payment_status)}>{r.payment_status||'UNKNOWN'}</VbenBadge>},{key:'grand_total',label:'Total',render:r=><VbenMoney value={r.grand_total} currency={r.currency||currency}/>},{key:'created_at',label:'Created',render:r=><VbenDateTime value={r.created_at}/>}];
  const unavailable=safeList(data.unavailable);
  return <div className="vben-dashboard-page a10-business-command-center" data-testid="business-command-center-a10-1">
