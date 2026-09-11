@@ -2,7 +2,7 @@ import fs from'node:fs';import assert from'node:assert/strict';
 const read=p=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');
 const pkg=JSON.parse(read('package.json'));const page=read('src/pages/CustomerExperiencePage.jsx');const css=read('src/cx-v4-store-designer.css');const main=read('src/main.jsx');
 const tests=[];const test=(n,f)=>tests.push([n,f]);
-test('release/runtime versions remain production baseline',()=>{assert.equal(pkg.version,'0.13.0');assert.equal(pkg.dependencies.react,'19.1.1');assert.equal(pkg.dependencies['react-dom'],'19.1.1');assert.equal(pkg.devDependencies.vite,'7.3.6');assert.equal(pkg.devDependencies.wrangler,'4.126.0')});
+test('release/runtime versions remain production baseline',()=>{assert.equal(pkg.version,'0.13.0');assert.equal(pkg.dependencies.react,'19.1.1');assert.equal(pkg.dependencies['react-dom'],'19.1.1');assert.equal(pkg.devDependencies.vite,'7.3.6');assert.equal(pkg.devDependencies.wrangler,'4.131.0')});
 test('verify permanently includes CX v4 designer regression',()=>{assert.equal(pkg.scripts['test:cx-v4-designer'],'node scripts/v0.13.0-cx-v4-store-designer-regression-test.mjs');assert.match(pkg.scripts.verify,/test:cx-v4-designer/)});
 test('designer uses v4 command bar and shared Vben controls',()=>{assert.match(page,/Store Designer/);assert.match(page,/>v4</);assert.match(page,/VbenButton/);assert.doesNotMatch(page,/PageHeader/)});
 test('real storefront page navigator covers existing Customer Web routes',()=>{for(const route of ["route:'/'","route:'/explore'","route:'/cart'","route:'/checkout'","route:'/orders'","route:'/profile'","route:'/login'"])assert.ok(page.includes(route),`missing ${route}`)});
