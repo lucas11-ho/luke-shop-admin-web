@@ -12,6 +12,7 @@ import './vben-ui.css';
 import './sidebar-navigation-v2.css';
 import './vben-dashboard.css';
 import './business-command-center-a10-1.css';
+import './finance-reconciliation-center-a10-2.css';
 import './vben-orders.css';
 import './vben-products.css';
 import './product-policy-digital.css';
