@@ -2,7 +2,7 @@ import fs from'node:fs';import assert from'node:assert/strict';
 const read=p=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');
 const pkg=JSON.parse(read('package.json')),page=read('src/pages/CustomerExperiencePage.jsx'),panel=read('src/components/FooterBuilderA2.jsx'),css=read('src/cx-v4-footer-builder-a2.css'),main=read('src/main.jsx');
 const tests=[];const test=(name,fn)=>tests.push([name,fn]);
-test('runtime versions remain production baseline',()=>{assert.equal(pkg.version,'0.13.0');assert.equal(pkg.dependencies.react,'19.1.1');assert.equal(pkg.dependencies['react-dom'],'19.1.1');assert.equal(pkg.devDependencies.vite,'7.3.6');assert.equal(pkg.devDependencies.wrangler,'4.126.0')});
+test('runtime versions remain production baseline',()=>{assert.equal(pkg.version,'0.13.0');assert.equal(pkg.dependencies.react,'19.1.1');assert.equal(pkg.dependencies['react-dom'],'19.1.1');assert.equal(pkg.devDependencies.vite,'7.3.6');assert.equal(pkg.devDependencies.wrangler,'4.131.0')});
 test('verify permanently includes Footer A2 suite',()=>{assert.equal(pkg.scripts['test:store-designer-footer-a2'],'node scripts/v0.13.0-store-designer-footer-a2-regression-test.mjs');assert.match(pkg.scripts.verify,/test:store-designer-footer-a2/)});
 test('Footer is a first-class Store Designer panel',()=>{assert.match(page,/\['footer','Footer'/);assert.match(page,/FooterBuilderA2/);assert.match(page,/active==='footer'/)});
 test('Footer changes are categorized for publish review',()=>assert.match(page,/footer:'Footer'/));
