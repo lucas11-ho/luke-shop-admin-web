@@ -1,16 +1,18 @@
 import React,{useEffect,useMemo,useState}from'react';
 import{useAuth}from'../auth/AuthContext.jsx';
 import{VbenAlert,VbenBadge,VbenButton,VbenCard,VbenDateTime,VbenField,VbenInput,VbenMetric,VbenModal,VbenPasswordInput,VbenSelect,VbenSkeleton,VbenTable,VbenTabs,VbenTextarea,VbenToast,vbenStatusTone}from'../components/VbenUI.jsx';
+import{AccessOverviewPanel}from'../components/AccessOverviewPanel.jsx';
+import{StaffStoreAccessInline}from'../components/StaffStoreAccessInline.jsx';
 
 const blankStaff={email:'',display_name:'',password:'',role_ids:[]};
 const blankRole={key:'',name:'',description:'',permission_keys:[]};
 const uniq=v=>[...new Set(v)];
 const toggle=(arr,value)=>arr.includes(value)?arr.filter(x=>x!==value):[...arr,value];
-const tabItems=[{value:'Staff',label:'Staff'},{value:'Roles',label:'Roles'},{value:'Permissions',label:'Permissions'}];
+const tabItems=[{value:'Overview',label:'Overview'},{value:'Staff',label:'Staff'},{value:'Roles',label:'Roles'},{value:'Permissions',label:'Permissions'}];
 
 export function AccessPage(){
  const{session,api,has,refreshProfile}=useAuth();
- const[tab,setTab]=useState('Staff'),[staff,setStaff]=useState([]),[roles,setRoles]=useState([]),[permissions,setPermissions]=useState([]),[loading,setLoading]=useState(true),[error,setError]=useState(null),[toast,setToast]=useState(''),[q,setQ]=useState(''),[busy,setBusy]=useState('');
+ const[tab,setTab]=useState('Overview'),[staff,setStaff]=useState([]),[roles,setRoles]=useState([]),[permissions,setPermissions]=useState([]),[loading,setLoading]=useState(true),[error,setError]=useState(null),[toast,setToast]=useState(''),[q,setQ]=useState(''),[busy,setBusy]=useState('');
  const[staffModal,setStaffModal]=useState(false),[staffForm,setStaffForm]=useState(blankStaff),[editStaff,setEditStaff]=useState(null),[editStaffForm,setEditStaffForm]=useState({display_name:'',status:'ACTIVE',role_ids:[]});
  const[roleModal,setRoleModal]=useState(false),[editRole,setEditRole]=useState(null),[roleForm,setRoleForm]=useState(blankRole);
  const[passwordStaff,setPasswordStaff]=useState(null),[newPassword,setNewPassword]=useState('');
@@ -43,12 +45,14 @@ export function AccessPage(){
  if(!canAccess)return <div className="vben-access-page"><div className="vben-access-hero"><div><span className="vben-access-eyebrow">Security administration</span><h1>Access & roles</h1><p>Your current account is authenticated, but it does not have staff/RBAC read permission.</p></div></div><VbenCard title="Current merchant"><div className="vben-access-current"><div><span>Name</span><strong>{session.user.display_name}</strong></div><div><span>Email</span><strong>{session.user.email}</strong></div><div><span>Roles</span><div className="vben-access-badges">{(session.user.roles||[]).map(r=><VbenBadge key={r}>{r}</VbenBadge>)}</div></div></div></VbenCard></div>;
 
  return <div className="vben-access-page">
-  <div className="vben-access-hero"><div><span className="vben-access-eyebrow">Security administration</span><h1>Staff & access</h1><p>Create merchant staff, assign least-privilege roles, reset passwords, and revoke sessions. Backend authorization remains the source of truth for every access decision.</p></div><div className="vben-access-actions">{canStaffManage&&canRolesRead&&<VbenButton icon="plus" onClick={openCreateStaff}>Create staff</VbenButton>}{canRolesManage&&<VbenButton variant="secondary" icon="plus" onClick={openCreateRole}>Create role</VbenButton>}</div></div>
+  <div className="vben-access-hero"><div><span className="vben-access-eyebrow">Security administration</span><h1>Staff & access</h1><p>Govern staff identities, least-privilege roles, store assignments, sessions and operational access. Backend authorization remains the source of truth for every access decision.</p></div><div className="vben-access-actions">{canStaffManage&&canRolesRead&&<VbenButton icon="plus" onClick={openCreateStaff}>Create staff</VbenButton>}{canRolesManage&&<VbenButton variant="secondary" icon="plus" onClick={openCreateRole}>Create role</VbenButton>}</div></div>
   {error&&<VbenAlert tone="danger" title={error.code||'Request failed'}>{error.message||'Unable to complete the access-control request.'}</VbenAlert>}
   {loading?<VbenCard><VbenSkeleton lines={7}/></VbenCard>:<>
    <div className="vben-access-metrics"><VbenMetric label="Staff" value={staff.length} detail={`${activeStaff} active`} icon="users"/><VbenMetric label="Active sessions" value={totalSessions} detail="Across loaded staff" icon="lock" tone="success"/><VbenMetric label="Custom roles" value={customRoles} detail={`${roles.length} total roles`} icon="users" tone="primary"/><VbenMetric label="Permissions" value={permissions.length} detail="Platform catalog" icon="check" tone="warning"/></div>
-   <VbenAlert tone="info" title="Authorization boundary">System OWNER is protected. Custom roles can only receive permissions the acting merchant is allowed to grant, and self-lockout actions remain blocked.</VbenAlert>
+   <VbenAlert tone="info" title="Authorization boundary">System OWNER is protected. Custom roles can only receive permissions the acting merchant is allowed to grant, store scope is enforced separately, and self-lockout actions remain blocked.</VbenAlert>
    <VbenTabs value={tab} onChange={setTab} items={tabItems}/>
+
+   {tab==='Overview'&&<AccessOverviewPanel/>}
 
    {tab==='Staff'&&<VbenCard title="Merchant staff" description="Suspending or disabling an account immediately revokes its active sessions." actions={canStaffManage&&canRolesRead?<VbenButton size="sm" icon="plus" onClick={openCreateStaff}>Create staff</VbenButton>:null}>
     <div className="vben-access-toolbar"><VbenInput icon="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Search staff, email, or role"/><span>{filteredStaff.length} of {staff.length}</span></div>
@@ -62,7 +66,7 @@ export function AccessPage(){
     ]}/>} 
    </VbenCard>}
 
-   {tab==='Roles'&&<VbenCard title="Roles" description="System OWNER is protected. Custom roles can only receive permissions the acting merchant already has." actions={canRolesManage?<VbenButton size="sm" icon="plus" onClick={openCreateRole}>Create role</VbenButton>:null}>
+   {tab==='Roles'&&<VbenCard title="Roles" description="System OWNER and operational system roles are protected. Custom roles can only receive permissions the acting merchant already has." actions={canRolesManage?<VbenButton size="sm" icon="plus" onClick={openCreateRole}>Create role</VbenButton>:null}>
     {!canRolesRead?<VbenAlert tone="warning" title="Role read permission required">Your role does not include merchant.roles.read.</VbenAlert>:<VbenTable rows={roles} emptyTitle="No roles" ariaLabel="Merchant roles" columns={[
      {key:'name',label:'Role',render:r=><div className="vben-access-role"><strong>{r.name}</strong><code>{r.key}</code>{r.description&&<small>{r.description}</small>}</div>},
      {key:'system',label:'Type',render:r=><VbenBadge tone={r.is_system?'success':'neutral'}>{r.is_system?'SYSTEM':'CUSTOM'}</VbenBadge>},
@@ -86,6 +90,7 @@ export function AccessPage(){
     <VbenField label="Display name"><VbenInput disabled={!canStaffManage} value={editStaffForm.display_name} onChange={e=>setEditStaffForm({...editStaffForm,display_name:e.target.value})}/></VbenField>
     <VbenField label="Status" hint={editStaff.id===session.user.id?'Self suspension/disable is blocked to prevent lockout.':'Non-active status revokes all active sessions.'}><VbenSelect disabled={!canStaffManage||editStaff.id===session.user.id} value={editStaffForm.status} onChange={e=>setEditStaffForm({...editStaffForm,status:e.target.value})}><option>ACTIVE</option><option>SUSPENDED</option><option>DISABLED</option></VbenSelect></VbenField>
     {canRolesManage&&editStaff.id!==session.user.id&&<VbenField label="Roles"><div className="vben-access-choice-grid">{allowedRoleOptions.map(r=><label className="vben-access-choice" key={r.id}><input type="checkbox" checked={editStaffForm.role_ids.includes(r.id)} onChange={()=>setEditStaffForm({...editStaffForm,role_ids:toggle(editStaffForm.role_ids,r.id)})}/><div><strong>{r.name}</strong><span>{r.key}</span></div></label>)}</div></VbenField>}
+    <StaffStoreAccessInline staff={editStaff}/>
     <div className="vben-access-danger-zone"><strong>Security actions</strong><span>Password reset revokes every active session for this account.</span><div>{canStaffManage&&editStaff.id!==session.user.id&&<VbenButton variant="secondary" onClick={()=>{setPasswordStaff(editStaff);setNewPassword('')}}>Reset password</VbenButton>}{canSessionsManage&&editStaff.id!==session.user.id&&<VbenButton variant="danger" loading={busy===`logout-${editStaff.id}`} onClick={()=>forceLogout(editStaff)}>Force logout</VbenButton>}<VbenButton variant="secondary" onClick={()=>openSessions(editStaff)}>View sessions</VbenButton></div></div>
    </>}
   </VbenModal>

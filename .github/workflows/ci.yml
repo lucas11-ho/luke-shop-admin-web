@@ -49,6 +49,8 @@ jobs:
         run: node scripts/v0.13.0-business-command-center-v1-a10-1-regression-test.mjs
       - name: Finance & Reconciliation Center v1 A10.2 merchant guard
         run: node scripts/v0.13.0-finance-reconciliation-center-v1-a10-2-regression-test.mjs
+      - name: Staff & Access Management Center v1 A10.3 merchant guard
+        run: node scripts/v0.13.0-staff-access-management-center-v1-a10-3-regression-test.mjs
       - name: Merchant runtime resilience guard
         run: node scripts/v0.13.0-merchant-runtime-resilience-regression-test.mjs
       - name: Staff store access Admin regression

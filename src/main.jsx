@@ -27,6 +27,7 @@ import './kitchen-cashier-operations-v1.css';
 import './tokenpay-gateway-v1.css';
 import './vben-promotions.css';
 import './vben-settings-access.css';
+import './staff-access-management-center-a10-3.css';
 import './cx-v4-store-designer.css';
 import './cx-v4-home-builder.css';
 import './cx-v4-product-detail-builder.css';
