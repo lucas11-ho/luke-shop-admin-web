@@ -3,7 +3,7 @@ const read=p=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');
 const pkg=JSON.parse(read('package.json'));const page=read('src/pages/CustomerExperiencePage.jsx');const css=read('src/cx-v4-store-designer-completion-a1.css');const main=read('src/main.jsx');
 const tests=[];const test=(name,fn)=>tests.push([name,fn]);
 
-test('runtime versions remain the production baseline',()=>{assert.equal(pkg.version,'0.13.0');assert.equal(pkg.dependencies.react,'19.1.1');assert.equal(pkg.dependencies['react-dom'],'19.1.1');assert.equal(pkg.devDependencies.vite,'7.3.6');assert.equal(pkg.devDependencies.wrangler,'4.126.0')});
+test('runtime versions remain the production baseline',()=>{assert.equal(pkg.version,'0.13.0');assert.equal(pkg.dependencies.react,'19.1.1');assert.equal(pkg.dependencies['react-dom'],'19.1.1');assert.equal(pkg.devDependencies.vite,'7.3.6');assert.equal(pkg.devDependencies.wrangler,'4.131.0')});
 test('verify permanently includes Store Designer A1',()=>{assert.equal(pkg.scripts['test:store-designer-a1'],'node scripts/v0.13.0-store-designer-completion-a1-regression-test.mjs');assert.match(pkg.scripts.verify,/test:store-designer-a1/)});
 test('real Product Detail preview reuses the existing merchant catalog endpoint',()=>{assert.match(page,/api\.request\('\/v1\/merchant\/products',\{query:\{status:'PUBLISHED',limit:100\}\}\)/);assert.match(page,/\(r\.data\.products\|\|\[\]\)\.filter\(x=>x\.slug\)/)});
 test('Product Detail preview is permission gated by catalog read',()=>{assert.match(page,/if\(!has\('catalog\.read'\)\)/);assert.match(page,/Product preview requires catalog\.read permission/)});
