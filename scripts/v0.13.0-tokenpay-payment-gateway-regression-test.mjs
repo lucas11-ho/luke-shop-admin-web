@@ -2,7 +2,7 @@ import fs from'node:fs';import assert from'node:assert/strict';
 const read=p=>fs.readFileSync(p,'utf8').replace(/\r\n?/g,'\n');
 const pkg=JSON.parse(read('package.json')),page=read('src/pages/PaymentsPage.jsx'),provider=read('src/components/TokenPayProviderConfig.jsx'),css=read('src/tokenpay-gateway-v1.css'),main=read('src/main.jsx');
 const tests=[];const test=(name,fn)=>tests.push([name,fn]);
-test('Merchant Admin runtime versions remain production baseline',()=>{assert.equal(pkg.version,'0.13.0');assert.equal(pkg.dependencies.react,'19.1.1');assert.equal(pkg.dependencies['react-dom'],'19.1.1');assert.equal(pkg.devDependencies.vite,'7.3.6');assert.equal(pkg.devDependencies.wrangler,'4.126.0')});
+test('Merchant Admin runtime versions remain production baseline',()=>{assert.equal(pkg.version,'0.13.0');assert.equal(pkg.dependencies.react,'19.1.1');assert.equal(pkg.dependencies['react-dom'],'19.1.1');assert.equal(pkg.devDependencies.vite,'7.3.6');assert.equal(pkg.devDependencies.wrangler,'4.131.0')});
 test('verify permanently includes TokenPay Merchant Admin gate',()=>{assert.equal(pkg.scripts['test:payments-tokenpay-v1'],'node scripts/v0.13.0-tokenpay-payment-gateway-regression-test.mjs');assert.match(pkg.scripts.verify,/test:payments-tokenpay-v1/)});
 test('Payments page identifies TokenPay only as EXTERNAL TOKENPAY',()=>{assert.match(page,/provider_type\|\|''\)\.toUpperCase\(\)==='EXTERNAL'/);assert.match(page,/provider_key\|\|''\)\.toUpperCase\(\)==='TOKENPAY'/)});
 test('new external gateway defaults to TokenPay provider identifier',()=>{assert.match(page,/value==='EXTERNAL'\?'TOKENPAY'/);assert.match(page,/<option value="TOKENPAY">TokenPay<\/option>/)});
