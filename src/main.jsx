@@ -4,6 +4,8 @@ import { App } from './app/App.jsx';
 import { AuthProvider } from './auth/AuthContext.jsx';
 import { AdminI18nProvider } from './i18n/AdminI18nContext.jsx';
 import { AppErrorBoundary } from './components/AppErrorBoundary.jsx';
+import { writeStoredSession } from './api/client.js';
+import { bootstrapBotPilotMerchantMiniApp } from './integrations/botPilotMiniApp.js';
 import './components/PlatformIconPicker.jsx';
 import './styles.css';
 import './localization-controls.css';
@@ -48,14 +50,33 @@ import './category-icons-a9-1.css';
 import './menu-shortcuts-a9-2.css';
 import './app-error-boundary.css';
 
-createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <AppErrorBoundary>
-      <AdminI18nProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </AdminI18nProvider>
-    </AppErrorBoundary>
-  </React.StrictMode>
-);
+function renderApp() {
+  createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+      <AppErrorBoundary>
+        <AdminI18nProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </AdminI18nProvider>
+      </AppErrorBoundary>
+    </React.StrictMode>
+  );
+}
+
+function renderMiniAppError(error) {
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  const card = document.createElement('main');
+  card.style.cssText = 'max-width:520px;margin:64px auto;padding:24px;font:16px/1.5 system-ui,sans-serif;text-align:center';
+  const title = document.createElement('h1');
+  title.textContent = 'Manage Shop';
+  const message = document.createElement('p');
+  message.textContent = error?.message || 'Unable to sign in to this Shop.';
+  card.append(title, message);
+  root.append(card);
+}
+
+bootstrapBotPilotMerchantMiniApp({ writeSession: writeStoredSession })
+  .then(renderApp)
+  .catch(renderMiniAppError);
